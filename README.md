@@ -119,15 +119,15 @@ against the starter's random baseline.
 
 | agent | levels cleared | aggregate score |
 |---|---|---|
-| starter random agent | 0 | 0.0 |
-| legal-only + counter-masked + systematic sweep | 1 | **7.80** |
+| starter random agent | **4** | 0.0505 |
+| legal-only + counter-masked + systematic sweep | 3 | **0.1141** |
 
-*(3000 steps/game on ls20, tr87, vc33.)* Three measured facts drive that gap:
-`available_actions` is reported every frame and the starter ignores it (86% of
-its budget is illegal actions on click-only games); click games have ~2–11
-responsive cells out of 4096, so random clicking is arithmetically hopeless;
-and part of every frame is a step counter that makes 250 random steps look like
-51 distinct states when there is really only 1. Details and commands in
+*(All 24 games, 3000 steps each.)* We are 2.2x ahead on score and one level
+behind on count — and the two agents clear **disjoint** sets of games. We win
+the click-driven ones (lp85, vc33) where random is arithmetically hopeless, and
+lose four action-rich ones (ar25, cd82, m0r0, sp80) that random happens to
+stumble through. Three measured facts justify the masking; the systematic
+schedule on top of it is not yet a net win. Details, the cause, and the fix in
 [paper/findings.md](paper/findings.md).
 
 ```bash

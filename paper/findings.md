@@ -109,17 +109,41 @@ only a usable signal *after* masking.
 
 ### Result
 
-`python agi3/run.py --ab --steps 3000 --games ls20,tr87,vc33`
+`python agi3/run.py --ab --steps 3000` (all 24 playable games)
 
-| agent | levels cleared | aggregate score |
-|---|---|---|
-| starter random agent | 0 | 0.0 |
-| legal-only + counter-masked + sweep | 1 (vc33) | **7.80** |
+| agent | levels cleared | aggregate score | games cleared |
+|---|---|---|---|
+| starter random agent | **4** | 0.0505 | ar25, cd82, m0r0, sp80 |
+| legal-only + counter-masked + sweep | 3 | **0.1141** | lf52, lp85, vc33 |
 
-The gain lands exactly where the analysis said it would: the click-only game,
-where the starter cannot function. Neither agent clears a level on the
-simple-action games at this budget — that is the next problem, and it is a
-different one.
+Read this carefully, because it is not the clean win the three-game subset
+suggested. On `ls20,tr87,vc33` alone the random agent scores 0 and ours scores
+above it; on the full set the random agent clears **more levels than we do**.
+We are 2.2x ahead on aggregate score and one level behind on count.
+
+**The two agents clear disjoint sets of games.** That is the finding, not the
+scoreline:
+
+- We win where the analysis predicted -- lp85 and vc33 are click-driven, the
+  regime where random is arithmetically hopeless.
+- We *lose* four games random wins (ar25, cd82, m0r0, sp80), and all four
+  expose five or more actions.
+
+The regression has a specific cause. The policy drains every untried simple
+action in a masked state before it will consider a click, and prefers actions
+with a track record of changing the masked state. On a game with six or seven
+live actions and rich dynamics, that is systematically *less* diverse than
+uniform sampling: it commits early to whatever moved the state first and
+under-explores the rest. Random's only virtue -- it never stops trying
+everything -- turns out to matter on exactly the games where the action space
+is already small enough to stumble through.
+
+So the honest summary is: legal-action masking and counter-row masking are
+unambiguously correct and should stay; the *systematic* exploration schedule
+built on top of them is an improvement on click-only games and a regression on
+action-rich ones. The obvious next step is to make the schedule adaptive on
+`len(available_actions)` -- sweep when the action space is a 4096-cell board,
+sample when it is six buttons -- and to re-run this same A/B as the ablation.
 
 ---
 
@@ -128,7 +152,9 @@ different one.
 - **Theory**: a stated hypothesis (the ARC-AGI-2 bottleneck is exact
   completion, not coarse structure), a measurement that supports it, and a
   mechanism it recommends.
-- **Progress**: the negative result — depth-3 composition transfers *zero* to
-  ARC-AGI-2 eval — saves the next person a month, and the four ARC-AGI-3
-  environment facts are directly reusable by anyone.
+- **Progress**: two negative results. Depth-3 composition transfers *zero* to
+  ARC-AGI-2 eval. And systematic exploration, which is provably right for
+  click-only ARC-AGI-3 games, *loses* to uniform random on action-rich ones —
+  a trap worth naming, since the three-game subset we first measured on hid it
+  completely. The four environment facts are directly reusable by anyone.
 - **Completeness**: every number above has a command next to it.
