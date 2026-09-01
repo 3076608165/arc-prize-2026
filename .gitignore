@@ -1,0 +1,13 @@
+# datasets & vendored repos (re-clone with scripts/setup_data.sh)
+data/
+# local envs
+.venv/
+venv/
+__pycache__/
+*.pyc
+# secrets - NEVER commit
+.kaggle/
+kaggle.json
+*.token
+# local eval outputs
+agi2/out/
