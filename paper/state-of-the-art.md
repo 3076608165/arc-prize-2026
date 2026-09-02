@@ -145,7 +145,55 @@ tasks of the public split, not the hidden 240), so it does not contradict the
 reference's 33.89 -- it is one point, at slightly less per-task budget, on a
 different set.
 
-## Suggested order## Suggested order
+### Commit run vs competition rerun
+
+Worth being explicit, because getting it wrong wastes quota or handicaps the
+score. They are two different executions of the same notebook:
+
+| | commit ("Save & Run All") | competition rerun |
+|---|---|---|
+| triggered by | `kaggle kernels push` | clicking *Submit to Competition* |
+| data | `arc-agi_evaluation_challenges.json` (120 public) | `arc-agi_test_challenges.json` (240 hidden) |
+| `KAGGLE_IS_COMPETITION_RERUN` | unset | set |
+| tasks queued | 4, via the allowlist | all 240 |
+| what it costs | our GPU quota | not our quota |
+| what it produces | a validation pass | the leaderboard score |
+
+So upstream's four-task allowlist is not a wart, it is the mechanism that keeps
+the commit cheap while the rerun does the real work. Keep it for any run headed
+for the leaderboard; strip it (`--full-eval`) only to measure something on the
+public split.
+
+The corollary that is easy to get backwards: `--hours` does **not** trade quota
+against coverage. The commit is cheap either way, and the budget it sets is
+what the *rerun* obeys. Lowering it does not save quota -- it just gives the
+scoring run less time. Submit with the full 11.83h.
+
+## Suggested order### Commit run vs competition rerun
+
+Worth being explicit, because getting it wrong wastes quota or handicaps the
+score. They are two different executions of the same notebook:
+
+| | commit ("Save & Run All") | competition rerun |
+|---|---|---|
+| triggered by | `kaggle kernels push` | clicking *Submit to Competition* |
+| data | `arc-agi_evaluation_challenges.json` (120 public) | `arc-agi_test_challenges.json` (240 hidden) |
+| `KAGGLE_IS_COMPETITION_RERUN` | unset | set |
+| tasks queued | 4, via the allowlist | all 240 |
+| what it costs | our GPU quota | not our quota |
+| what it produces | a validation pass | the leaderboard score |
+
+So upstream's four-task allowlist is not a wart, it is the mechanism that keeps
+the commit cheap while the rerun does the real work. Keep it for any run headed
+for the leaderboard; strip it (`--full-eval`) only to measure something on the
+public split.
+
+The corollary that is easy to get backwards: `--hours` does **not** trade quota
+against coverage. The commit is cheap either way, and the budget it sets is
+what the *rerun* obeys. Lowering it does not save quota -- it just gives the
+scoring run less time. Submit with the full 11.83h.
+
+## Suggested order
 
 1. Attach the model, run the public notebook unmodified, confirm we reproduce
    ~19-34. This replaces 0.00 with a real baseline and validates the plumbing.
