@@ -7,6 +7,40 @@ what did not.
 
 ---
 
+## Leaderboard reality check (2026-09-02)
+
+Both pipelines were submitted and scored. Read this section before the
+analysis below it, because it bounds how much that analysis is worth.
+
+| competition | our score | rank | field median | field max | teams scoring > 0 |
+|---|---|---|---|---|---|
+| ARC-AGI-2 | **0.00** | **1760 / 1760** | 27.64 | 72.08 | 1142 / 1760 |
+| ARC-AGI-3 | **0.15** | 1949 / 2706 | 0.27 | 7.51 | 2563 / 2706 |
+
+Submissions `55951759` (ARC-AGI-2) and `55949902` (ARC-AGI-3).
+
+**This kills a framing used further down.** The sections below describe
+ARC-AGI-2 as a benchmark that resists the classical search family, and they are
+accurate about *what was measured*. But 1142 teams score above zero and the
+median is 27.64, so the benchmark is not the obstacle -- our hypothesis class
+is. A 0.00 against a median of 27.64 is not "the benchmark is hard", it is
+"this approach is not in the running". Any claim below that reads as *ARC-AGI-2
+is near-impossible* should be read as *depth-3 DSL search is roughly 28 points
+behind whatever the field is doing*.
+
+The practical consequence: the propose-and-repair direction argued for below is
+derived from where **our** search stalls. That is a real observation about our
+search and a poor guide to closing a 0 -> 28 gap. Before building it, find out
+what the teams at 30-70 are actually running (ARC Prize 2025 writeups, public
+notebooks on this competition). Optimising the last few percent of a dead
+branch is the expensive mistake available here.
+
+One thing that did hold up: **the local harness is predictive.** The ARC-AGI-3
+local A/B said 0.1141 and the leaderboard said 0.15 on a different hidden game
+set. Local iteration is trustworthy; that is worth a lot for speed.
+
+---
+
 ## ARC-AGI-2: the classical search family gets close and never closes
 
 `python agi2/run_baseline.py --split {evaluation,training} [--full]`
@@ -108,6 +142,10 @@ byte-identical deltas: one cell, in the counter row. "Did the frame change" is
 only a usable signal *after* masking.
 
 ### Result
+
+Leaderboard: **0.15**, rank 1949/2706, against a field median of 0.27 and a max
+of 7.51. Local A/B on the 24 public games predicted 0.1141, so the local
+measurement tracks the hidden set closely.
 
 `python agi3/run.py --ab --steps 3000` (all 24 playable games)
 

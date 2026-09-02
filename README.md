@@ -4,6 +4,17 @@ Working repo for all three 2026 ARC competitions. One local harness for
 ARC-AGI-2, the official starter wired up for ARC-AGI-3, and a writeup skeleton
 for the Paper Track that both feed.
 
+## Where we actually stand (2026-09-02)
+
+| competition | our score | rank | field median | field max |
+|---|---|---|---|---|
+| ARC-AGI-2 | **0.00** | **1760 / 1760** | 27.64 | 72.08 |
+| ARC-AGI-3 | **0.15** | 1949 / 2706 | 0.27 | 7.51 |
+
+Last place and just under half the field respectively. 1142 of 1760 ARC-AGI-2
+teams score above zero, so the gap is our hypothesis class, not the benchmark.
+Read [paper/findings.md](paper/findings.md) before extending anything here.
+
 ## Deadlines (all 23:59 UTC)
 
 | Date | What |
