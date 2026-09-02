@@ -105,10 +105,26 @@ The fork runs. A 1-hour validation (`--hours 1`, v2 of
 format-valid `submission.json`: model load, per-task LoRA test-time training,
 `turbo_dfs` decode, and submission write all work end to end.
 
-It got through **4 of 120 tasks** in that hour -- expected, because the first
-run pays a one-time cost to load the 7.3 GB model and JIT-compile unsloth
-before any task starts, and every task then needs its own LoRA finetune. Cost:
-0.89h of GPU quota.
+It processed **4 of 120 tasks** -- not because an hour was too short, but
+because `starter.py` hardcodes a four-task allowlist whenever
+`KAGGLE_IS_COMPETITION_RERUN` is unset, so that committing the notebook stays
+cheap:
+
+```python
+if not rerun_mode:
+    if key not in ["0934a4d8", "36a08778", "981571dc", "aa4ec2a5"]:
+        continue
+```
+
+So the validation proves the pipeline runs end to end and proves nothing about
+throughput. **We currently have no measurement of how long one task takes**,
+which means we cannot yet say whether 240 tasks fit in the 12h limit. Getting
+that number is the prerequisite for deciding on a full run. Cost so far: 0.89h
+of GPU quota.
+
+Note also `mp.spawn(..., nprocs=4)` and `CUDA_VISIBLE_DEVICES = str(rank)`:
+four workers, one pinned per GPU, hardcoded. Any single-GPU run needs that
+changed.
 
 Two environment facts the validation nailed down, both of which cost a failed
 run to learn and are now handled by `repro_nvarc.py`:
