@@ -132,6 +132,14 @@ def main() -> int:
     }
     if up_meta.get("machine_shape"):
         meta["machine_shape"] = up_meta["machine_shape"]
+    # Carrying this is not optional. The unsloth/torch/numpy wheels in the
+    # `sorokin/pip-install-unsloth-flash-patch` utility kernel are built against
+    # a pinned BYOD image. Push without it and Kaggle runs the current default
+    # image instead, where those wheels fail to load their C extensions:
+    #   ImportError: Failed to load PyTorch C extensions
+    #   ModuleNotFoundError: No module named 'numpy._core._multiarray_umath'
+    if up_meta.get("docker_image"):
+        meta["docker_image"] = up_meta["docker_image"]
     (out / "kernel-metadata.json").write_text(json.dumps(meta, indent=2) + "\n",
                                               encoding="utf-8")
 

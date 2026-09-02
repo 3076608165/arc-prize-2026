@@ -98,6 +98,30 @@ debugging the plumbing, but any number that means anything has to come from a
 Kaggle run. Note that "Save & Run All" commits are cheap — only clicking
 *Submit to Competition* spends one of the 5 daily submissions.
 
+## Reproduction status (validated 2026-09-02)
+
+The fork runs. A 1-hour validation (`--hours 1`, v2 of
+`uts3125025522741/arc-agi-2-nvarc-repro`) completed cleanly and wrote a
+format-valid `submission.json`: model load, per-task LoRA test-time training,
+`turbo_dfs` decode, and submission write all work end to end.
+
+It got through **4 of 120 tasks** in that hour -- expected, because the first
+run pays a one-time cost to load the 7.3 GB model and JIT-compile unsloth
+before any task starts, and every task then needs its own LoRA finetune. Cost:
+0.89h of GPU quota.
+
+Two environment facts the validation nailed down, both of which cost a failed
+run to learn and are now handled by `repro_nvarc.py`:
+
+- The vendored torch/numpy/unsloth wheels require the upstream's pinned BYOD
+  `docker_image`. Push without it and they fail to load their C extensions.
+- The accelerator is `NvidiaL4` (x4), which burns GPU quota at 2x.
+
+**The full-run decision is a real resource tradeoff.** A 12h run costs ~24h of
+quota against the ~29h we have until the Sep 5 refresh -- so it is one run, and
+it spends essentially the week's budget to reproduce public work that scores 0
+on Paper Track novelty. Not taken automatically.
+
 ## Suggested order
 
 1. Attach the model, run the public notebook unmodified, confirm we reproduce
