@@ -11,6 +11,7 @@ of the gitignored `data/` tree and makes the baseline comparison one command.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import shutil
@@ -32,6 +33,33 @@ AB_ARMS = ("random", "argmax", "explore")
 
 SUMMARY = re.compile(r"^\s+(\w+)\s+levels=\s*(\d+)\s+actions=\s*(\d+)\s+state=(\S+)")
 SCORE = re.compile(r"Aggregate scorecard score:\s*([\d.]+)")
+
+#: Levels needed to beat each game, cached from the engine (183 across 25 games).
+WIN_LEVELS = json.loads((ROOT / "agi3" / "win_levels.json").read_text(encoding="utf-8"))
+
+
+def progress(per_game: dict) -> float:
+    """Mean fraction of each game completed -- our own metric, and the honest one.
+
+    The library's `Scorecard.score` is documented as "the average score of the
+    runs" and implemented as `max(run.score for run in self.runs)`. It reports
+    the single best game, so it barely moves when a change clears twice as many
+    games, and one lucky game swings it by 3x between otherwise identical runs.
+    Every score comparison in this repo before this function was reading that.
+
+    This is what the competition actually describes: per-game progress,
+    averaged across games. It ignores the action-efficiency term (we have no
+    human action counts), so treat it as an upper bound on the real score --
+    but it is stable, interpretable, and moves when the agent improves.
+    """
+    if not per_game:
+        return 0.0
+    fracs = [
+        min(g["levels"] / WIN_LEVELS[gid], 1.0)
+        for gid, g in per_game.items()
+        if gid in WIN_LEVELS
+    ]
+    return sum(fracs) / len(fracs) if fracs else 0.0
 
 
 def venv_python() -> Path:
@@ -75,7 +103,9 @@ def play(agent: str, games: str, steps: int, seed: int = 0) -> dict:
 
 def report(label: str, res: dict) -> None:
     total = sum(g["levels"] for g in res["games"].values())
-    print(f"\n--- {label} ---  aggregate score {res['score']}   levels cleared {total}")
+    print(f"\n--- {label} ---  progress {progress(res['games']):.4f}"
+          f"   levels cleared {total}"
+          f"   lib-score(max-of-games) {res['score']:.4f}")
     for gid, g in sorted(res["games"].items()):
         flag = "  <-- progress" if g["levels"] else ""
         print(f"    {gid:6} levels={g['levels']:2}  actions={g['actions']:5}  {g['state']}{flag}")
@@ -101,7 +131,7 @@ def main() -> int:
         for seed in range(args.seeds):
             for arm in AB_ARMS:
                 res = play(arm, args.games, args.steps, seed=seed)
-                rows[arm].append((levels(res), res["score"]))
+                rows[arm].append((levels(res), progress(res["games"]), res["score"]))
                 cleared[arm] |= {g for g, v in res["games"].items() if v["levels"]}
                 if args.seeds == 1:
                     report(f"{arm} ({args.steps} steps/game)", res)
@@ -110,14 +140,19 @@ def main() -> int:
             print(f"\n=== {args.seeds} seeds x {args.steps} steps/game ===")
             for arm in AB_ARMS:
                 lv = [r[0] for r in rows[arm]]
-                sc = [r[1] for r in rows[arm]]
-                print(f"  {arm:<8} levels {lv}  mean {sum(lv)/len(lv):.1f}"
-                      f"   score min {min(sc):.4f} mean {sum(sc)/len(sc):.4f} max {max(sc):.4f}")
+                pr = [r[1] for r in rows[arm]]
+                sc = [r[2] for r in rows[arm]]
+                print(f"  {arm:<8} levels {lv} mean {sum(lv)/len(lv):.1f}"
+                      f" | progress mean {sum(pr)/len(pr):.4f}"
+                      f" [{min(pr):.4f}-{max(pr):.4f}]"
+                      f" | lib-score(max-of-games) mean {sum(sc)/len(sc):.4f}"
+                      f" [{min(sc):.4f}-{max(sc):.4f}]")
                 print(f"           ever cleared: {', '.join(sorted(cleared[arm])) or 'none'}")
         else:
-            b, o = rows["random"][0], rows["explore"][0]
-            print(f"\nlevels cleared: random {b[0]} -> explore {o[0]}")
-            print(f"scorecard:      random {b[1]} -> explore {o[1]}")
+            print()
+            for arm in AB_ARMS:
+                lv, pr, sc = rows[arm][0]
+                print(f"  {arm:<8} levels {lv:2}  progress {pr:.4f}  lib-score {sc:.4f}")
     else:
         report(f"{args.agent} ({args.steps} steps/game)",
                play(args.agent, args.games, args.steps))

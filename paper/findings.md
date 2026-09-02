@@ -141,50 +141,60 @@ Clicking a known-valid cell and a known-invalid cell on vc33 produce
 byte-identical deltas: one cell, in the counter row. "Did the frame change" is
 only a usable signal *after* masking.
 
-### Result: the ablation, and what it exposed
+### The reference implementation's score is not the score
 
-`python agi3/run.py --ab --steps 3000 --seeds 3` (all 24 games, three arms,
-same seeds)
+`arc_agi.scorecard.Scorecard.score` reads:
 
-| arm | levels per seed | mean | score min / mean / max |
+```python
+def score(self) -> float:
+    """Return the average score of the runs."""
+    return max(run.score for run in self.runs)
+```
+
+Documented as an average, implemented as a max over games. It reports the
+single best game, so it barely moves when an agent clears twice as many, and
+one lucky game swings it 3x between otherwise identical runs. Everything in
+this file that compared "scores" before this section was reading it.
+
+The competition describes averaging per-game scores. `agi3/run.py` now computes
+that itself from `levels_completed / win_levels` (cached in
+`agi3/win_levels.json`: 183 levels across 25 games) and reports it as
+**progress**. It ignores the action-efficiency term -- we have no human action
+counts -- so it is an upper bound on the true score, but it is stable and it
+moves when the agent improves.
+
+### The ablation, on the honest metric
+
+`python agi3/run.py --ab --steps 3000 --seeds 3`
+
+| arm | levels | **progress** | lib-score (max-of-games) |
 |---|---|---|---|
-| starter random | [4, 2, 4] | 3.3 | 0.0013 / 0.0290 / 0.0780 |
-| ours, argmax policy | [3, 3, 3] | 3.0 | 0.1141 / **0.1141** / 0.1141 |
-| ours, sampling policy | [6, 4, 6] | **5.3** | 0.1190 / **0.1228** / 0.1282 |
+| starter random | 2.7 | 0.0167 [0.0117-0.0200] | 0.0100 |
+| ours, argmax | 3.0 | **0.0147** [constant] | 0.1141 |
+| ours, sampling | **5.7** | **0.0314** [0.0214-0.0380] | 0.1395 |
 
-Three things worth separating.
+Two conclusions invert once the metric is fixed.
 
-**The argmax arm has zero variance.** Identical to four decimals across three
-seeds, because that policy is deterministic -- both decision points were
-`max(..., key=effect_rate)` and the rng only fed a fallback that rarely
-fires. So 0.1141 is its true value, not a sample, and earlier single-run
-comparisons against it were sounder than they looked.
+**The sampling fix is worth ~2.1x, not the +7.6% the broken metric showed.**
+Its range does not overlap argmax's constant.
 
-**The sampling fix is real but small.** Its worst seed (0.1190) beats argmax's
-constant (0.1141), so the ranges do not overlap -- but the mean gain is +7.6%.
+**The argmax policy was worse than random** -- 0.0147 against 0.0167 -- while
+the broken metric scored it 11x *better* than random (0.1141 vs 0.0100). That
+policy is what we submitted to the leaderboard. The bug did not merely add
+noise; it reversed the direction of the comparison.
 
-**And that is the finding.** Levels cleared went 3.0 -> 5.3, a 77% increase,
-and bought 7.6% of score. Level count is not what this benchmark pays for.
+The argmax arm's zero variance is real and independently useful: that policy is
+deterministic, since both decision points were `max(..., key=effect_rate)` and
+the rng only fed a rarely-taken fallback.
 
-### We have been optimising the wrong quantity
+### Still open
 
-The competition defines a per-game score where 100% means beating the game
-*while matching the number of actions a human took*. We spend 3001 actions per
-game. A human spends order tens. If the efficiency term is multiplicative, it
-pins every score we produce near the floor regardless of progress, which is
-exactly the pattern above: a large change in progress moving the score barely
-at all.
-
-If that is right, the route from our 0.12 to the leader's 7.51 -- 60x -- does
-not run through clearing more levels. It runs through clearing the same levels
-in far fewer actions, which is a different optimisation problem than the one
-the sweep was designed for. A systematic 4096-cell sweep is the *most*
-action-hungry thing you could do; it is right for discovering the two live
-cells and wrong for scoring once you know them.
-
-Testable, and cheap: hold the policy fixed and vary only the action budget. If
-score rises as the budget falls, efficiency dominates and the sweep needs a
-phase that stops sweeping once it has found the responsive cells.
+Progress ignores action efficiency, and the competition's 100% means beating a
+game *while matching human action count*. We spend 3001 actions per game where
+a human spends order tens, so the efficiency term may still dominate the real
+score. The earlier budget sweep that appeared to test this (200/600/1500/3000
+steps) reported max-of-games numbers and establishes nothing. Re-running it
+against progress is the next measurement.
 
 ---
 
