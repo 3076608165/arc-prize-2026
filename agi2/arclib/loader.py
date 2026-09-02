@@ -12,7 +12,13 @@ from pathlib import Path
 
 Grid = list[list[int]]
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+try:
+    REPO_ROOT = Path(__file__).resolve().parents[2]
+except NameError:
+    # `build_notebook.py` inlines this module into a notebook cell, where
+    # `__file__` is undefined. Nothing in the Kaggle driver reads the local
+    # dataset paths, so the cwd is a fine stand-in.
+    REPO_ROOT = Path.cwd()
 AGI2_DATA = REPO_ROOT / "data" / "ARC-AGI-2" / "data"
 
 

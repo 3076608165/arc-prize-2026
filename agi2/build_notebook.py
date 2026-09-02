@@ -151,6 +151,9 @@ def to_notebook(source: str) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="agi2/out/submission.ipynb")
+    ap.add_argument("--kernel-dir", default="",
+                    help="assemble a push-ready folder here: notebook + "
+                         "agi2/kernel-metadata.json (then `kaggle kernels push -p <dir>`)")
     ap.add_argument("--self-test", action="store_true",
                     help="run the generated source against the local eval split")
     args = ap.parse_args()
@@ -171,10 +174,21 @@ def main() -> int:
             for p in t["test"]:
                 p.pop("output", None)
         (stage / "arc-agi_test_challenges.json").write_text(json.dumps(tasks))
+        # Execute the way a notebook cell does -- via exec() in a namespace
+        # with no `__file__` -- not as a script. Running it as a script hides
+        # every module-level `Path(__file__)`, which is exactly the bug class
+        # that only shows up once Kaggle runs the kernel.
         script = stage.parent.parent / "nb.py"
         script.write_text(source, encoding="utf-8")
+        runner = stage.parent.parent / "run_as_cell.py"
+        runner.write_text(
+            "import pathlib\n"
+            "src = pathlib.Path('nb.py').read_text(encoding='utf-8')\n"
+            "exec(compile(src, '<cell>', 'exec'), {'__name__': '__main__'})\n",
+            encoding="utf-8",
+        )
         r = subprocess.run(
-            [sys.executable, str(script)], cwd=script.parent,
+            [sys.executable, str(runner)], cwd=script.parent,
             capture_output=True, text=True,
         )
         print(r.stdout[-2000:] or r.stderr[-2000:])
@@ -185,10 +199,17 @@ def main() -> int:
         assert set(sub) == set(tasks), "task ids do not round-trip"
         print(f"SELF-TEST OK: {len(sub)} tasks, valid shape")
 
-    out = Path(args.out)
+    out = Path(args.kernel_dir) / "submission.ipynb" if args.kernel_dir else Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(to_notebook(source), indent=1), encoding="utf-8")
     print(f"wrote {out}  ({len(source.splitlines())} source lines)")
+
+    if args.kernel_dir:
+        meta = HERE / "kernel-metadata.json"
+        target = Path(args.kernel_dir) / "kernel-metadata.json"
+        target.write_text(meta.read_text(encoding="utf-8"), encoding="utf-8")
+        print(f"wrote {target}")
+        print(f"\npush it with:\n  kaggle kernels push -p {args.kernel_dir}")
     return 0
 
 
