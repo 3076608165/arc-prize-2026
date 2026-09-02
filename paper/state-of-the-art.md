@@ -105,40 +105,47 @@ The fork runs. A 1-hour validation (`--hours 1`, v2 of
 format-valid `submission.json`: model load, per-task LoRA test-time training,
 `turbo_dfs` decode, and submission write all work end to end.
 
-It processed **4 of 120 tasks** -- not because an hour was too short, but
-because `starter.py` hardcodes a four-task allowlist whenever
-`KAGGLE_IS_COMPETITION_RERUN` is unset, so that committing the notebook stays
-cheap:
+It processed 4 of 120 tasks -- because `starter.py` hardcodes a four-task
+allowlist whenever `KAGGLE_IS_COMPETITION_RERUN` is unset, to keep commits
+cheap. So it proved the pipeline runs and said nothing about speed.
 
-```python
-if not rerun_mode:
-    if key not in ["0934a4d8", "36a08778", "981571dc", "aa4ec2a5"]:
-        continue
-```
+### Throughput, measured (v3, `--hours 1 --full-eval`)
 
-So the validation proves the pipeline runs end to end and proves nothing about
-throughput. **We currently have no measurement of how long one task takes**,
-which means we cannot yet say whether 240 tasks fit in the 12h limit. Getting
-that number is the prerequisite for deciding on a full run. Cost so far: 0.89h
-of GPU quota.
+Dropping that allowlist and running 1h against all 120 public evaluation tasks
+gives the number the full-run decision depends on. Cost: 2.11h of quota.
 
-Note also `mp.spawn(..., nprocs=4)` and `CUDA_VISIBLE_DEVICES = str(rank)`:
-four workers, one pinned per GPU, hardcoded. Any single-GPU run needs that
-changed.
+Scored with our own harness against the public ground truth, by queue position
+(the queue is `sorted(data.keys())`, so position is time order):
 
-Two environment facts the validation nailed down, both of which cost a failed
-run to learn and are now handled by `repro_nvarc.py`:
+| queue quartile | shape correct | solved |
+|---|---|---|
+| tasks 1-30 | **27/46 (59%)** | **4/46** |
+| tasks 31-60 | 0/42 | 0/42 |
+| tasks 61-90 | 0/39 | 0/39 |
+| tasks 91-120 | 0/40 | 0/40 |
 
-- The vendored torch/numpy/unsloth wheels require the upstream's pinned BYOD
-  `docker_image`. Push without it and they fail to load their C extensions.
-- The accelerator is `NvidiaL4` (x4), which burns GPU quota at 2x.
+The cliff is the answer. Roughly **30 tasks got real treatment in one hour on
+4x L4**, and everything after the deadline was emitted as filler -- non-blank,
+so a naive "did it produce a grid" check counts it as a prediction, which is
+how I first misread this run as full coverage.
 
-**The full-run decision is a real resource tradeoff.** A 12h run costs ~24h of
-quota against the ~29h we have until the Sep 5 refresh -- so it is one run, and
-it spends essentially the week's budget to reproduce public work that scores 0
-on Paper Track novelty. Not taken automatically.
+That fixes the arithmetic:
 
-## Suggested order
+- 1h x 4 workers = 240 worker-minutes over ~30 tasks = **~8 worker-minutes per
+  task**, and the work per task looks fixed rather than elastic.
+- 240 hidden tasks x 8 min / 4 workers = **~8 hours**. The 12h limit fits with
+  roughly 50% headroom.
+- On tasks that were actually processed: **8.7% of outputs solved, 59% of
+  shapes correct**. For comparison our depth-3 DSL search gets 77% of shapes
+  and 0% solved. The LLM is worse at coarse geometry and strictly better at
+  the thing that scores.
+
+8.7% on 46 outputs is a small, non-random sample (the alphabetically first
+tasks of the public split, not the hidden 240), so it does not contradict the
+reference's 33.89 -- it is one point, at slightly less per-task budget, on a
+different set.
+
+## Suggested order## Suggested order
 
 1. Attach the model, run the public notebook unmodified, confirm we reproduce
    ~19-34. This replaces 0.00 with a real baseline and validates the plumbing.
