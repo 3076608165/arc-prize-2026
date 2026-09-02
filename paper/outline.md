@@ -85,10 +85,14 @@ reproduces it. Two of them are writeup-grade on their own:
   method over a wider global search. That is a hypothesis, a measurement, and a
   mechanism: exactly the shape the Theory criterion asks for.
 - **ARC-AGI-3**: four environment facts the official starter ignores, and an
-  agent built on them that scores 7.80 where the starter scores 0.0. The facts
-  themselves (legal-action masking, ~2-11 responsive cells per click game, the
-  step-counter row, the uselessness of raw frame deltas) are reusable by anyone
-  and belong in the Progress section.
+  agent built on them that scores 0.1141 against the starter's 0.0505 over all
+  24 games -- while clearing one *fewer* level, on a disjoint set of games. The
+  split is the interesting part: systematic exploration wins the click-driven
+  games and loses the action-rich ones. The facts themselves (legal-action
+  masking, ~2-11 responsive cells per click game, the step-counter row, the
+  uselessness of raw frame deltas) are reusable by anyone and belong in the
+  Progress section, as does the measurement trap -- the three-game subset we
+  first tested on hid the regression completely.
 
 ## Reference material
 

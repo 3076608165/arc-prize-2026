@@ -105,6 +105,9 @@ public eval tasks, so eval is the honest predictor — not training.
   downloaded at runtime
 - L4×4 (96 GB) is available; it burns GPU quota at 2×
 - **Prizes require open-sourcing your solution.**
+- The data mounts at `/kaggle/input/competitions/<slug>/`, **not**
+  `/kaggle/input/<slug>/`. Do not hardcode either — recurse from
+  `/kaggle/input`, as the generated driver does.
 
 `build_notebook.py` inlines `arclib` into a single cell so the notebook has no
 imports to resolve. Edit the Python locally, rebuild, and never touch the

@@ -43,21 +43,31 @@ DRIVER = '''\
 # ==========================================================================
 # driver
 # ==========================================================================
-INPUT_DIRS = [
-    Path("/kaggle/input/arc-prize-2026-arc-agi-2"),
-    Path("/kaggle/input/arc-prize-2026"),
-    Path("data/kaggle"),                       # local dry run
-]
+INPUT_ROOTS = [Path("/kaggle/input"), Path("data/kaggle")]   # the latter: local dry run
 
 def find_challenges() -> Path:
-    for d in INPUT_DIRS:
-        if not d.is_dir():
-            continue
-        for pat in ("*test_challenges.json", "*test-challenges.json"):
-            hits = sorted(d.glob(pat))
-            if hits:
-                return hits[0]
-    raise FileNotFoundError(f"no test challenges under {[str(d) for d in INPUT_DIRS]}")
+    """Locate the challenges file without hardcoding the mount path.
+
+    Guessing `/kaggle/input/<competition-slug>/` cost a kernel run. Recurse
+    instead, prefer a filename containing "test", and fall back to any
+    challenges file so a mount-path surprise degrades to a wrong-split run
+    rather than a crash that scores nothing.
+    """
+    found = []
+    for root in INPUT_ROOTS:
+        if root.is_dir():
+            found += [p for p in root.rglob("*.json") if "challenges" in p.name.lower()]
+    for pick in (lambda p: "test" in p.name.lower(), lambda p: True):
+        hits = sorted(p for p in found if pick(p))
+        if hits:
+            return hits[0]
+
+    for root in INPUT_ROOTS:                      # nothing: say what is there
+        if root.is_dir():
+            print(f"contents of {root}:")
+            for p in sorted(root.rglob("*"))[:60]:
+                print("   ", p)
+    raise FileNotFoundError(f"no challenges json under {[str(r) for r in INPUT_ROOTS]}")
 
 # Kaggle enforces a 12 hour wall clock. Leave headroom so a slow task can never
 # cost you the whole submission -- an unfinished notebook scores nothing.
