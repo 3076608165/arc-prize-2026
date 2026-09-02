@@ -13,7 +13,13 @@ for the Paper Track that both feed.
 
 Last place and just under half the field respectively. 1142 of 1760 ARC-AGI-2
 teams score above zero, so the gap is our hypothesis class, not the benchmark.
-Read [paper/findings.md](paper/findings.md) before extending anything here.
+
+[paper/state-of-the-art.md](paper/state-of-the-art.md) says what the gap is:
+every competitive ARC-AGI-2 system is an LLM with per-task test-time training,
+not a program search. The best public notebook (LB 33.89) LoRA-finetunes a
+4B Qwen3 already SFT'd on ARC grids, on each task's own demo pairs, then
+decodes with a constrained DFS over the ~12 legal grid tokens. Read that and
+[paper/findings.md](paper/findings.md) before extending anything here.
 
 ## Deadlines (all 23:59 UTC)
 

@@ -96,6 +96,10 @@ reproduces it. Two of them are writeup-grade on their own:
 
 ## Reference material
 
+- **[state-of-the-art.md](state-of-the-art.md)** — the 2025 podium, the current
+  field, and the exact public recipe at LB 33.89, with hyperparameters. Start
+  here: Novelty is scored relative to existing public research, so the writeup
+  has to show it knows what that is.
 - ARC Prize 2025 solution writeups on Kaggle
 - 2024 winning solutions on arcprize.org
 - <https://arcprize.org/guide>
