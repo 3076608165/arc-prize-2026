@@ -69,6 +69,37 @@ def cell_text(cell: dict) -> str:
     return "".join(s) if isinstance(s, list) else s
 
 
+#: Upstream's four-task shortcut, verbatim, inside `starter.py`. The whole
+#: `if not rerun_mode:` block has to go -- dropping only the inner two lines
+#: leaves a header with no body, i.e. an IndentationError and a wasted run.
+ALLOWLIST = (
+    "        if not rerun_mode:\n"
+    '            if key not in ["0934a4d8", "36a08778", "981571dc", "aa4ec2a5"]:\n'
+    "                continue\n"
+)
+
+
+def drop_allowlist(nb: dict) -> bool:
+    """Remove the four-task shortcut so a commit run covers all 120 eval tasks.
+
+    `starter.py` queues only four hardcoded ids whenever
+    KAGGLE_IS_COMPETITION_RERUN is unset, to keep notebook commits cheap. That
+    also means a commit run measures nothing about speed. Dropping it turns a
+    cheap 1h commit into a throughput probe: queue all 120 evaluation tasks,
+    run the clock out, then count how many got a real prediction. That is the
+    number the 12h full-run decision actually depends on, and it has to be
+    measured on the 4x L4 the submission will run on -- not on other hardware.
+    """
+    for cell in nb["cells"]:
+        if cell["cell_type"] != "code":
+            continue
+        txt = cell_text(cell)
+        if ALLOWLIST in txt:
+            cell["source"] = txt.replace(ALLOWLIST, "").splitlines(keepends=True)
+            return True
+    return False
+
+
 def set_budget(nb: dict, hours: float) -> bool:
     """Rewrite the single `global_end_time = ...` line."""
     pat = re.compile(r"global_end_time\s*=\s*time\.time\(\)\s*\+[^\n]*")
@@ -93,6 +124,9 @@ def main() -> int:
                     help="wall-clock budget. Upstream uses 11.83 (12h - 10min).")
     ap.add_argument("--out", default="agi2/out/nvarc")
     ap.add_argument("--refresh", action="store_true", help="re-pull upstream")
+    ap.add_argument("--full-eval", action="store_true",
+                    help="queue all 120 evaluation tasks in commit mode instead of "
+                         "upstream's 4-task shortcut, to measure throughput")
     args = ap.parse_args()
 
     src_nb = fetch_upstream(force=args.refresh)
@@ -101,6 +135,10 @@ def main() -> int:
 
     if not set_budget(nb, args.hours):
         raise SystemExit("could not find `global_end_time = time.time() + ...`; "
+                         "upstream changed shape, re-read it before pushing")
+
+    if args.full_eval and not drop_allowlist(nb):
+        raise SystemExit("could not find the four-task allowlist in starter.py; "
                          "upstream changed shape, re-read it before pushing")
 
     nb["cells"].insert(0, {"cell_type": "markdown", "metadata": {},
@@ -144,7 +182,9 @@ def main() -> int:
                                               encoding="utf-8")
 
     print(f"upstream      : {UPSTREAM}")
+    queued = "all 120 eval tasks" if args.full_eval else "upstream 4-task shortcut"
     print(f"budget        : {args.hours}h")
+    print(f"commit mode   : {queued}")
     print(f"accelerator   : {meta.get('machine_shape', 'default GPU')}"
           f"   (L4 burns GPU quota at 2x)")
     print(f"model         : {', '.join(meta['model_sources']) or 'none'}")
