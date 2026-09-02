@@ -141,47 +141,50 @@ Clicking a known-valid cell and a known-invalid cell on vc33 produce
 byte-identical deltas: one cell, in the counter row. "Did the frame change" is
 only a usable signal *after* masking.
 
-### Result
+### Result: the ablation, and what it exposed
 
-Leaderboard: **0.15**, rank 1949/2706, against a field median of 0.27 and a max
-of 7.51. Local A/B on the 24 public games predicted 0.1141, so the local
-measurement tracks the hidden set closely.
+`python agi3/run.py --ab --steps 3000 --seeds 3` (all 24 games, three arms,
+same seeds)
 
-`python agi3/run.py --ab --steps 3000` (all 24 playable games)
-
-| agent | levels cleared | aggregate score | games cleared |
+| arm | levels per seed | mean | score min / mean / max |
 |---|---|---|---|
-| starter random agent | **4** | 0.0505 | ar25, cd82, m0r0, sp80 |
-| legal-only + counter-masked + sweep | 3 | **0.1141** | lf52, lp85, vc33 |
+| starter random | [4, 2, 4] | 3.3 | 0.0013 / 0.0290 / 0.0780 |
+| ours, argmax policy | [3, 3, 3] | 3.0 | 0.1141 / **0.1141** / 0.1141 |
+| ours, sampling policy | [6, 4, 6] | **5.3** | 0.1190 / **0.1228** / 0.1282 |
 
-Read this carefully, because it is not the clean win the three-game subset
-suggested. On `ls20,tr87,vc33` alone the random agent scores 0 and ours scores
-above it; on the full set the random agent clears **more levels than we do**.
-We are 2.2x ahead on aggregate score and one level behind on count.
+Three things worth separating.
 
-**The two agents clear disjoint sets of games.** That is the finding, not the
-scoreline:
+**The argmax arm has zero variance.** Identical to four decimals across three
+seeds, because that policy is deterministic -- both decision points were
+`max(..., key=effect_rate)` and the rng only fed a fallback that rarely
+fires. So 0.1141 is its true value, not a sample, and earlier single-run
+comparisons against it were sounder than they looked.
 
-- We win where the analysis predicted -- lp85 and vc33 are click-driven, the
-  regime where random is arithmetically hopeless.
-- We *lose* four games random wins (ar25, cd82, m0r0, sp80), and all four
-  expose five or more actions.
+**The sampling fix is real but small.** Its worst seed (0.1190) beats argmax's
+constant (0.1141), so the ranges do not overlap -- but the mean gain is +7.6%.
 
-The regression has a specific cause. The policy drains every untried simple
-action in a masked state before it will consider a click, and prefers actions
-with a track record of changing the masked state. On a game with six or seven
-live actions and rich dynamics, that is systematically *less* diverse than
-uniform sampling: it commits early to whatever moved the state first and
-under-explores the rest. Random's only virtue -- it never stops trying
-everything -- turns out to matter on exactly the games where the action space
-is already small enough to stumble through.
+**And that is the finding.** Levels cleared went 3.0 -> 5.3, a 77% increase,
+and bought 7.6% of score. Level count is not what this benchmark pays for.
 
-So the honest summary is: legal-action masking and counter-row masking are
-unambiguously correct and should stay; the *systematic* exploration schedule
-built on top of them is an improvement on click-only games and a regression on
-action-rich ones. The obvious next step is to make the schedule adaptive on
-`len(available_actions)` -- sweep when the action space is a 4096-cell board,
-sample when it is six buttons -- and to re-run this same A/B as the ablation.
+### We have been optimising the wrong quantity
+
+The competition defines a per-game score where 100% means beating the game
+*while matching the number of actions a human took*. We spend 3001 actions per
+game. A human spends order tens. If the efficiency term is multiplicative, it
+pins every score we produce near the floor regardless of progress, which is
+exactly the pattern above: a large change in progress moving the score barely
+at all.
+
+If that is right, the route from our 0.12 to the leader's 7.51 -- 60x -- does
+not run through clearing more levels. It runs through clearing the same levels
+in far fewer actions, which is a different optimisation problem than the one
+the sweep was designed for. A systematic 4096-cell sweep is the *most*
+action-hungry thing you could do; it is right for discovering the two live
+cells and wrong for scoring once you know them.
+
+Testable, and cheap: hold the policy fixed and vary only the action budget. If
+score rises as the budget falls, efficiency dominates and the sweep needs a
+phase that stops sweeping once it has found the responsive cells.
 
 ---
 

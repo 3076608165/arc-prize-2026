@@ -21,7 +21,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 STARTER = ROOT / "data" / "ARC-AGI-3-Kaggle-Starter"
 TARGET = STARTER / "agent" / "my_agent.py"
-AGENTS = {"explore": ROOT / "agi3" / "my_agent.py", "random": ROOT / "agi3" / "random_agent.py"}
+AGENTS = {
+    "explore": ROOT / "agi3" / "my_agent.py",
+    "random": ROOT / "agi3" / "random_agent.py",
+    # Frozen previous policy, kept so a change can be ablated against the thing
+    # it replaced rather than only against the random floor.
+    "argmax": ROOT / "agi3" / "argmax_agent.py",
+}
+AB_ARMS = ("random", "argmax", "explore")
 
 SUMMARY = re.compile(r"^\s+(\w+)\s+levels=\s*(\d+)\s+actions=\s*(\d+)\s+state=(\S+)")
 SCORE = re.compile(r"Aggregate scorecard score:\s*([\d.]+)")
@@ -34,7 +41,7 @@ def venv_python() -> Path:
     raise SystemExit(f"No venv under {STARTER}. Run: bash scripts/setup.sh")
 
 
-def play(agent: str, games: str, steps: int) -> dict:
+def play(agent: str, games: str, steps: int, seed: int = 0) -> dict:
     src = AGENTS[agent]
     if not src.exists():
         raise SystemExit(f"missing agent source {src}")
@@ -43,7 +50,7 @@ def play(agent: str, games: str, steps: int) -> dict:
     cmd = [str(venv_python()), "scripts/play_local.py", "--max-steps", str(steps)]
     if games:
         cmd += ["--game", games]
-    env = {**os.environ, "PYTHONIOENCODING": "utf-8"}
+    env = {**os.environ, "PYTHONIOENCODING": "utf-8", "ARC_SEED": str(seed)}
     # The child prints UTF-8; this box's locale is GBK, so decode explicitly.
     proc = subprocess.run(
         cmd, cwd=STARTER, capture_output=True, text=True,
@@ -80,19 +87,40 @@ def main() -> int:
     ap.add_argument("--games", default="", help="comma-separated ids; empty = all 24")
     ap.add_argument("--steps", type=int, default=300)
     ap.add_argument("--ab", action="store_true", help="run random then explore")
+    ap.add_argument("--seeds", type=int, default=1,
+                    help="repeat the whole A/B under N randomisations and report "
+                         "the spread. One run is a noisy sample.")
     args = ap.parse_args()
 
+    def levels(res: dict) -> int:
+        return sum(g["levels"] for g in res["games"].values())
+
     if args.ab:
-        base = play("random", args.games, args.steps)
-        report(f"random baseline ({args.steps} steps/game)", base)
-        ours = play("explore", args.games, args.steps)
-        report(f"explore agent ({args.steps} steps/game)", ours)
-        b = sum(g["levels"] for g in base["games"].values())
-        o = sum(g["levels"] for g in ours["games"].values())
-        print(f"\nlevels cleared: random {b} -> explore {o}")
-        print(f"scorecard:      random {base['score']} -> explore {ours['score']}")
+        rows: dict[str, list[tuple[int, float]]] = {a: [] for a in AB_ARMS}
+        cleared: dict[str, set[str]] = {a: set() for a in AB_ARMS}
+        for seed in range(args.seeds):
+            for arm in AB_ARMS:
+                res = play(arm, args.games, args.steps, seed=seed)
+                rows[arm].append((levels(res), res["score"]))
+                cleared[arm] |= {g for g, v in res["games"].items() if v["levels"]}
+                if args.seeds == 1:
+                    report(f"{arm} ({args.steps} steps/game)", res)
+
+        if args.seeds > 1:
+            print(f"\n=== {args.seeds} seeds x {args.steps} steps/game ===")
+            for arm in AB_ARMS:
+                lv = [r[0] for r in rows[arm]]
+                sc = [r[1] for r in rows[arm]]
+                print(f"  {arm:<8} levels {lv}  mean {sum(lv)/len(lv):.1f}"
+                      f"   score min {min(sc):.4f} mean {sum(sc)/len(sc):.4f} max {max(sc):.4f}")
+                print(f"           ever cleared: {', '.join(sorted(cleared[arm])) or 'none'}")
+        else:
+            b, o = rows["random"][0], rows["explore"][0]
+            print(f"\nlevels cleared: random {b[0]} -> explore {o[0]}")
+            print(f"scorecard:      random {b[1]} -> explore {o[1]}")
     else:
-        report(f"{args.agent} ({args.steps} steps/game)", play(args.agent, args.games, args.steps))
+        report(f"{args.agent} ({args.steps} steps/game)",
+               play(args.agent, args.games, args.steps))
     return 0
 
 

@@ -37,6 +37,7 @@ for games driven by simple actions.
 """
 from __future__ import annotations
 
+import os
 import random
 from collections import defaultdict
 from typing import Any
@@ -139,7 +140,12 @@ class MyAgent(Agent):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self.rng = random.Random(0xA3C ^ (hash(self.game_id) & 0xFFFF))
+        # ARC_SEED lets `run.py --seeds` replay the whole sweep under different
+        # randomisation. Without it a single A/B is one sample of a noisy
+        # measurement: the random baseline alone has scored 4 levels and 2
+        # levels on identical settings.
+        seed_base = int(os.environ.get("ARC_SEED", "0"))
+        self.rng = random.Random(0xA3C ^ (hash(self.game_id) & 0xFFFF) ^ (seed_base * 0x9E37))
 
         # counter detection
         self.row_changes: list[int] = [0] * BOARD

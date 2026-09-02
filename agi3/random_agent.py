@@ -19,6 +19,7 @@ Contract (enforced by the ARC-AGI-3-Agents framework):
 """
 from __future__ import annotations
 
+import os
 import random
 import time
 from typing import Any
@@ -40,7 +41,8 @@ class MyAgent(Agent):
         super().__init__(*args, **kwargs)
         # Seed per game_id so replays from the same game are reproducible but
         # different games explore independently.
-        seed = int(time.time() * 1_000_000) + hash(self.game_id) % 1_000_000
+        seed = (int(os.environ.get("ARC_SEED", "0")) * 0x9E37
+                + hash(self.game_id) % 1_000_000)
         random.seed(seed)
 
     @property
