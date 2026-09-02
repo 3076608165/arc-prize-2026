@@ -264,7 +264,19 @@ class MyAgent(Agent):
     ) -> GameAction:
         untried = [a for a in simple if a.value not in self.tried_simple[sig]]
         if untried:
-            action = max(untried, key=self._effect_rate)
+            # Uniform, deliberately -- not argmax by effect rate.
+            #
+            # The size of the action space decides whether coverage or sampling
+            # wins, and these games span both regimes. Over 4096 click cells,
+            # of which 2 do anything, chance never finds them and only a sweep
+            # works. Over four to seven buttons, chance tries everything within
+            # a few steps, and imposing an order on top only removes diversity:
+            # ranking by a statistic gathered in *other* states commits early
+            # to whatever happened to move the frame first.
+            #
+            # Measured: the argmax version cleared 3 games to the random
+            # agent's 4, losing exactly the four that expose 5+ actions.
+            action = self.rng.choice(untried)
             self.tried_simple[sig].add(action.value)
             action.reasoning = "untried simple action in this masked state"
             return action
@@ -283,16 +295,25 @@ class MyAgent(Agent):
                 self.pending_click = (x, y)
                 return action
 
+        # Everything here has been tried. Sample in proportion to how often each
+        # action has moved the masked state, rather than replaying the single
+        # best one -- an argmax here is an absorbing state, and a game whose
+        # progress needs a button that happens to rank second never sees it
+        # again.
         pool = simple or complex_
-        action = max(pool, key=self._effect_rate)
+        action = self._sample_by_effect(pool)
         if action.is_complex():
             x, y = self.rng.randrange(BOARD), self.rng.randrange(BOARD)
             action.set_data({"x": x, "y": y})
             action.reasoning = {"why": "exhausted, random probe", "x": x, "y": y}
             self.pending_click = None
         else:
-            action.reasoning = "exhausted, replaying most effective action"
+            action.reasoning = "exhausted, sampled by effect rate"
         return action
+
+    def _sample_by_effect(self, pool: list[GameAction]) -> GameAction:
+        weights = [self._effect_rate(a) for a in pool]
+        return self.rng.choices(pool, weights=weights, k=1)[0]
 
     def _next_click(self, latest_frame: FrameData) -> tuple[int, int] | None:
         """Object centroids first, then a coarse-to-fine sweep, then what worked."""
