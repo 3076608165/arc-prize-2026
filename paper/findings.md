@@ -147,60 +147,80 @@ Clicking a known-valid cell and a known-invalid cell on vc33 produce
 byte-identical deltas: one cell, in the counter row. "Did the frame change" is
 only a usable signal *after* masking.
 
-### The reference implementation's score is not the score
+### The scoring formula, recovered
 
-`arc_agi.scorecard.Scorecard.score` reads:
+`arc_agi.scorecard.Scorecard.score` is documented "the average score of the
+runs" and implemented `max(run.score for run in self.runs)`. Every score
+comparison in this file before this section was reading that max. The
+per-*game* scores underneath it are correct; only the aggregation is wrong.
+`agi3/run.py` now patches a copy of `play_local.py` to emit them and takes the
+mean. The engine computes, per level:
 
-```python
-def score(self) -> float:
-    """Return the average score of the runs."""
-    return max(run.score for run in self.runs)
+```
+level_score = min( (human_baseline_actions / actions_on_that_level) ** 2 * 100, 100 )
+game_score  = level-index-weighted mean, capped at
+              sum(indices of completed levels) / sum(all indices) * 100
 ```
 
-Documented as an average, implemented as a max over games. It reports the
-single best game, so it barely moves when an agent clears twice as many, and
-one lucky game swings it 3x between otherwise identical runs. Everything in
-this file that compared "scores" before this section was reading it.
+Human baselines are available locally -- all 25 environments expose
+`baseline_actions` (vc33 level 1 is 7 actions; ls20 level 1 is 22).
 
-The competition describes averaging per-game scores. `agi3/run.py` now computes
-that itself from `levels_completed / win_levels` (cached in
-`agi3/win_levels.json`: 183 levels across 25 games) and reports it as
-**progress**. It ignores the action-efficiency term -- we have no human action
-counts -- so it is an upper bound on the true score, but it is stable and it
-moves when the agent improves.
+Three properties matter, and our earlier metrics saw none of them:
 
-### The ablation, on the honest metric
+**Actions are counted per level, not per game.** Grinding 3000 actions against
+level 2 does not dilute what you earned on level 1.
 
-`python agi3/run.py --ab --steps 3000 --seeds 3`
+**The efficiency term is squared.** Ten times the human action count returns 1%
+of that level.
 
-| arm | levels | **progress** | lib-score (max-of-games) |
+**Depth sets a hard ceiling.** Completing only level 1 of an eight-level game
+caps that game at 1/36 * 100 = 2.78, however efficiently you did it.
+
+Two games make it concrete -- both cleared exactly one level in 3001 actions:
+
+| game | level 1 baseline | score |
+|---|---|---|
+| lp85 | 17 actions | **2.7778** (at the cap) |
+| vc33 | 7 actions | **0.0000** |
+
+lp85 cleared level 1 inside its human baseline and collected the whole ceiling.
+vc33 took ~3000 actions to pass a 7-action level, and the square annihilated it.
+
+### The ablation, on the real metric
+
+`python agi3/run.py --ab --steps 3000 --seeds 2`
+
+| arm | levels | progress | **true score** |
 |---|---|---|---|
-| starter random | 2.7 | 0.0167 [0.0117-0.0200] | 0.0100 |
-| ours, argmax | 3.0 | **0.0147** [constant] | 0.1141 |
-| ours, sampling | **5.7** | **0.0314** [0.0214-0.0380] | 0.1395 |
+| starter random | 1.5 | 0.0100 | 0.0489 [0.0044-0.0933] |
+| ours, argmax | 3.0 | 0.0147 | 0.1141 [constant] |
+| ours, sampling | 4.5 | 0.0252 | **0.2153** [0.1265-0.3042] |
 
-Two conclusions invert once the metric is fixed.
+The ordering is finally consistent across all three columns, and the sampling
+fix is worth ~1.9x over the policy it replaced.
 
-**The sampling fix is worth ~2.1x, not the +7.6% the broken metric showed.**
-Its range does not overlap argmax's constant.
+**This also gives the first genuine calibration point.** The argmax policy is
+what we submitted; it scores 0.1141 locally and returned **0.15** on the
+leaderboard's hidden game set, under the same formula. So local numbers can be
+trusted to about that tolerance -- which makes the sampling agent's 0.2153 worth
+roughly 0.28 on the board, against a field median of 0.27.
 
-**The argmax policy was worse than random** -- 0.0147 against 0.0167 -- while
-the broken metric scored it 11x *better* than random (0.1141 vs 0.0100). That
-policy is what we submitted to the leaderboard. The bug did not merely add
-noise; it reversed the direction of the comparison.
+### Depth beats breadth, arithmetically
 
-The argmax arm's zero variance is real and independently useful: that policy is
-deterministic, since both decision points were `max(..., key=effect_rate)` and
-the rng only fed a rarely-taken fallback.
+The cap is the lever. Our agents clear level 1 of several games. Consider
+instead clearing levels 1-4 of a single eight-level game at human efficiency:
 
-### Still open
+    cap = (1+2+3+4) / (1+...+8) * 100 = 27.8 for that game
+    aggregate contribution = 27.8 / 24 games = 1.16
 
-Progress ignores action efficiency, and the competition's 100% means beating a
-game *while matching human action count*. We spend 3001 actions per game where
-a human spends order tens, so the efficiency term may still dominate the real
-score. The earlier budget sweep that appeared to test this (200/600/1500/3000
-steps) reported max-of-games numbers and establishes nothing. Re-running it
-against progress is the next measurement.
+That single game would be **5x our entire current score**, and the leader sits
+at 7.51. Breadth is worth almost nothing here: a first level is the cheapest
+index in the weighting, and we are collecting the cheapest one in each of
+several games while paying full exploration cost for each.
+
+That is a concrete, testable redirection: spend the action budget going deep in
+the games we can already enter, rather than sweeping every game for its
+entrance.
 
 ---
 
