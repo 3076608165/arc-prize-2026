@@ -35,9 +35,15 @@ what the teams at 30-70 are actually running (ARC Prize 2025 writeups, public
 notebooks on this competition). Optimising the last few percent of a dead
 branch is the expensive mistake available here.
 
-One thing that did hold up: **the local harness is predictive.** The ARC-AGI-3
-local A/B said 0.1141 and the leaderboard said 0.15 on a different hidden game
-set. Local iteration is trustworthy; that is worth a lot for speed.
+~~One thing that did hold up: the local harness is predictive. The ARC-AGI-3
+local A/B said 0.1141 and the leaderboard said 0.15.~~ **Retracted.** That
+0.1141 came from the library's `max(run.score ...)` metric, which reports the
+best single game rather than an aggregate -- see *The reference
+implementation's score is not the score* below. Two numbers landing near each
+other was a coincidence, not a validation. **We currently have no established
+relationship between any local metric and the leaderboard**, which is the main
+reason to spend a submission on the sampling agent: it buys the first
+calibration point.
 
 ---
 
