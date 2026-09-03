@@ -55,6 +55,11 @@ MAX_CLICK_TARGETS = 128
 NOISE_WARMUP = 24
 NOISE_ROW_FRACTION = 0.85
 
+# Fraction of clicks still spent looking for new controls once some are known.
+# Scoring squares the action count per level, so exploration after the controls
+# are found is paid for twice: once in actions, once in the squared penalty.
+EXPLORE_RATE = 0.15
+
 # `GameAction.value` is 1-7 but the by-value constructor rejects those ints,
 # so build the reverse map by iterating the members.
 BY_VALUE = {a.value: a for a in GameAction}
@@ -159,6 +164,7 @@ class MyAgent(Agent):
         self.responsive: list[tuple[int, int]] = []   # cells that moved the masked state
         self.dead: set[tuple[int, int]] = set()
         self.pending_click: tuple[int, int] | None = None
+        self.exploit_pos = -1
         self.effect: dict[int, list[int]] = defaultdict(lambda: [0, 0])
 
         self.prev_sig: int | None = None
@@ -322,7 +328,30 @@ class MyAgent(Agent):
         return self.rng.choices(pool, weights=weights, k=1)[0]
 
     def _next_click(self, latest_frame: FrameData) -> tuple[int, int] | None:
-        """Object centroids first, then a coarse-to-fine sweep, then what worked."""
+        """Exploit known controls first; sweep for new ones only in the gaps.
+
+        The scoring formula makes this the difference between a level being
+        worth something and worth nothing. A level scores
+        ``(human_baseline_actions / actions_on_that_level) ** 2``, so on a game
+        whose first level a human clears in 7 actions, taking 3000 returns
+        essentially zero -- while taking 17 collects the entire structural cap.
+
+        The previous version returned every untried cell before it would reuse
+        one it had already seen work, so it finished discovering the controls
+        and then kept sweeping the remaining few thousand cells anyway. It was
+        paying full exploration price for a level it had already learned how to
+        play.
+
+        Once a cell is known to move the masked state, replay it. Keep a small
+        exploration rate so a level that needs a *second* control can still
+        find it.
+        """
+        if self.responsive and self.rng.random() > EXPLORE_RATE:
+            # Cycle rather than sample, so several known controls all get used
+            # instead of the RNG favouring one.
+            self.exploit_pos = (self.exploit_pos + 1) % len(self.responsive)
+            return self.responsive[self.exploit_pos]
+
         for pt in _components(_layer(latest_frame.frame)):
             if pt not in self.dead and pt not in self.responsive:
                 return pt
@@ -335,7 +364,8 @@ class MyAgent(Agent):
 
         # Board fully swept. Re-use whatever actually did something.
         if self.responsive:
-            return self.responsive[self.rng.randrange(len(self.responsive))]
+            self.exploit_pos = (self.exploit_pos + 1) % len(self.responsive)
+            return self.responsive[self.exploit_pos]
         return None
 
     def _effect_rate(self, action: GameAction) -> float:
