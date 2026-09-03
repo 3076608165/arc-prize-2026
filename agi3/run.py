@@ -28,11 +28,11 @@ AGENTS = {
     # Frozen previous policy, kept so a change can be ablated against the thing
     # it replaced rather than only against the random floor.
     "argmax": ROOT / "agi3" / "argmax_agent.py",
-    # Same policy as explore but EXPLORE_RATE=1.0, isolating the
-    # exploit phase as the only variable.
-    "sweeponly": ROOT / "agi3" / "sweeponly_agent.py",
+    # Same policy as explore but EXPLORE_RATE=0.15, isolating the exploit
+    # phase as the only variable. Currently the losing arm.
+    "exploit": ROOT / "agi3" / "exploit_agent.py",
 }
-AB_ARMS = ("random", "sweeponly", "explore")
+AB_ARMS = ("random", "exploit", "explore")
 
 SUMMARY = re.compile(r"^\s+(\w+)\s+levels=\s*(\d+)\s+actions=\s*(\d+)\s+state=(\S+)")
 SCORE = re.compile(r"Aggregate scorecard score:\s*([\d.]+)")

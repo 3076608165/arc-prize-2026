@@ -55,10 +55,18 @@ MAX_CLICK_TARGETS = 128
 NOISE_WARMUP = 24
 NOISE_ROW_FRACTION = 0.85
 
-# Fraction of clicks still spent looking for new controls once some are known.
-# Scoring squares the action count per level, so exploration after the controls
-# are found is paid for twice: once in actions, once in the squared penalty.
-EXPLORE_RATE = 0.15
+# Fraction of clicks still spent sweeping once some controls are known.
+#
+# 1.0 means "always keep sweeping" -- the exploit phase is OFF. It looked like
+# it should help: scoring squares per-level action count, so sweeping after the
+# controls are found is paid for twice. Measured over 5 seeds it did the
+# opposite, scoring 0.1356 against 0.1812 for plain sweeping while clearing
+# *more* levels (7.6 vs 6.0). Clearing more and scoring less is the whole
+# tension in this benchmark.
+#
+# At 2 seeds it looked 34% better. That was noise. See agi3/exploit_agent.py
+# for the variant and what to try next.
+EXPLORE_RATE = 1.0
 
 # `GameAction.value` is 1-7 but the by-value constructor rejects those ints,
 # so build the reverse map by iterating the members.

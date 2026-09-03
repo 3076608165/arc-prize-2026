@@ -222,6 +222,42 @@ That is a concrete, testable redirection: spend the action budget going deep in
 the games we can already enter, rather than sweeping every game for its
 entrance.
 
+### Negative result: exploiting known controls scores worse
+
+The scoring formula says sweeping after you have found a level's controls is
+paid for twice -- in actions, and again in the square. So once a cell is known
+to move the masked state, replay it instead of finishing the sweep. Frozen as
+`agi3/exploit_agent.py`; the only difference from the shipping policy is
+`EXPLORE_RATE` (0.15 vs 1.0).
+
+`python agi3/run.py --ab --steps 3000 --seeds 5`
+
+| arm | levels | true score |
+|---|---|---|
+| starter random | 2.6 | 0.0771 [0.0045-0.1905] |
+| **exploit** (EXPLORE_RATE 0.15) | **7.6** | 0.1356 [0.1159-0.1859] |
+| **sweep** (EXPLORE_RATE 1.0, shipping) | 6.0 | **0.1812** [0.1179-0.3055] |
+
+**It clears more and scores less.** 7.6 levels against 6.0, across 11 distinct
+games against 8 -- and 25% less score. Exploiting known controls grinds through
+levels, spending many actions each; plain sweeping occasionally falls into a
+level fast and collects a large share of that game's cap (its best seed is
+0.3055 against the exploit arm's 0.1859).
+
+That is the depth-versus-efficiency tension made concrete, and it is worth
+saying plainly: **on this benchmark, level count and score can move in opposite
+directions.** Any agent tuned against levels cleared -- which is the obvious
+thing to tune against, and what the library's own summary line shows you -- is
+being optimised away from the score.
+
+At 2 seeds this same comparison showed the exploit arm 34% *ahead*. It was
+noise. The measurement needs 5 seeds to separate these arms at all, and the
+ranges still overlap; only the means are ordered.
+
+The idea is not necessarily wrong -- the implementation trusts a cell as a
+control after it moves the masked state once, so one noisy frame can lock the
+agent onto a dead cell. Requiring repeated confirmation is the next attempt.
+
 ---
 
 ## What this gives the writeup
