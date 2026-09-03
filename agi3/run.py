@@ -62,6 +62,58 @@ def progress(per_game: dict) -> float:
     return sum(fracs) / len(fracs) if fracs else 0.0
 
 
+#: Appended to a copy of the starter's play_local.py so it also emits the
+#: per-environment scores. Those carry the real formula -- see true_score() --
+#: while the line play_local already prints is `Scorecard.score`, the max.
+#: The anchor must be inside play_local's `main()`, where `sc` is in scope --
+#: appending at module level fails with NameError because `arc` is a local.
+PER_ENV_ANCHOR = '    print(f"\\nAggregate scorecard score: {score_val}")'
+
+PER_ENV_PATCH = PER_ENV_ANCHOR + '''
+    import json as _json
+    _rows = []
+    for _e in (getattr(sc, "environments", None) or []):
+        _d = _e.model_dump() if hasattr(_e, "model_dump") else dict(_e)
+        _rows.append({"keys": sorted(_d.keys()),
+                      **{k: _d.get(k) for k in
+                         ("id", "game_id", "score", "levels_completed", "actions")}})
+    print("PER_ENV_JSON " + _json.dumps(_rows))'''
+
+PER_ENV = re.compile(r"^PER_ENV_JSON (.*)$", re.M)
+
+
+def true_score(rows: list[dict]) -> float:
+    """Mean per-game score -- the metric the competition describes.
+
+    Each game's score comes from the engine, which computes a level as
+
+        ((human_baseline_actions / actions_taken) ** 2) * 100     capped at 100
+
+    and then averages levels weighted by level index. Human baselines *are*
+    available locally: all 25 environments expose `baseline_actions`.
+
+    The only thing the library gets wrong is the final aggregation --
+    `Scorecard.score` returns `max(...)` under a docstring saying average -- so
+    we take the mean of the per-game scores it already computed correctly.
+
+    Note the square. Clearing a level in 10x the human action count scores 1%
+    of that level, not 10%.
+    """
+    if not rows:
+        return 0.0
+    return sum(float(r.get("score") or 0.0) for r in rows) / len(rows)
+
+
+def patched_runner() -> Path:
+    """Write play_local.py + the per-env dump, leaving the original alone."""
+    src = (STARTER / "scripts" / "play_local.py").read_text(encoding="utf-8")
+    if PER_ENV_ANCHOR not in src:
+        raise SystemExit("play_local.py changed shape; re-read it before patching")
+    out = STARTER / "scripts" / "_play_local_scored.py"
+    out.write_text(src.replace(PER_ENV_ANCHOR, PER_ENV_PATCH), encoding="utf-8")
+    return out
+
+
 def venv_python() -> Path:
     for cand in (STARTER / ".venv" / "Scripts" / "python.exe", STARTER / ".venv" / "bin" / "python"):
         if cand.exists():
@@ -75,7 +127,8 @@ def play(agent: str, games: str, steps: int, seed: int = 0) -> dict:
         raise SystemExit(f"missing agent source {src}")
     shutil.copyfile(src, TARGET)
 
-    cmd = [str(venv_python()), "scripts/play_local.py", "--max-steps", str(steps)]
+    runner = patched_runner().relative_to(STARTER).as_posix()
+    cmd = [str(venv_python()), runner, "--max-steps", str(steps)]
     if games:
         cmd += ["--game", games]
     env = {**os.environ, "PYTHONIOENCODING": "utf-8", "ARC_SEED": str(seed)}
@@ -85,8 +138,11 @@ def play(agent: str, games: str, steps: int, seed: int = 0) -> dict:
         encoding="utf-8", errors="replace", env=env,
     )
 
-    per_game, score = {}, None
+    per_game, score, rows = {}, None, []
     for line in proc.stdout.splitlines():
+        if m := PER_ENV.match(line):
+            rows = json.loads(m.group(1))
+            continue
         if m := SUMMARY.match(line):
             per_game[m.group(1)] = {
                 "levels": int(m.group(2)),
@@ -98,17 +154,22 @@ def play(agent: str, games: str, steps: int, seed: int = 0) -> dict:
     if score is None:
         sys.stderr.write(proc.stdout[-3000:] + "\n" + proc.stderr[-3000:])
         raise SystemExit(f"{agent}: run produced no scorecard")
-    return {"score": score, "games": per_game}
+    return {"score": score, "games": per_game, "true": true_score(rows), "rows": rows}
 
 
 def report(label: str, res: dict) -> None:
     total = sum(g["levels"] for g in res["games"].values())
-    print(f"\n--- {label} ---  progress {progress(res['games']):.4f}"
-          f"   levels cleared {total}"
-          f"   lib-score(max-of-games) {res['score']:.4f}")
+    print(f"\n--- {label} ---  TRUE {res['true']:.4f}"
+          f"   progress {progress(res['games']):.4f}"
+          f"   levels {total}"
+          f"   lib-score(max) {res['score']:.4f}")
+    by_id = {(r.get("game_id") or r.get("id") or "").split("-")[0]: r for r in res["rows"]}
     for gid, g in sorted(res["games"].items()):
+        r = by_id.get(gid, {})
+        sc = r.get("score")
         flag = "  <-- progress" if g["levels"] else ""
-        print(f"    {gid:6} levels={g['levels']:2}  actions={g['actions']:5}  {g['state']}{flag}")
+        print(f"    {gid:6} levels={g['levels']:2}  actions={g['actions']:5}"
+              f"  score={sc if sc is None else f'{float(sc):.4f}'}{flag}")
 
 
 def main() -> int:
@@ -131,7 +192,7 @@ def main() -> int:
         for seed in range(args.seeds):
             for arm in AB_ARMS:
                 res = play(arm, args.games, args.steps, seed=seed)
-                rows[arm].append((levels(res), progress(res["games"]), res["score"]))
+                rows[arm].append((levels(res), progress(res["games"]), res["true"]))
                 cleared[arm] |= {g for g, v in res["games"].items() if v["levels"]}
                 if args.seeds == 1:
                     report(f"{arm} ({args.steps} steps/game)", res)
@@ -145,14 +206,14 @@ def main() -> int:
                 print(f"  {arm:<8} levels {lv} mean {sum(lv)/len(lv):.1f}"
                       f" | progress mean {sum(pr)/len(pr):.4f}"
                       f" [{min(pr):.4f}-{max(pr):.4f}]"
-                      f" | lib-score(max-of-games) mean {sum(sc)/len(sc):.4f}"
-                      f" [{min(sc):.4f}-{max(sc):.4f}]")
+                      f" | TRUE SCORE mean {sum(sc)/len(sc):.6f}"
+                      f" [{min(sc):.6f}-{max(sc):.6f}]")
                 print(f"           ever cleared: {', '.join(sorted(cleared[arm])) or 'none'}")
         else:
             print()
             for arm in AB_ARMS:
                 lv, pr, sc = rows[arm][0]
-                print(f"  {arm:<8} levels {lv:2}  progress {pr:.4f}  lib-score {sc:.4f}")
+                print(f"  {arm:<8} levels {lv:2}  progress {pr:.4f}  TRUE {sc:.6f}")
     else:
         report(f"{args.agent} ({args.steps} steps/game)",
                play(args.agent, args.games, args.steps))
