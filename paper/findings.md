@@ -7,43 +7,63 @@ what did not.
 
 ---
 
-## Leaderboard reality check (2026-09-02)
+## Leaderboard, 2026-09-04
 
-Both pipelines were submitted and scored. Read this section before the
-analysis below it, because it bounds how much that analysis is worth.
-
-| competition | our score | rank | field median | field max | teams scoring > 0 |
+| competition | first submission | now | rank | field median | field max |
 |---|---|---|---|---|---|
-| ARC-AGI-2 | **0.00** | **1760 / 1760** | 27.64 | 72.08 | 1142 / 1760 |
-| ARC-AGI-3 | **0.15** | 1949 / 2706 | 0.27 | 7.51 | 2563 / 2706 |
+| ARC-AGI-2 | 0.00 (1760/1760) | **30.14** | **591 / 1802** | 27.64 | 73.33 |
+| ARC-AGI-3 | 0.15 | 0.15 (best kept) | 2006 / 2773 | 0.27 | 7.51 |
 
-Submissions `55951759` (ARC-AGI-2) and `55949902` (ARC-AGI-3).
+### ARC-AGI-2: switching families was the whole thing
 
-**This kills a framing used further down.** The sections below describe
-ARC-AGI-2 as a benchmark that resists the classical search family, and they are
-accurate about *what was measured*. But 1142 teams score above zero and the
-median is 27.64, so the benchmark is not the obstacle -- our hypothesis class
-is. A 0.00 against a median of 27.64 is not "the benchmark is hard", it is
-"this approach is not in the running". Any claim below that reads as *ARC-AGI-2
-is near-impossible* should be read as *depth-3 DSL search is roughly 28 points
-behind whatever the field is doing*.
+0.00 to 30.14, last place to rank 591 of 1802, above the field median. Nothing
+about our own ideas produced that -- it is the NVARC-lineage public notebook,
+forked and run. The lesson is the one the 0.00 already implied and this
+confirms: on this benchmark the hypothesis class *is* the result. Depth-3 DSL
+search scored zero; a 4B model with per-task test-time training scores 30 with
+no cleverness from us at all.
 
-The practical consequence: the propose-and-repair direction argued for below is
-derived from where **our** search stalls. That is a real observation about our
-search and a poor guide to closing a 0 -> 28 gap. Before building it, find out
-what the teams at 30-70 are actually running (ARC Prize 2025 writeups, public
-notebooks on this competition). Optimising the last few percent of a dead
-branch is the expensive mistake available here.
+It also cost almost nothing in quota -- ~0.9h for the commit, with the 240-task
+work running on Kaggle's side during the rerun.
 
-~~One thing that did hold up: the local harness is predictive. The ARC-AGI-3
-local A/B said 0.1141 and the leaderboard said 0.15.~~ **Retracted.** That
-0.1141 came from the library's `max(run.score ...)` metric, which reports the
-best single game rather than an aggregate -- see *The reference
-implementation's score is not the score* below. Two numbers landing near each
-other was a coincidence, not a validation. **We currently have no established
-relationship between any local metric and the leaderboard**, which is the main
-reason to spend a submission on the sampling agent: it buys the first
-calibration point.
+### ARC-AGI-3: our local metric anti-predicted the board
+
+This is the more instructive result.
+
+| version | local true score (5 seeds) | leaderboard |
+|---|---|---|
+| v1, argmax policy | 0.1141 | **0.15** |
+| v2, sampling policy | 0.1812 | **0.04** |
+
+Local said the sampling policy was 59% better. The board says it is 73% worse.
+The metric we spent a day building -- recovering the real formula, caching
+human baselines, fixing the library's max-vs-mean bug -- **inverted** against
+the only ground truth that counts.
+
+The likeliest explanation is not that the metric is wrong but that **one run
+cannot resolve this difference**. Our own 5-seed spread for a single policy was
+[0.1179, 0.3055], a 2.6x range. The leaderboard is a *single* run of that same
+high-variance measurement, and 0.04 vs 0.15 sits comfortably inside it. Two
+policies whose 5-seed means differ by 1.5x are simply not separable by one
+sample each.
+
+**The operational consequence is hard.** ARC-AGI-3 allows one submission per
+day. If single-run variance is ~2.6x, then no change smaller than roughly 3x
+can be confirmed on the leaderboard at all, and a day of submissions buys one
+sample. Local iteration cannot be validated against the board at the effect
+sizes we are producing.
+
+Two ways out, and they are the real choice on this track:
+
+1. **Stop chasing small gains.** Only pursue changes with a plausible >3x
+   effect -- which, given the cap structure, means going deep in a game rather
+   than entering more of them.
+2. **Treat the local 5-seed mean as the target and stop spending submissions to
+   check it.** Accept that we are optimising a proxy, and only submit when the
+   local number has moved by more than its own spread.
+
+Neither is comfortable, and pretending the 0.04 was informative about the
+policy would be worse.
 
 ---
 

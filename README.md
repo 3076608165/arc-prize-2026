@@ -8,18 +8,16 @@ for the Paper Track that both feed.
 
 | competition | our score | rank | field median | field max |
 |---|---|---|---|---|
-| ARC-AGI-2 | **0.00** | **1760 / 1760** | 27.64 | 72.08 |
-| ARC-AGI-3 | **0.15** | 1949 / 2706 | 0.27 | 7.51 |
+| ARC-AGI-2 | **30.14** | 591 / 1802 | 27.64 | 73.33 |
+| ARC-AGI-3 | 0.15 | 2006 / 2773 | 0.27 | 7.51 |
 
-Last place and just under half the field respectively. 1142 of 1760 ARC-AGI-2
-teams score above zero, so the gap is our hypothesis class, not the benchmark.
+ARC-AGI-2 went 0.00 -> 30.14 by abandoning our own approach and running the
+public NVARC-lineage notebook. See [paper/state-of-the-art.md](paper/state-of-the-art.md).
 
-[paper/state-of-the-art.md](paper/state-of-the-art.md) says what the gap is:
-every competitive ARC-AGI-2 system is an LLM with per-task test-time training,
-not a program search. The best public notebook (LB 33.89) LoRA-finetunes a
-4B Qwen3 already SFT'd on ARC grids, on each task's own demo pairs, then
-decodes with a constrained DFS over the ~12 legal grid tokens. Read that and
-[paper/findings.md](paper/findings.md) before extending anything here.
+ARC-AGI-3 is stuck, and [paper/findings.md](paper/findings.md) explains why it
+is hard to unstick: our local metric said the newer policy was 59% better and
+the board scored it 73% worse, which single-run variance alone can account for.
+At one submission per day, changes below ~3x are not measurable there.
 
 ## Deadlines (all 23:59 UTC)
 
