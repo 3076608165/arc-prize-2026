@@ -100,6 +100,27 @@ def drop_allowlist(nb: dict) -> bool:
     return False
 
 
+def add_cellvote(nb: dict) -> bool:
+    """Append our per-cell voting selector to the arc_decoder.py cell.
+
+    It registers itself in `selection_algorithms`, so a commit run's
+    `benchmark_selection_algos()` prints its accuracy next to upstream's two on
+    the same decoded candidates -- an ablation that costs no extra compute.
+    """
+    sys.path.insert(0, str(ROOT / "agi2"))
+    from cellvote_patch import CELLVOTE_SRC
+
+    for cell in nb["cells"]:
+        if cell["cell_type"] != "code":
+            continue
+        txt = cell_text(cell)
+        if "%%writefile arc_decoder.py" in txt:
+            cell["source"] = (txt.rstrip() + "\n" + CELLVOTE_SRC).splitlines(
+                keepends=True)
+            return True
+    return False
+
+
 def set_budget(nb: dict, hours: float) -> bool:
     """Rewrite the single `global_end_time = ...` line."""
     pat = re.compile(r"global_end_time\s*=\s*time\.time\(\)\s*\+[^\n]*")
@@ -124,6 +145,9 @@ def main() -> int:
                     help="wall-clock budget. Upstream uses 11.83 (12h - 10min).")
     ap.add_argument("--out", default="agi2/out/nvarc")
     ap.add_argument("--refresh", action="store_true", help="re-pull upstream")
+    ap.add_argument("--cellvote", action="store_true",
+                    help="add our per-cell voting selector as an extra arm in "
+                         "benchmark_selection_algos()")
     ap.add_argument("--full-eval", action="store_true",
                     help="queue all 120 evaluation tasks in commit mode instead of "
                          "upstream's 4-task shortcut, to measure throughput")
@@ -136,6 +160,10 @@ def main() -> int:
     if not set_budget(nb, args.hours):
         raise SystemExit("could not find `global_end_time = time.time() + ...`; "
                          "upstream changed shape, re-read it before pushing")
+
+    if args.cellvote and not add_cellvote(nb):
+        raise SystemExit("could not find the arc_decoder.py cell; upstream "
+                         "changed shape, re-read it before pushing")
 
     if args.full_eval and not drop_allowlist(nb):
         raise SystemExit("could not find the four-task allowlist in starter.py; "
@@ -185,6 +213,7 @@ def main() -> int:
     queued = "all 120 eval tasks" if args.full_eval else "upstream 4-task shortcut"
     print(f"budget        : {args.hours}h")
     print(f"commit mode   : {queued}")
+    print(f"cell-vote arm : {'added' if args.cellvote else 'no'}")
     print(f"accelerator   : {meta.get('machine_shape', 'default GPU')}"
           f"   (L4 burns GPU quota at 2x)")
     print(f"model         : {', '.join(meta['model_sources']) or 'none'}")
