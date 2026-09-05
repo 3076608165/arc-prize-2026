@@ -278,6 +278,53 @@ The idea is not necessarily wrong -- the implementation trusts a cell as a
 control after it moves the masked state once, so one noisy frame can lock the
 agent onto a dead cell. Requiring repeated confirmation is the next attempt.
 
+### Where the 30.14 model actually fails, and what that rules out
+
+`python agi2/analyze_submission.py agi2/out/nvfull/submission.json`
+(NVARC run over all 120 public evaluation tasks, 167 scored outputs)
+
+| bucket | count | share |
+|---|---|---|
+| solved | 41 | 24.6% |
+| off-by-a-few (>=99% cells) | 8 | 4.8% |
+| near-miss (>=90% cells) | 47 | 28.1% |
+| right-shape-only | 34 | 20.4% |
+| wrong-shape | 37 | 22.2% |
+
+Median cell accuracy 94.1%, p90 100%. A third of all outputs get nine cells in
+ten right and score nothing, so the naive ceiling for perfect repair is 57.5%,
+2.34x the current score. That number is a trap, and the next measurement is why.
+
+**The two attempts err in overlapping places.** Across the 83 failed outputs
+where both attempts have the right shape:
+
+| | |
+|---|---|
+| error-set overlap (Jaccard), median / mean | **0.50 / 0.51** |
+| cells where both attempts agree and are right | 83.2% |
+| cells where both **agree and are wrong** | **7.6%** |
+| cells where they disagree | 9.1% |
+| failed outputs with *fully disjoint* error sets | **8 / 83** |
+
+So roughly half of every error is common-mode. Only 8 outputs have errors a
+vote could in principle resolve completely, and resolving them needs at least
+three candidates -- two can only tie. The realistic gain from per-cell voting
+is about **+4.8 points absolute** (24.6% -> 29.4%), not 2.34x.
+
+**This rules out the obvious mechanism and names the real one.** The public
+pipeline aggregates whole grids: `arc_decoder.score_sum` buckets candidates by
+`hashable(g["solution"])`, so two answers differing in one cell are treated as
+entirely different and compete. Adding per-cell voting is a genuine gap in that
+design and it is worth the few lines -- but it is a 5-point idea, not a
+doubling.
+
+The 7.6% both-wrong figure is the thing to attack. Those are cells where the
+model made the *same* mistake twice, which means it holds a wrong hypothesis
+about the transformation rather than sampling noisily around a right one. More
+samples of the same distribution cannot fix a misreading. That needs a
+different signal -- something that checks a candidate against the
+demonstrations rather than against other candidates.
+
 ---
 
 ## What this gives the writeup
