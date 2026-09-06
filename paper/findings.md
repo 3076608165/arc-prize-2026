@@ -26,44 +26,35 @@ no cleverness from us at all.
 It also cost almost nothing in quota -- ~0.9h for the commit, with the 240-task
 work running on Kaggle's side during the rerun.
 
-### ARC-AGI-3: our local metric anti-predicted the board
-
-This is the more instructive result.
+### ARC-AGI-3: the leaderboard is noise at our effect sizes
 
 | version | local true score (5 seeds) | leaderboard |
 |---|---|---|
-| v1, argmax policy | 0.1141 | **0.15** |
+| v1, argmax policy | 0.1141 | 0.15 |
 | v2, sampling policy | 0.1812 | **0.04** |
+| **v2 again, byte-identical resubmit** | -- | **0.12** |
 
-Local said the sampling policy was 59% better. The board says it is 73% worse.
-The metric we spent a day building -- recovering the real formula, caching
-human baselines, fixing the library's max-vs-mean bug -- **inverted** against
-the only ground truth that counts.
+The third row settles it. The *same kernel version*, resubmitted unchanged,
+returned 0.04 and then 0.12 -- a **3x spread on identical code**. So the
+apparent "sampling is 73% worse" was never a fact about the policy; 0.04 was a
+low sample of a wide distribution, and 0.15 / 0.04 / 0.12 are mutually
+indistinguishable.
 
-The likeliest explanation is not that the metric is wrong but that **one run
-cannot resolve this difference**. Our own 5-seed spread for a single policy was
-[0.1179, 0.3055], a 2.6x range. The leaderboard is a *single* run of that same
-high-variance measurement, and 0.04 vs 0.15 sits comfortably inside it. Two
-policies whose 5-seed means differ by 1.5x are simply not separable by one
-sample each.
+This exonerates the local metric rather than vindicating it: nothing has
+contradicted it, and nothing has confirmed it either. It also matches the local
+picture exactly -- our own 5-seed spread for one policy was [0.1179, 0.3055],
+also ~2.6x.
 
-**The operational consequence is hard.** ARC-AGI-3 allows one submission per
-day. If single-run variance is ~2.6x, then no change smaller than roughly 3x
-can be confirmed on the leaderboard at all, and a day of submissions buys one
-sample. Local iteration cannot be validated against the board at the effect
-sizes we are producing.
+**The operational consequence stands and is now measured, not inferred.** At
+one submission per day and ~3x single-run variance, no ARC-AGI-3 change below
+roughly 3x is confirmable on the board. Chasing small gains there is spending
+days to sample noise. Either pursue only large effects -- which the cap
+structure says means depth within a game, not more entrances -- or treat the
+local 5-seed mean as the target and stop paying submissions to check it.
 
-Two ways out, and they are the real choice on this track:
-
-1. **Stop chasing small gains.** Only pursue changes with a plausible >3x
-   effect -- which, given the cap structure, means going deep in a game rather
-   than entering more of them.
-2. **Treat the local 5-seed mean as the target and stop spending submissions to
-   check it.** Accept that we are optimising a proxy, and only submit when the
-   local number has moved by more than its own spread.
-
-Neither is comfortable, and pretending the 0.04 was informative about the
-policy would be worse.
+Worth stating for the writeup: **a benchmark whose leaderboard cannot resolve a
+1.5x improvement is a benchmark where published single-run comparisons should
+be read with suspicion**, including everyone else's.
 
 ---
 

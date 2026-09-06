@@ -121,6 +121,40 @@ def add_cellvote(nb: dict) -> bool:
     return False
 
 
+#: Copies the decoded-candidate store into the kernel's output. One run then
+#: yields a permanent local corpus on which any number of selection algorithms
+#: can be compared offline, at zero further quota -- instead of one 10h run per
+#: selector. The store is what `ArcDecoder.load_decoded_results` reads.
+SAVE_CANDIDATES_SRC = """
+
+# --- save the candidate store (added by agi2/repro_nvarc.py) ----------------
+import shutil as _shutil, os as _os
+_src, _dst = "/kaggle/inference_outputs", "/kaggle/working/inference_outputs"
+if _os.path.isdir(_src):
+    _shutil.rmtree(_dst, ignore_errors=True)
+    _shutil.copytree(_src, _dst)
+    _n = sum(len(f) for _, _, f in _os.walk(_dst))
+    _mb = sum(_os.path.getsize(_os.path.join(r, f))
+              for r, _, fs in _os.walk(_dst) for f in fs) / 1e6
+    print(f"saved candidate store: {_n} files, {_mb:.1f} MB")
+else:
+    print(f"NO CANDIDATE STORE at {_src}")
+"""
+
+
+def save_candidates(nb: dict) -> bool:
+    """Append the store copy to the final cell, after the submission is written."""
+    for cell in reversed(nb["cells"]):
+        if cell["cell_type"] != "code":
+            continue
+        txt = cell_text(cell)
+        if "submission.json" in txt and "json.dump" in txt:
+            cell["source"] = (txt.rstrip() + "\n" + SAVE_CANDIDATES_SRC).splitlines(
+                keepends=True)
+            return True
+    return False
+
+
 def set_budget(nb: dict, hours: float) -> bool:
     """Rewrite the single `global_end_time = ...` line."""
     pat = re.compile(r"global_end_time\s*=\s*time\.time\(\)\s*\+[^\n]*")
@@ -145,6 +179,9 @@ def main() -> int:
                     help="wall-clock budget. Upstream uses 11.83 (12h - 10min).")
     ap.add_argument("--out", default="agi2/out/nvarc")
     ap.add_argument("--refresh", action="store_true", help="re-pull upstream")
+    ap.add_argument("--save-candidates", action="store_true",
+                    help="copy the decoded-candidate store into kernel output so "
+                         "selection algorithms can be compared offline")
     ap.add_argument("--cellvote", action="store_true",
                     help="add our per-cell voting selector as an extra arm in "
                          "benchmark_selection_algos()")
@@ -160,6 +197,10 @@ def main() -> int:
     if not set_budget(nb, args.hours):
         raise SystemExit("could not find `global_end_time = time.time() + ...`; "
                          "upstream changed shape, re-read it before pushing")
+
+    if args.save_candidates and not save_candidates(nb):
+        raise SystemExit("could not find the submission-writing cell; upstream "
+                         "changed shape, re-read it before pushing")
 
     if args.cellvote and not add_cellvote(nb):
         raise SystemExit("could not find the arc_decoder.py cell; upstream "
