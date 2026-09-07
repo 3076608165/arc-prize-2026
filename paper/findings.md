@@ -340,6 +340,52 @@ samples of the same distribution cannot fix a misreading. That needs a
 different signal -- something that checks a candidate against the
 demonstrations rather than against other candidates.
 
+### The selection stage is not where the win is
+
+`repro_nvarc.py --save-candidates` copies the decode store out of the kernel
+once (1723 files, 2.5 MB, median 17 candidates per output). `select_offline.py`
+then scores any selector against public ground truth in seconds, at zero quota.
+Decoding costs ~8 worker-minutes a task; selection costs nothing. Only the
+second half is ours, and now only the second half has to be paid for twice.
+
+Three independent attacks on it, all negative:
+
+| selector | solved / 141 | vs upstream |
+|---|---|---|
+| **upstream `score_full_probmul_3`** | **42** (29.8%) | -- |
+| upstream `score_kgmon` | 41 | -1 |
+| our per-cell voting (`score_cellvote`) | 36 | **-6** |
+| best of 9 alternative ranking statistics | 41 | -1 |
+| **ORACLE -- any candidate in the pool** | **51** (36.2%) | **+9** |
+
+**Per-cell voting is wrong here.** A `MERGE_TOL` sweep makes it unambiguous:
+0.0 reproduces the baseline exactly (42), validating the implementation, and
+every non-zero tolerance is worse, roughly monotonically, to -12 at 0.20.
+Candidates that differ slightly are not noisy samples of one hypothesis; they
+are distinct answers the ranking already discriminates. The near-miss
+statistics that motivated this were real, but they described the *emitted pair*
+and not the candidate pool.
+
+**Shape filtering promotes nothing.** For the 9 outputs whose correct answer is
+in the pool but ranked below top-2, the truth sits at rank 3 four times and
+never below 7. A shape rule inferred from the demos matches the truth in 6 of
+those 9 -- and changes the rank of exactly **0**, because the candidates above
+it are shape-correct too. The competition is shape-right and content-wrong.
+
+**No reweighting of the available statistics helps.** Nine variants over
+`beam_score` and `score_aug` -- counts, sums, means, medians, minima, products
+-- and the best reaches 41. Searching nine rankers on 141 outputs would be a
+multiple-comparisons hazard if one had won; none did, which makes the
+conclusion stronger rather than weaker.
+
+**So the +9 is not reachable from inside the candidates.** Whatever separates
+the truth from three shape-correct rivals is not in `beam_score` or
+`score_aug`. Getting it needs either better candidates (the decode stage) or a
+signal from outside the pool -- the obvious one being leave-one-demo-out:
+re-fit on n-1 demonstrations and rank candidates by whether the resulting model
+reproduces the held-out one. That is a real verification signal, it is exactly
+what this pipeline lacks, and it costs decode-stage compute.
+
 ---
 
 ## What this gives the writeup
