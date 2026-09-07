@@ -26,7 +26,31 @@ no cleverness from us at all.
 It also cost almost nothing in quota -- ~0.9h for the commit, with the 240-task
 work running on Kaggle's side during the rerun.
 
-### ARC-AGI-3: the leaderboard is noise at our effect sizes
+### Leaderboard precision, measured on both tracks
+
+The same experiment on both boards -- resubmit byte-identical code and see what
+comes back -- gives opposite answers, and settles where effort belongs.
+
+| track | identical-code resubmits | spread | smallest change the board can resolve |
+|---|---|---|---|
+| ARC-AGI-2 | 30.14, 29.72 | **0.42 pts (1.4%)** | ~1 point |
+| ARC-AGI-3 | 0.15, 0.04, 0.12, 0.01 | **12x** | more than 12x |
+
+**ARC-AGI-2 is a precise instrument.** A one-point improvement is visible above
+the noise, so the +5-point per-cell voting estimate would show clearly, and
+work there converts into measurable score.
+
+**ARC-AGI-3 is not a measuring device at all** at anything below an order of
+magnitude. Our best is 0.15; demonstrating a real improvement would require
+roughly 2.0, which sits between the field median (0.27) and the leader (7.51).
+Every ARC-AGI-3 comparison we have made, and every published single-run
+comparison by anyone else, is inside that noise.
+
+That is the resource decision: **ARC-AGI-2 gets the effort.** ARC-AGI-3 keeps
+its daily submission because the slot is free, but no further engineering until
+something with an order-of-magnitude story exists.
+
+### ARC-AGI-3 detail: the leaderboard is noise at our effect sizes
 
 | version | local true score (5 seeds) | leaderboard |
 |---|---|---|

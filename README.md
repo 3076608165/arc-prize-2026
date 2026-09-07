@@ -19,6 +19,13 @@ is hard to unstick: our local metric said the newer policy was 59% better and
 the board scored it 73% worse, which single-run variance alone can account for.
 At one submission per day, changes below ~3x are not measurable there.
 
+### Which board can measure anything
+
+Resubmitting byte-identical code: ARC-AGI-2 returned 30.14 then 29.72 (1.4%
+spread); ARC-AGI-3 returned 0.15, 0.04, 0.12, 0.01 (12x). AGI-2 resolves a
+one-point change; AGI-3 cannot resolve an order of magnitude. Effort goes to
+AGI-2.
+
 ## Deadlines (all 23:59 UTC)
 
 | Date | What |
