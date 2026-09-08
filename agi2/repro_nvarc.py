@@ -100,6 +100,32 @@ def drop_allowlist(nb: dict) -> bool:
     return False
 
 
+def set_subset(nb: dict, n: int) -> list[str]:
+    """Replace the four-task allowlist with the first `n` evaluation task ids.
+
+    Turns a commit run into a controlled compute experiment: hold the task set
+    fixed, change only the per-task budget, and compare against the same tasks
+    from an earlier run. Upstream's allowlist mechanism is already the right
+    hook -- it just needs a longer list.
+    """
+    data = ROOT / "data" / "ARC-AGI-2" / "data" / "evaluation"
+    ids = sorted(p.stem for p in data.glob("*.json"))[:n]
+    replacement = (
+        "        if not rerun_mode:\n"
+        f"            if key not in {ids!r}:\n"
+        "                continue\n"
+    )
+    for cell in nb["cells"]:
+        if cell["cell_type"] != "code":
+            continue
+        txt = cell_text(cell)
+        if ALLOWLIST in txt:
+            cell["source"] = txt.replace(ALLOWLIST, replacement).splitlines(
+                keepends=True)
+            return ids
+    return []
+
+
 def add_cellvote(nb: dict) -> bool:
     """Append our per-cell voting selector to the arc_decoder.py cell.
 
@@ -185,6 +211,9 @@ def main() -> int:
     ap.add_argument("--cellvote", action="store_true",
                     help="add our per-cell voting selector as an extra arm in "
                          "benchmark_selection_algos()")
+    ap.add_argument("--subset", type=int, default=0,
+                    help="commit-mode: queue the first N evaluation tasks instead "
+                         "of upstream's 4, for controlled compute experiments")
     ap.add_argument("--full-eval", action="store_true",
                     help="queue all 120 evaluation tasks in commit mode instead of "
                          "upstream's 4-task shortcut, to measure throughput")
@@ -205,6 +234,12 @@ def main() -> int:
     if args.cellvote and not add_cellvote(nb):
         raise SystemExit("could not find the arc_decoder.py cell; upstream "
                          "changed shape, re-read it before pushing")
+
+    subset_ids = []
+    if args.subset:
+        subset_ids = set_subset(nb, args.subset)
+        if not subset_ids:
+            raise SystemExit("could not find the allowlist to replace")
 
     if args.full_eval and not drop_allowlist(nb):
         raise SystemExit("could not find the four-task allowlist in starter.py; "
@@ -253,6 +288,8 @@ def main() -> int:
     print(f"upstream      : {UPSTREAM}")
     queued = "all 120 eval tasks" if args.full_eval else "upstream 4-task shortcut"
     print(f"budget        : {args.hours}h")
+    if subset_ids:
+        queued = f"{len(subset_ids)} tasks (subset)"
     print(f"commit mode   : {queued}")
     print(f"cell-vote arm : {'added' if args.cellvote else 'no'}")
     print(f"accelerator   : {meta.get('machine_shape', 'default GPU')}"
