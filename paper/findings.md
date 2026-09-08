@@ -33,12 +33,13 @@ comes back -- gives opposite answers, and settles where effort belongs.
 
 | track | identical-code resubmits | spread | smallest change the board can resolve |
 |---|---|---|---|
-| ARC-AGI-2 | 30.14, 29.72 | **0.42 pts (1.4%)** | ~1 point |
-| ARC-AGI-3 | 0.15, 0.04, 0.12, 0.01 | **12x** | more than 12x |
+| ARC-AGI-2 | 30.14, 29.72, 28.47 | **1.67 pts (5.6%)** | ~2 points |
+| ARC-AGI-3 | 0.15, 0.04, 0.12, 0.01, 0.14 | **14x** | more than an order of magnitude |
 
-**ARC-AGI-2 is a precise instrument.** A one-point improvement is visible above
-the noise, so the +5-point per-cell voting estimate would show clearly, and
-work there converts into measurable score.
+**ARC-AGI-2 is a precise instrument** -- but less precise than the first two
+samples suggested. At n=2 the spread looked like 1.4%; the third resubmit came
+back 28.47 and widened it to 5.6%. The honest floor is **~2 points**, not one.
+Still two orders of magnitude better than the other board.
 
 **ARC-AGI-3 is not a measuring device at all** at anything below an order of
 magnitude. Our best is 0.15; demonstrating a real improvement would require
@@ -385,6 +386,60 @@ signal from outside the pool -- the obvious one being leave-one-demo-out:
 re-fit on n-1 demonstrations and rank candidates by whether the resulting model
 reproduces the held-out one. That is a real verification signal, it is exactly
 what this pipeline lacks, and it costs decode-stage compute.
+
+### Four attacks on selection, one conclusion
+
+Everything below runs on the saved candidate store in seconds, so these are
+cheap to reproduce and cheap to extend.
+
+| attempt | solved / 141 | vs upstream |
+|---|---|---|
+| **upstream `score_full_probmul_3`** | **42** (29.8%) | -- |
+| per-cell voting over merged clusters | 36 | **-6** |
+| filter by demo-inferred output shape | 42 | 0 |
+| best of 9 reweightings of the available statistics | 41 | -1 |
+| demote candidates identical to the test input | 42 | 0 |
+| **ORACLE -- any candidate in the pool** | **51** (36.2%) | **+9** |
+
+The last one is the point: **a correct answer is already in the pool for nine
+outputs that we get wrong, and nothing we can compute promotes it.**
+
+Why each failed, since the failures are more informative than the ranking:
+
+- **Voting** assumed near-identical candidates were noisy samples of one
+  hypothesis. They are not; they are distinct answers, and merging destroys the
+  ranking that already discriminates them. `MERGE_TOL=0` reproduces the
+  baseline exactly, so this is the mechanism failing, not the code.
+- **Shape** cannot separate anything: for the nine recoverable outputs, a
+  demo-inferred shape rule matches the truth six times and moves zero ranks,
+  because every candidate above the truth is shape-correct too.
+- **Reweighting** has nothing left to extract. `beam_score` and `score_aug` are
+  the only per-candidate signals, and nine functional forms over them all land
+  at or below upstream.
+- **Identity demotion** looked promising -- in six outputs the top-2 contained a
+  verbatim copy of the test input, and only 1 of 120 tasks has any demo where
+  output equals input, so those copies are provably wrong. Demoting them
+  rescues nothing, because the candidate that moves up is also wrong.
+
+The rivals ranked above the truth differ from it by a **median of 5% of
+cells** -- often one or two. The selector is being asked to choose between
+grids that are nearly identical and it has no information that distinguishes
+them.
+
+**Read the small differences with care.** These are single-run measurements on
+141 outputs; the leaderboard's own identical-code spread is 5.6%, and the local
+figure carries comparable sampling noise. A one-output difference is not a
+result. The -6 is; the zeros are, in the sense that four independent mechanisms
+all failing to move the number is itself the finding.
+
+**Where this leaves ARC-AGI-2.** Selection is a dead end -- upstream tuned it
+well and the remaining headroom is not addressable with the information the
+candidates carry. Any further gain has to come from the decode stage: better or
+more candidates, or a verification signal computed outside the pool.
+Leave-one-demo-out is the obvious one -- re-fit on n-1 demonstrations and rank
+candidates by whether the resulting model reproduces the held-out pair -- and
+unlike everything above it costs decode-stage compute, which is the expensive
+half.
 
 ---
 
