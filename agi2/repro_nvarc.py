@@ -126,6 +126,27 @@ def set_subset(nb: dict, n: int) -> list[str]:
     return []
 
 
+def set_train_augment(nb: dict, n: int) -> bool:
+    """Change the test-time-training augmentation count in arc_solver.py.
+
+    `train_ds = puzzle_ds.augment(n=16, ...)` is the dominant per-task cost:
+    16 augmented views of the demonstrations, one LoRA epoch over them, per
+    puzzle. Per-task work is fixed rather than elastic (see findings), so this
+    is the actual knob for trading quality against how many of the 240 tasks
+    finish inside the 12h wall -- which we measured at a 50-minute margin.
+    """
+    import re as _re
+    pat = _re.compile(r"(train_ds = puzzle_ds\.augment\(n=)\d+")
+    for cell in nb["cells"]:
+        if cell["cell_type"] != "code":
+            continue
+        txt = cell_text(cell)
+        if pat.search(txt):
+            cell["source"] = pat.sub(rf"\g<1>{n}", txt).splitlines(keepends=True)
+            return True
+    return False
+
+
 def add_cellvote(nb: dict) -> bool:
     """Append our per-cell voting selector to the arc_decoder.py cell.
 
@@ -211,6 +232,9 @@ def main() -> int:
     ap.add_argument("--cellvote", action="store_true",
                     help="add our per-cell voting selector as an extra arm in "
                          "benchmark_selection_algos()")
+    ap.add_argument("--augment", type=int, default=0,
+                    help="test-time-training augmentation count (upstream: 16). "
+                         "The dominant per-task cost.")
     ap.add_argument("--subset", type=int, default=0,
                     help="commit-mode: queue the first N evaluation tasks instead "
                          "of upstream's 4, for controlled compute experiments")
@@ -234,6 +258,10 @@ def main() -> int:
     if args.cellvote and not add_cellvote(nb):
         raise SystemExit("could not find the arc_decoder.py cell; upstream "
                          "changed shape, re-read it before pushing")
+
+    if args.augment and not set_train_augment(nb, args.augment):
+        raise SystemExit("could not find `train_ds = puzzle_ds.augment(n=...)`; "
+                         "upstream changed shape, re-read it before pushing")
 
     subset_ids = []
     if args.subset:
@@ -291,6 +319,7 @@ def main() -> int:
     if subset_ids:
         queued = f"{len(subset_ids)} tasks (subset)"
     print(f"commit mode   : {queued}")
+    print(f"train augment : {args.augment or 16} (upstream 16)")
     print(f"cell-vote arm : {'added' if args.cellvote else 'no'}")
     print(f"accelerator   : {meta.get('machine_shape', 'default GPU')}"
           f"   (L4 burns GPU quota at 2x)")
