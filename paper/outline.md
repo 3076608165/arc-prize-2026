@@ -73,26 +73,63 @@ solutions, test-time training, program synthesis / DSL search, LLM-guided
 induction. Novelty is scored *relative to existing public research*, so you
 have to show you know what that is.
 
-## What we already have to write from
+## What we actually have, and what the paper should be
 
-[findings.md](findings.md) holds every measured result with the command that
-reproduces it. Two of them are writeup-grade on their own:
+The score is not the story. ARC-AGI-2 sits at 30.14 (rank 591/1802, above the
+field median) and every point of it came from forking a public notebook --
+zero on Novelty by construction. Five separate attempts to improve it all
+failed. So a paper organised around "our method" has nothing to say.
 
-- **ARC-AGI-2**: depth-3 compositional search lifts training 3.07% -> 4.83% and
-  evaluation 0.00% -> 0.00%. It reaches the right shape on 77% of eval tasks
-  and a median 83% of cells (p90 96%), and solves none. The bottleneck is exact
-  completion, not coarse structure -- which argues for a propose-and-repair
-  method over a wider global search. That is a hypothesis, a measurement, and a
-  mechanism: exactly the shape the Theory criterion asks for.
-- **ARC-AGI-3**: four environment facts the official starter ignores, and an
-  agent built on them that scores 0.1141 against the starter's 0.0505 over all
-  24 games -- while clearing one *fewer* level, on a disjoint set of games. The
-  split is the interesting part: systematic exploration wins the click-driven
-  games and loses the action-rich ones. The facts themselves (legal-action
-  masking, ~2-11 responsive cells per click game, the step-counter row, the
-  uselessness of raw frame deltas) are reusable by anyone and belong in the
-  Progress section, as does the measurement trap -- the three-game subset we
-  first tested on hid the regression completely.
+What this project does have is a run of results about **what can and cannot be
+measured on these benchmarks**, each one arrived at by trusting the obvious
+measurement and being wrong. That is a real contribution, it is reusable by
+everyone in the competition, and it is the rare kind of material that scores on
+Theory, Progress and Novelty at once.
+
+**The candidate title: what you can and cannot measure on ARC Prize 2026.**
+
+The evidence, all in [findings.md](findings.md) with reproducing commands:
+
+1. **Leaderboard precision, measured by resubmitting byte-identical code.**
+   ARC-AGI-2 returns 30.14 / 29.72 / 28.47 / 28.47 -- a 1.67-point spread, so
+   ~2 points is the floor for a detectable change. ARC-AGI-3 returns 0.15 /
+   0.04 / 0.12 / 0.01 / 0.14 -- **14x on identical code**. No ARC-AGI-3 change
+   below an order of magnitude is confirmable, which means every published
+   single-run comparison on that track, ours included, is inside the noise.
+   Nobody appears to have measured this.
+
+2. **The reference implementation's own score function is wrong.**
+   `arc_agi.scorecard.Scorecard.score` is documented "the average score of the
+   runs" and returns `max(...)`. It reports the best single game. Reading it
+   inverted one of our ablations: a policy that measured 11x *better* than
+   random was in fact slightly worse. Anyone tuning against that number is
+   tuning against the wrong thing.
+
+3. **The ARC-AGI-3 scoring formula, recovered and stated.** Per level,
+   `(human_baseline_actions / actions_taken)^2 * 100`, capped, then weighted by
+   level index and capped again at the completed-level share. Two consequences
+   nobody states: level count and score can move in *opposite* directions, and
+   completing level 1 of an eight-level game caps that game at 2.78 however
+   efficiently you do it.
+
+4. **Selection on ARC-AGI-2 is closed, with an oracle bound.** Five mechanisms
+   -- per-cell voting, shape filtering, nine reweightings, identity demotion,
+   augmentation-stratified agreement -- all land at or below upstream's
+   42/141, against an oracle of 51/141. The correct answer is already in the
+   pool for nine outputs and nothing computable promotes it: the rivals ranked
+   above it differ by a median of 5% of cells and are shape-correct.
+
+5. **The pipeline runs at the competition's wall, not inside it.** Per-task
+   work is fixed, not elastic -- 10x the wall-clock per task produces identical
+   candidates and identical accuracy. At 11 min/task, 240 tasks on 4 workers is
+   11.0h against an 11.83h budget: a 5% margin. That supplies the mechanism for
+   the score drift, which is monotone rather than symmetric.
+
+**What the writeup still needs.** A mechanism of our own that survives its own
+ablation. The augmentation-count trade (item 5) is the first candidate with a
+mechanism, a predicted direction and an expected size above the resolution
+floor. If it works it is the Theory section; if it fails it joins the negative
+results, which are already the strongest part of the paper.
 
 ## Reference material
 
