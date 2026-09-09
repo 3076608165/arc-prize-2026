@@ -441,6 +441,53 @@ candidates by whether the resulting model reproduces the held-out pair -- and
 unlike everything above it costs decode-stage compute, which is the expensive
 half.
 
+### Per-task work is fixed, and the submission runs at the wall
+
+`--subset 24` holds the task set fixed and changes only the wall-clock budget.
+v8 gave those 24 tasks a 4h budget; v7 had given the same tasks a share of a 5h
+budget spread over 120. Roughly 10x the time available per task:
+
+| run | budget | tasks | candidates/output | solved (same 34 outputs) |
+|---|---|---|---|---|
+| v7 | 5h | 120 | 16 | 6/34 |
+| v8 | 4h | **24** | 16 | 6/34 |
+
+Identical. v8 also finished early, spending 2.18h of quota against the 8h its
+budget allowed.
+
+**So `global_end_time` is a deadline that truncates the queue, not a budget
+that gets allocated per task.** The solver does a fixed amount of work per
+puzzle -- one epoch of LoRA over 16 augmentations, then a DFS with its own
+internal limits -- and stops. Giving it more time changes nothing. "More
+per-task compute" is not a lever that exists in this code; changing the *amount
+of work* (epochs, augmentation count, DFS width) is, and each of those
+multiplies the per-task cost.
+
+Which matters, because both runs measure the same per-task cost:
+
+    v7:  120 tasks, 5h wall, 4 workers   ->  10.0 min/task
+    v8:   24 tasks, 1.09h wall, 4 workers -> 10.9 min/task
+
+and the real submission has to answer 240:
+
+    240 tasks / 4 workers x 11 min = 11.0h   against an 11.83h budget
+
+**A 50-minute margin, about 5%.** The submission is not budget-bound, it is
+running at the competition's 12h wall, which is presumably why upstream tuned
+it exactly here.
+
+That also supplies a mechanism for the score drift nobody had explained.
+Identical-code resubmits returned 30.14, 29.72, 28.47, 28.47 -- monotonically
+down, which is what losing a few tail tasks to the deadline looks like, not
+what symmetric noise looks like.
+
+**The testable consequence, and it is cheap:** if the tail is being lost, then
+*reducing* per-task work -- 8 augmentations instead of 16 -- should raise the
+score, because finishing 240 tasks slightly worse beats finishing 225 of them
+well. That is a rare thing in this project: a hypothesis with a mechanism, a
+predicted direction, and an expected size above the board's ~2-point
+resolution.
+
 ---
 
 ## What this gives the writeup
