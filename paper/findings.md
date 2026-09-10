@@ -154,6 +154,72 @@ against 167, not 120.
 
 ---
 
+## RETRACTION: every pre-2026-09-10 ARC-AGI-3 ablation was mis-seeded
+
+Agent seeding used `hash(self.game_id)`. Python randomises string hashing per
+process unless `PYTHONHASHSEED` is set, so the `--seeds N` machinery that every
+ARC-AGI-3 A/B in this file relied on **was not controlling anything across
+processes**. Found by Codex on 2026-09-10 and fixed (sha256-derived game seed,
+`PYTHONHASHSEED=0` in the child).
+
+Re-running the same three arms with correct seeding:
+
+| arm | true score, before (mis-seeded) | after (correct) |
+|---|---|---|
+| exploit | 0.1356 | **0.2629** [0.1573-0.3158] |
+| explore / sweep | 0.1812 | **0.2648** [0.1626-0.3169] |
+
+Two things follow, and both are worse than a simple "numbers moved".
+
+**The exploit ablation is void.** It concluded "exploit is 25% worse, revert
+it", and that reverted a mechanism on the strength of a broken randomisation.
+Correctly seeded, exploit and sweep are indistinguishable -- 0.2629 against
+0.2648, with ranges almost entirely overlapping. The revert may still be
+defensible on simplicity grounds; it is not defensible on that evidence.
+
+**The absolute level moved too** (0.13-0.18 to 0.26), so the earlier
+distribution was not the real one. The local 5-seed spread quoted as
+[0.1179, 0.3055] describes an uncontrolled process, not seed variation.
+
+What is *not* affected: the leaderboard variance measurements (Kaggle-side, no
+local seeding involved), all ARC-AGI-2 work, the recovered scoring formula, and
+the four environment facts below -- those are properties of the engine, not of
+any run.
+
+The honest summary: **no ARC-AGI-3 ablation in this project was correctly
+randomised until 2026-09-10.** Sections below that predate it should be read as
+suggestive only.
+
+## The objects agent: submitted on the best of three seeds
+
+Codex submitted `object_agent.py` on 2026-09-10 citing "all-25 public mean
+improved 0.315011 to 0.451665". That comparison is **one seed against one
+seed**; the three-seed run in the same log had no control arm. Running the
+control:
+
+| seed | explore | objects | |
+|---|---|---|---|
+| 0 | 0.3150 | 0.4517 | +43% <- the figure cited |
+| 1 | 0.1626 | 0.1834 | +13% |
+| 2 | 0.3169 | 0.2239 | **-29%** |
+| **mean** | **0.2648** | **0.2863** | **+8.1%** |
+
+The cited number is the most favourable of three. Levels are more consistent
+(6.3 -> 7.7, objects at least matching on every seed), but level count and
+score move in opposite directions on this benchmark, which is established
+above.
+
+The sharp point is internal consistency. The same round *rejected* a `warm`
+variant with: "three-seed mean gain only 6.1%, with a large seed-0 regression."
+Objects is a three-seed mean gain of 8.1% with a large seed-2 regression --
+the same evidence profile. **By the round's own stated bar it would have been
+rejected**; the third seed with a control simply had not been run when the
+decision was made.
+
+The mechanism -- resample visible object centroids rather than permanently
+excluding cells that once did nothing -- is plausible and may well be a small
+gain. It is not established, and it is not +43%.
+
 ## ARC-AGI-3: four facts the starter agent ignores
 
 `python agi3/probe.py --games ls20,vc33,ft09,tr87`
