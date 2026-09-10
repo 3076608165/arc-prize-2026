@@ -39,12 +39,13 @@ OUR_TITLE = "ARC AGI 2 NVARC repro"     # must slugify to the id, or push 409s
 ATTRIBUTION = f"""\
 # NVARC repro (fork)
 
-Unmodified fork of [`{UPSTREAM}`](https://www.kaggle.com/code/{UPSTREAM})
+Fork of [`{UPSTREAM}`](https://www.kaggle.com/code/{UPSTREAM})
 (LB 33.89), itself a minimal performance patch of the NVARC ARC Prize 2025
 winning solution. **Not our work** -- run here as a baseline to measure our own
 methods against.
 
-The only edits are the account it runs under and the wall-clock budget below.
+Local experiment settings are recorded in `experiment.json` beside this notebook.
+The model and core solver are inherited from the attributed upstream work.
 """
 
 
@@ -242,6 +243,12 @@ def main() -> int:
                     help="queue all 120 evaluation tasks in commit mode instead of "
                          "upstream's 4-task shortcut, to measure throughput")
     args = ap.parse_args()
+    if not 0 < args.hours <= 11.83:
+        ap.error("--hours must be positive and at most 11.83")
+    if args.augment < 0 or args.subset < 0:
+        ap.error("--augment and --subset cannot be negative")
+    if args.subset and args.full_eval:
+        ap.error("--subset and --full-eval are mutually exclusive")
 
     src_nb = fetch_upstream(force=args.refresh)
     nb = json.loads(src_nb.read_text(encoding="utf-8"))
@@ -277,9 +284,7 @@ def main() -> int:
                            "source": ATTRIBUTION.splitlines(keepends=True)})
 
     out = Path(args.out)
-    if out.exists():
-        shutil.rmtree(out)
-    out.mkdir(parents=True)
+    out.mkdir(parents=True, exist_ok=True)
     (out / "submission.ipynb").write_text(json.dumps(nb, indent=1), encoding="utf-8")
 
     # Carry every source the upstream notebook depends on. Dropping any of
@@ -312,6 +317,13 @@ def main() -> int:
         meta["docker_image"] = up_meta["docker_image"]
     (out / "kernel-metadata.json").write_text(json.dumps(meta, indent=2) + "\n",
                                               encoding="utf-8")
+    (out / "experiment.json").write_text(json.dumps({
+        "upstream": UPSTREAM, "hours": args.hours,
+        "train_augment": args.augment or 16,
+        "commit_subset": subset_ids or ("all" if args.full_eval else "upstream-four"),
+        "competition_tasks": "all", "save_candidates": args.save_candidates,
+        "cellvote": args.cellvote,
+    }, indent=2) + "\n", encoding="utf-8")
 
     print(f"upstream      : {UPSTREAM}")
     queued = "all 120 eval tasks" if args.full_eval else "upstream 4-task shortcut"

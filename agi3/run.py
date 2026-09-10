@@ -1,8 +1,8 @@
-"""Sync an agent into the starter kit and play it, with an A/B mode.
+"""Play tracked agent sources with reproducible A/B experiments.
 
-The starter loads `agent/my_agent.py` by path, so the repo keeps the real
-source in `agi3/` and copies it over before each run. That keeps our work out
-of the gitignored `data/` tree and makes the baseline comparison one command.
+The local runner imports each selected source directly from `agi3/`.
+Agents have separate runner files so experiments do not overwrite each other's
+source. PYTHONHASHSEED and ARC_SEED are fixed in each child process.
 
     python agi3/run.py --steps 300 --games ls20,vc33,ft09
     python agi3/run.py --steps 300 --agent random      # the starter's baseline
@@ -11,18 +11,20 @@ of the gitignored `data/` tree and makes the baseline comparison one command.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
-import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 STARTER = ROOT / "data" / "ARC-AGI-3-Kaggle-Starter"
-TARGET = STARTER / "agent" / "my_agent.py"
 AGENTS = {
+    "state": ROOT / "agi3" / "state_agent.py",
+    "objects": ROOT / "agi3" / "object_agent.py",
+    "warm": ROOT / "agi3" / "warm_agent.py",
     "explore": ROOT / "agi3" / "my_agent.py",
     "random": ROOT / "agi3" / "random_agent.py",
     # Frozen previous policy, kept so a change can be ablated against the thing
@@ -107,12 +109,16 @@ def true_score(rows: list[dict]) -> float:
     return sum(float(r.get("score") or 0.0) for r in rows) / len(rows)
 
 
-def patched_runner() -> Path:
+def patched_runner(agent: str) -> Path:
     """Write play_local.py + the per-env dump, leaving the original alone."""
     src = (STARTER / "scripts" / "play_local.py").read_text(encoding="utf-8")
     if PER_ENV_ANCHOR not in src:
         raise SystemExit("play_local.py changed shape; re-read it before patching")
-    out = STARTER / "scripts" / "_play_local_scored.py"
+    agent_anchor = 'ROOT / "agent" / "my_agent.py"'
+    if agent_anchor not in src:
+        raise SystemExit("play_local.py agent loader changed; inspect before running")
+    src = src.replace(agent_anchor, 'Path(__import__("os").environ["ARC_AGENT_SOURCE"])')
+    out = STARTER / "scripts" / f"_play_local_scored_{agent}.py"
     out.write_text(src.replace(PER_ENV_ANCHOR, PER_ENV_PATCH), encoding="utf-8")
     return out
 
@@ -128,13 +134,12 @@ def play(agent: str, games: str, steps: int, seed: int = 0) -> dict:
     src = AGENTS[agent]
     if not src.exists():
         raise SystemExit(f"missing agent source {src}")
-    shutil.copyfile(src, TARGET)
-
-    runner = patched_runner().relative_to(STARTER).as_posix()
+    runner = patched_runner(agent).relative_to(STARTER).as_posix()
     cmd = [str(venv_python()), runner, "--max-steps", str(steps)]
     if games:
         cmd += ["--game", games]
-    env = {**os.environ, "PYTHONIOENCODING": "utf-8", "ARC_SEED": str(seed)}
+    env = {**os.environ, "PYTHONIOENCODING": "utf-8", "ARC_SEED": str(seed),
+           "PYTHONHASHSEED": "0", "ARC_AGENT_SOURCE": str(src.resolve())}
     # The child prints UTF-8; this box's locale is GBK, so decode explicitly.
     proc = subprocess.run(
         cmd, cwd=STARTER, capture_output=True, text=True,
@@ -154,9 +159,10 @@ def play(agent: str, games: str, steps: int, seed: int = 0) -> dict:
             }
         elif m := SCORE.search(line):
             score = float(m.group(1))
-    if score is None:
+    if proc.returncode != 0 or score is None or not per_game or not rows:
         sys.stderr.write(proc.stdout[-3000:] + "\n" + proc.stderr[-3000:])
-        raise SystemExit(f"{agent}: run produced no scorecard")
+        raise SystemExit(f"{agent}: incomplete run or missing per-game scorecard "
+                         f"(exit {proc.returncode})")
     return {"score": score, "games": per_game, "true": true_score(rows), "rows": rows}
 
 
@@ -178,23 +184,36 @@ def report(label: str, res: dict) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--agent", default="explore", choices=list(AGENTS))
-    ap.add_argument("--games", default="", help="comma-separated ids; empty = all 24")
+    ap.add_argument("--games", default="", help="comma-separated ids; empty = all available")
     ap.add_argument("--steps", type=int, default=300)
-    ap.add_argument("--ab", action="store_true", help="run random then explore")
+    ap.add_argument("--ab", action="store_true", help="compare random, exploit, and explore")
+    ap.add_argument("--arms", nargs="+", choices=list(AGENTS),
+                    help="explicit agents to compare under the same seeds")
+    ap.add_argument("--out", type=Path, help="save per-game results after each run")
     ap.add_argument("--seeds", type=int, default=1,
                     help="repeat the whole A/B under N randomisations and report "
                          "the spread. One run is a noisy sample.")
     args = ap.parse_args()
+    if args.seeds < 1 or args.steps < 1:
+        ap.error("--seeds and --steps must be positive")
 
     def levels(res: dict) -> int:
         return sum(g["levels"] for g in res["games"].values())
 
-    if args.ab:
-        rows: dict[str, list[tuple[int, float]]] = {a: [] for a in AB_ARMS}
-        cleared: dict[str, set[str]] = {a: set() for a in AB_ARMS}
+    if args.ab or args.arms or args.seeds > 1 or args.out:
+        arms = args.arms or (AB_ARMS if args.ab else (args.agent,))
+        records = []
+        rows: dict[str, list[tuple[int, float, float]]] = {a: [] for a in arms}
+        cleared: dict[str, set[str]] = {a: set() for a in arms}
         for seed in range(args.seeds):
-            for arm in AB_ARMS:
+            for arm in arms:
+                source_hash = hashlib.sha256(AGENTS[arm].read_bytes()).hexdigest()
                 res = play(arm, args.games, args.steps, seed=seed)
+                records.append({"arm": arm, "seed": seed, "steps": args.steps,
+                                "source_sha256": source_hash, **res})
+                if args.out:
+                    args.out.parent.mkdir(parents=True, exist_ok=True)
+                    args.out.write_text(json.dumps(records, indent=2) + "\n", encoding="utf-8")
                 rows[arm].append((levels(res), progress(res["games"]), res["true"]))
                 cleared[arm] |= {g for g, v in res["games"].items() if v["levels"]}
                 if args.seeds == 1:
@@ -202,7 +221,7 @@ def main() -> int:
 
         if args.seeds > 1:
             print(f"\n=== {args.seeds} seeds x {args.steps} steps/game ===")
-            for arm in AB_ARMS:
+            for arm in arms:
                 lv = [r[0] for r in rows[arm]]
                 pr = [r[1] for r in rows[arm]]
                 sc = [r[2] for r in rows[arm]]
@@ -214,7 +233,7 @@ def main() -> int:
                 print(f"           ever cleared: {', '.join(sorted(cleared[arm])) or 'none'}")
         else:
             print()
-            for arm in AB_ARMS:
+            for arm in arms:
                 lv, pr, sc = rows[arm][0]
                 print(f"  {arm:<8} levels {lv:2}  progress {pr:.4f}  TRUE {sc:.6f}")
     else:

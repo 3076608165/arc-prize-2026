@@ -1,0 +1,42 @@
+{
+  "verified_on": "2026-09-10",
+  "arc_agi_2": {
+    "best_public_score": 30.14,
+    "best_submission_id": 55977650,
+    "latest_public_score": 28.89,
+    "latest_submission_id": 56111988,
+    "latest_status": "COMPLETE",
+    "prepared_notebook": "agi2/out/augment8-20260910/submission.ipynb",
+    "prepared_notebook_uploaded": true,
+    "validation": {
+      "dsl_notebook_format_self_test_tasks": 120,
+      "nvarc_gpu_execution_this_session": false
+    },
+    "active_kernel_version": 10
+  },
+  "arc_agi_3": {
+    "best_public_score": 0.18,
+    "latest_public_score": null,
+    "latest_submission_id": 56140807,
+    "latest_status": "PENDING",
+    "prepared_notebook": "agi3/out/objects-20260910/submission.ipynb",
+    "prepared_notebook_uploaded": true,
+    "validation": {
+      "embedded_agent_matches_source": true,
+      "steps_per_game": 3000,
+      "levels_completed": {
+        "lp85": 1,
+        "vc33": 1
+      }
+    },
+    "last_scored_submission_id": 56111992,
+    "last_scored_public_score": 0.18
+  },
+  "limitations": [
+    "Public leaderboard scores are not private final scores.",
+    "Local ARC-AGI-3 subset results do not estimate full competition performance.",
+    "Full notebook syntax validation was unavailable because the existing environment lacks IPython."
+  ],
+  "snapshot_only": true,
+  "active_round_report": "experiments/score-push-20260910.json"
+}

@@ -11,3 +11,4 @@ kaggle.json
 *.token
 # local eval outputs
 agi2/out/
+agi3/out/

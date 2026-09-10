@@ -1,0 +1,2669 @@
+{
+  "date": "2026-09-10",
+  "agi2": {
+    "hypothesis": "Reducing TTT augmentation from 16 to 8 can improve deadline coverage without sacrificing sampled accuracy.",
+    "matched_public_tasks": 24,
+    "matched_test_outputs": 37,
+    "augment16_correct": 6,
+    "augment8_correct": 8,
+    "gained_outputs": [
+      "20270e3b/1",
+      "31f7f899/0"
+    ],
+    "lost_outputs": [],
+    "kernel_version": 10,
+    "budget_hours": 11.83,
+    "leaderboard_status": "PENDING",
+    "source": "agi2/repro_nvarc.py",
+    "server_submission": {
+      "ref": "56140934",
+      "fileName": "submission.json",
+      "date": "2026-09-10 08:41:34.613000",
+      "description": "20260910 augment8 v10: reduce TTT work; full 11.83h competition budget",
+      "status": "SubmissionStatus.PENDING",
+      "publicScore": "",
+      "privateScore": ""
+    },
+    "submission_id": 56140934
+  },
+  "agi3": {
+    "hypothesis": "Repeated sampling of visible object centroids can discover context-dependent controls missed by permanent no-effect exclusions.",
+    "candidate": "agi3/object_agent.py",
+    "candidate_sha256": "3fa3aa4fdcd13080a26ac6601d7328c503e79130e8e1e6798bb352608bb5b11e",
+    "kernel_version": 3,
+    "leaderboard_status": "PENDING",
+    "results": {
+      "state-comparison": [
+        {
+          "arm": "explore",
+          "seed": 0,
+          "score": 0.6944502974783093,
+          "games": {
+            "lp85": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 0.6944502974783093,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 2.7777777777777777,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 2.341213545967253e-05,
+              "levels_completed": 1,
+              "actions": 3001
+            }
+          ]
+        },
+        {
+          "arm": "state",
+          "seed": 0,
+          "score": 0.6944995534595235,
+          "games": {
+            "lp85": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 0.6944995534595235,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 2.7777777777777777,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 0.00022043606031634468,
+              "levels_completed": 1,
+              "actions": 3001
+            }
+          ]
+        },
+        {
+          "arm": "explore",
+          "seed": 1,
+          "score": 0.6944502974783093,
+          "games": {
+            "lp85": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 0.6944502974783093,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 2.7777777777777777,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 2.341213545967253e-05,
+              "levels_completed": 1,
+              "actions": 3001
+            }
+          ]
+        },
+        {
+          "arm": "state",
+          "seed": 1,
+          "score": 0.6944995534595235,
+          "games": {
+            "lp85": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 0.6944995534595235,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 2.7777777777777777,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 0.00022043606031634468,
+              "levels_completed": 1,
+              "actions": 3001
+            }
+          ]
+        },
+        {
+          "arm": "explore",
+          "seed": 2,
+          "score": 0.6944502974783093,
+          "games": {
+            "lp85": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 0.6944502974783093,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 2.7777777777777777,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 2.341213545967253e-05,
+              "levels_completed": 1,
+              "actions": 3001
+            }
+          ]
+        },
+        {
+          "arm": "state",
+          "seed": 2,
+          "score": 0.6944995534595235,
+          "games": {
+            "lp85": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 0.6944995534595235,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 2.7777777777777777,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 0.00022043606031634468,
+              "levels_completed": 1,
+              "actions": 3001
+            }
+          ]
+        }
+      ],
+      "object-comparison": [
+        {
+          "arm": "objects",
+          "seed": 0,
+          "score": 1.6287803326969497,
+          "games": {
+            "lp85": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 2,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 1.6287803326969494,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 0.001666772786456531,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 4.761904761904762,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 1.75154979609658,
+              "levels_completed": 2,
+              "actions": 3001
+            }
+          ]
+        },
+        {
+          "arm": "objects",
+          "seed": 1,
+          "score": 1.1233029741020528,
+          "games": {
+            "lp85": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 2,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 1.1233029741020528,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 0.0005501251163447998,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 4.356827797281484,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.003911010456911436,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 0.13192296355347083,
+              "levels_completed": 2,
+              "actions": 3001
+            }
+          ]
+        },
+        {
+          "arm": "objects",
+          "seed": 2,
+          "score": 1.1916558781540054,
+          "games": {
+            "lp85": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 1.1916558781540054,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 0.00023104869822206667,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 4.761904761904762,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.002689953821058387,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 0.0017977481919789612,
+              "levels_completed": 1,
+              "actions": 3001
+            }
+          ]
+        }
+      ],
+      "object-full-comparison": [
+        {
+          "arm": "explore",
+          "seed": 0,
+          "score": 0.3150113125623303,
+          "games": {
+            "ar25": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "bp35": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "cd82": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "cn04": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "dc22": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "ft09": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "g50t": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "ka59": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "lf52": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "lp85": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "ls20": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "m0r0": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "re86": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "s5i5": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "sb26": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "sc25": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "sk48": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "sp80": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "su15": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tr87": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tu93": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "wa30": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 0.3150113125623303,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "ar25-0c556536",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "bp35-0a0ad940",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "cd82-fb555c5d",
+              "game_id": null,
+              "score": 0.0038751812944319954,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "cn04-2fe56bfb",
+              "game_id": null,
+              "score": 0.007640109247203049,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "dc22-fdcac232",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "ft09-0d8bbf25",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "g50t-5849a774",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "ka59-38d34dbb",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lf52-271a04aa",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 2.7777777777777777,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "ls20-9607627b",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "m0r0-492f87ba",
+              "game_id": null,
+              "score": 0.32406157169862276,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "re86-8af5384d",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "s5i5-18d95033",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "sb26-7fbdac44",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "sc25-635fd71a",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "sk48-d8078629",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "sp80-589a99af",
+              "game_id": null,
+              "score": 4.761904761904762,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "su15-1944f8ab",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tr87-cd924810",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tu93-0768757b",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 2.341213545967253e-05,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "wa30-ee6fef47",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            }
+          ]
+        },
+        {
+          "arm": "objects",
+          "seed": 0,
+          "score": 0.45166496019506125,
+          "games": {
+            "ar25": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "bp35": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "cd82": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "cn04": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "dc22": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "ft09": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "g50t": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "ka59": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "lf52": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "lp85": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "ls20": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "m0r0": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "re86": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "s5i5": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "sb26": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "sc25": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "sk48": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "sp80": {
+              "levels": 1,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "su15": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tr87": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tu93": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 2,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "wa30": {
+              "levels": 0,
+              "actions": 3001,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 0.45166496019506125,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "ar25-0c556536",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "bp35-0a0ad940",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "cd82-fb555c5d",
+              "game_id": null,
+              "score": 0.008082459793102388,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "cn04-2fe56bfb",
+              "game_id": null,
+              "score": 0.006515452390868885,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "dc22-fdcac232",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "ft09-0d8bbf25",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "g50t-5849a774",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "ka59-38d34dbb",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lf52-271a04aa",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 0.001666772786456531,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "ls20-9607627b",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "m0r0-492f87ba",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 4.761904761904762,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "re86-8af5384d",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "s5i5-18d95033",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "sb26-7fbdac44",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "sc25-635fd71a",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "sk48-d8078629",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "sp80-589a99af",
+              "game_id": null,
+              "score": 4.761904761904762,
+              "levels_completed": 1,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "su15-1944f8ab",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tr87-cd924810",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tu93-0768757b",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 1.75154979609658,
+              "levels_completed": 2,
+              "actions": 3001
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "wa30-ee6fef47",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 3001
+            }
+          ]
+        }
+      ]
+    },
+    "decision": "Submit object-sampling v3: all-25 public mean improved 0.315011 to 0.451665; 6 to 7 levels; one full-suite seed, plus three click-subset seeds. State-aware exclusion variant rejected for negligible gain.",
+    "submission_id": 56140807,
+    "daily_submissions_remaining": 0,
+    "warmup_followup": {
+      "results": [
+        {
+          "arm": "objects",
+          "seed": 0,
+          "steps": 300,
+          "source_sha256": "3fa3aa4fdcd13080a26ac6601d7328c503e79130e8e1e6798bb352608bb5b11e",
+          "score": 1.6279761904761905,
+          "games": {
+            "lp85": {
+              "levels": 0,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 1,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 0,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 1,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 1.6279761904761905,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 4.761904761904762,
+              "levels_completed": 1,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 1.7499999999999998,
+              "levels_completed": 1,
+              "actions": 301
+            }
+          ]
+        },
+        {
+          "arm": "warm",
+          "seed": 0,
+          "steps": 300,
+          "source_sha256": "aab9eaf354b0dbf75ec6a8d37ccb2e6b3bb9162499b8a7b42d0ccdaf884a7496",
+          "score": 0.9440620327865084,
+          "games": {
+            "lp85": {
+              "levels": 1,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 1,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 0,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 1,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 0.9440620327865082,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 2.7777777777777777,
+              "levels_completed": 1,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 0.7903847410020248,
+              "levels_completed": 1,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 0.20808561236623072,
+              "levels_completed": 1,
+              "actions": 301
+            }
+          ]
+        },
+        {
+          "arm": "objects",
+          "seed": 1,
+          "steps": 300,
+          "source_sha256": "3fa3aa4fdcd13080a26ac6601d7328c503e79130e8e1e6798bb352608bb5b11e",
+          "score": 1.1211645826293557,
+          "games": {
+            "lp85": {
+              "levels": 0,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 1,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 0,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 1,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 1.1211645826293557,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 4.356827797281484,
+              "levels_completed": 1,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 0.12783053323593865,
+              "levels_completed": 1,
+              "actions": 301
+            }
+          ]
+        },
+        {
+          "arm": "warm",
+          "seed": 1,
+          "steps": 300,
+          "source_sha256": "aab9eaf354b0dbf75ec6a8d37ccb2e6b3bb9162499b8a7b42d0ccdaf884a7496",
+          "score": 1.4509862145916568,
+          "games": {
+            "lp85": {
+              "levels": 1,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 1,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 0,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 1,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 1.4509862145916568,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 2.7777777777777777,
+              "levels_completed": 1,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 2.9397473275024293,
+              "levels_completed": 1,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 0.08641975308641976,
+              "levels_completed": 1,
+              "actions": 301
+            }
+          ]
+        },
+        {
+          "arm": "objects",
+          "seed": 2,
+          "steps": 300,
+          "source_sha256": "3fa3aa4fdcd13080a26ac6601d7328c503e79130e8e1e6798bb352608bb5b11e",
+          "score": 1.1904761904761905,
+          "games": {
+            "lp85": {
+              "levels": 0,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 1,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 0,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 0,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 1.1904761904761905,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 4.761904761904762,
+              "levels_completed": 1,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 301
+            }
+          ]
+        },
+        {
+          "arm": "warm",
+          "seed": 2,
+          "steps": 300,
+          "source_sha256": "aab9eaf354b0dbf75ec6a8d37ccb2e6b3bb9162499b8a7b42d0ccdaf884a7496",
+          "score": 1.786321681850753,
+          "games": {
+            "lp85": {
+              "levels": 1,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "r11l": {
+              "levels": 1,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "tn36": {
+              "levels": 0,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            },
+            "vc33": {
+              "levels": 1,
+              "actions": 301,
+              "state": "GameState.NOT_FINISHED"
+            }
+          },
+          "true": 1.786321681850753,
+          "rows": [
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "lp85-305b61c3",
+              "game_id": null,
+              "score": 2.7777777777777777,
+              "levels_completed": 1,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "r11l-495a7899",
+              "game_id": null,
+              "score": 4.356827797281484,
+              "levels_completed": 1,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "tn36-ef4dde99",
+              "game_id": null,
+              "score": 0.0,
+              "levels_completed": 0,
+              "actions": 301
+            },
+            {
+              "keys": [
+                "actions",
+                "completed",
+                "id",
+                "level_count",
+                "levels_completed",
+                "resets",
+                "runs",
+                "score"
+              ],
+              "id": "vc33-5430563c",
+              "game_id": null,
+              "score": 0.01068115234375,
+              "levels_completed": 1,
+              "actions": 301
+            }
+          ]
+        }
+      ],
+      "decision": "Not submitted: three-seed mean gain only 6.1%, with a large seed-0 regression; no further daily submission slots."
+    },
+    "server_submission": {
+      "ref": "56140807",
+      "fileName": "submission.parquet",
+      "date": "2026-09-10 08:32:59.783000",
+      "description": "20260910 objects v3: visible-object resampling, stable game seed; public25 0.315 to 0.452",
+      "status": "SubmissionStatus.PENDING",
+      "publicScore": "",
+      "privateScore": ""
+    }
+  },
+  "constraints": {
+    "paid_compute_purchased": false,
+    "local_scores_are_leaderboard_scores": false,
+    "public_subset_used_for_candidate_selection": true
+  },
+  "last_checked_utc": "2026-09-10T10:10:51.421458+00:00"
+}
