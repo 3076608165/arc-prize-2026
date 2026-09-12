@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-12",
+  "question": "Does fixing our own RNG seeding (worker hash seed on AGI-2, sha256 game seed on AGI-3) reduce leaderboard run-to-run variance? Prior identical-code spreads: AGI-2 1.67 pts over 5 samples (mis-seeded v4); AGI-3 14x over 7 samples (mis-seeded v2). Each seeded version has n=1. A second sample of each separates our randomness from Kaggle's.",
+  "predeclared_reading": {
+    "agi2": "If |v11#2 - 29.31| <= 0.5, seeding accounts for most of the prior spread and the board's resolution floor drops below 2 pts. If >= 1.5, the variance is Kaggle-side and the floor stands.",
+    "agi3": "If v4#2 is within 2x of 0.03, our RNG was the dominant source. If it lands anywhere in 0.10-0.18, the 14x spread is Kaggle-side (hidden-instance or environment randomness) and no local seeding can fix it."
+  },
+  "submissions": {
+    "agi2": {
+      "ref": 56179025,
+      "kernel_version": 11,
+      "prior_sample": 29.31,
+      "status": "PENDING"
+    },
+    "agi3": {
+      "ref": 56179026,
+      "kernel_version": 4,
+      "prior_sample": 0.03,
+      "status": "PENDING"
+    }
+  },
+  "no_improvement_claim": true,
+  "quota_after": "30.00h (refreshed 2026-09-12, next 2026-09-19)"
+}
