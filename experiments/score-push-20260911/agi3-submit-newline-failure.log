@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "D:\ARC Prize 2026\scripts\submit_agi3_after_evaluation.py", line 89, in <module>
+    main()
+  File "D:\ARC Prize 2026\scripts\submit_agi3_after_evaluation.py", line 54, in main
+    raise ValueError("Frozen selected source changed")
+ValueError: Frozen selected source changed

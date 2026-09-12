@@ -31,7 +31,7 @@
     "candidate": "agi3/object_agent.py",
     "candidate_sha256": "3fa3aa4fdcd13080a26ac6601d7328c503e79130e8e1e6798bb352608bb5b11e",
     "kernel_version": 3,
-    "leaderboard_status": "PENDING",
+    "leaderboard_status": "COMPLETE",
     "results": {
       "state-comparison": [
         {
@@ -2655,15 +2655,16 @@
       "fileName": "submission.parquet",
       "date": "2026-09-10 08:32:59.783000",
       "description": "20260910 objects v3: visible-object resampling, stable game seed; public25 0.315 to 0.452",
-      "status": "SubmissionStatus.PENDING",
-      "publicScore": "",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.16",
       "privateScore": ""
-    }
+    },
+    "public_score": 0.16
   },
   "constraints": {
     "paid_compute_purchased": false,
     "local_scores_are_leaderboard_scores": false,
     "public_subset_used_for_candidate_selection": true
   },
-  "last_checked_utc": "2026-09-10T10:10:51.421458+00:00"
+  "last_checked_utc": "2026-09-10T11:57:58.484618+00:00"
 }

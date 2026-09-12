@@ -1,0 +1,118 @@
+{
+  "bundles": [
+    {
+      "directory": "agi2/out/audited16",
+      "notebook_sha256": "45dcee6ee48ab20b4a9212a49151b321617762cb3b03289fae1acf08e8ace113",
+      "metadata_sha256": "3f985a2326f481f4f5bab8f09cdc58bb80fe4e6e108d349aea9e95970d627309",
+      "compiled_python_cells": [
+        1,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "unvalidated_shell_magic_cells": [
+        5,
+        10
+      ],
+      "execution_status": "prepared_only"
+    },
+    {
+      "directory": "agi2/out/audited8",
+      "notebook_sha256": "898ec7e2bf9c94d4c93770fe949f2361f44c29191aaa276cc15e0573f461fad7",
+      "metadata_sha256": "3f985a2326f481f4f5bab8f09cdc58bb80fe4e6e108d349aea9e95970d627309",
+      "compiled_python_cells": [
+        1,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "unvalidated_shell_magic_cells": [
+        5,
+        10
+      ],
+      "execution_status": "prepared_only"
+    },
+    {
+      "directory": "agi2/out/coverage-benchmark16",
+      "notebook_sha256": "4fb27bccd8f7afd2a069eb79ce1c9d58df0954a01a5ec128268f14c0d81329fa",
+      "metadata_sha256": "393216dc167a7c71391d44c126992d5be88596e0a7f9646ff84014e934a58879",
+      "compiled_python_cells": [
+        1,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "unvalidated_shell_magic_cells": [
+        5,
+        10
+      ],
+      "execution_status": "prepared_only"
+    },
+    {
+      "directory": "agi2/out/coverage-benchmark8",
+      "notebook_sha256": "e88436de6a57c496a6cc36f3ed26d621ecc7658935cd2d726f8018cce0b5b748",
+      "metadata_sha256": "303a64cbc581c2540f3d54d5b52628f359edf8a51a6b6391c1b6ba6208907e13",
+      "compiled_python_cells": [
+        1,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "unvalidated_shell_magic_cells": [
+        5,
+        10
+      ],
+      "execution_status": "prepared_only"
+    },
+    {
+      "directory": "agi3/out/stable-control",
+      "notebook_sha256": "1f4d762d8b97ad2d6d30a3f7c425bf144bef20d0fe6c2a33f9b5f3aa1e002b07",
+      "metadata_sha256": "6327a4d58c2d12dd42e00bd61b4cb24f5bb9bbc51a7e5d4f6bb641bf0319fa86",
+      "compiled_python_cells": [
+        2,
+        4
+      ],
+      "unvalidated_shell_magic_cells": [
+        1,
+        3
+      ],
+      "execution_status": "prepared_only"
+    },
+    {
+      "directory": "agi3/out/coverage-candidate",
+      "notebook_sha256": "fb4a524d7ae3702c5c9fe73a7dd920b297d1f3f8655da334dbd400a1985ddc59",
+      "metadata_sha256": "6327a4d58c2d12dd42e00bd61b4cb24f5bb9bbc51a7e5d4f6bb641bf0319fa86",
+      "compiled_python_cells": [
+        2,
+        4
+      ],
+      "unvalidated_shell_magic_cells": [
+        1,
+        3
+      ],
+      "execution_status": "prepared_only"
+    }
+  ],
+  "agi3_frozen_runtime_matches": true,
+  "limits": "Embedded Python syntax and source identity checked. Shell/magic execution and full Kaggle runtime are not validated by this check."
+}

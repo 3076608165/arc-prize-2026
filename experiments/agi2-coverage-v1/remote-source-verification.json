@@ -1,0 +1,10 @@
+{
+  "16": {
+    "remote_cells_match_local": true,
+    "downloaded_notebook_sha256": "8d013fa0d4b9cfaabf6cac3e844d2ac51c969f75c3d2b34fef02bde98017922a"
+  },
+  "8": {
+    "remote_cells_match_local": true,
+    "downloaded_notebook_sha256": "0a6ab625f63c71730c6d7eecae4d7c4f89242a4abd028b13018e879d630cb9f2"
+  }
+}

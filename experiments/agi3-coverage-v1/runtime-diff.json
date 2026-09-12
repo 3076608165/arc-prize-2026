@@ -1,0 +1,127 @@
+[
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/vc33/5430563c/metadata.json",
+    "before": "e70abe39c7290be87f56d385830c50ade7fee5b12fcdcd580649a326968b547f",
+    "after": "ee14192ce7c9c654ef5701d479e2d36e0314d1e3a28c200e1a907946f45e22a2"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/dc22/fdcac232/metadata.json",
+    "before": "bd9f06cdd55963ba7e70df631e4c0701e0273632c4dc7d3592cdbc4c289c9616",
+    "after": "34c9c7328b95b440209192dc5aa6d9ca75ecd6d74ab74f61798f1466682e8f07"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/lp85/305b61c3/metadata.json",
+    "before": "6f2182f452d540cfbd210f7d2218d3c69f44e345135fe6a13441770b1a02b0ac",
+    "after": "55975ca72535baac254e3f0e863f3dbdcdf28714785b357fdc3b699dd48a6da0"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/sb26/7fbdac44/metadata.json",
+    "before": "ac3c70bf48e6cf288c10d70441d4d6a328b09bed54cbf61fd5b48292b305b11c",
+    "after": "38e9727b2386c6a4aeeefa43119ba071d9254328567ca7c9b1ab3d24635d755c"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/cn04/2fe56bfb/metadata.json",
+    "before": "0b99349eb756a23f5aca7d8355513822a137f67f8277ea411d12b95eb936222a",
+    "after": "ad9eff84c11ea76c85ac204585b2f4d1dafed7261b68586d505f0562385c42a5"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/bp35/0a0ad940/metadata.json",
+    "before": "3b08a4d3c3aef2adcbaad2e2332920ea1eb12d28989c132a785d91a63b020fb1",
+    "after": "2745d2b4c314c719d405f0fae89122adcb4d3003ccdc9609f975c0257f93ebcf"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/ls20/9607627b/metadata.json",
+    "before": "586c6f49094a34d5b1c23e01e8a7e350e67cfc4e897c4eda9e73afb61e184642",
+    "after": "66a44b61dadf65bcf0845dff4930bf2239b2fd71868c1a363df237fd92df07b6"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/re86/8af5384d/metadata.json",
+    "before": "0d8dd4580e121af8192b8f9891042c863bb81e807615891c7a7fa66f1df84eea",
+    "after": "1c0301c4eaa928f0b594045209816e664eb45859860cb904f2b053c8680e43c0"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/sk48/d8078629/metadata.json",
+    "before": "a3c9b4eff0a6225fe6d0ee2a830885ca91aba0c0958453dae97b627e1d246f21",
+    "after": "8c33a431be5254928af9ae2d8c26770e643eeab95a5bfa5ff84fa85fb57fb9eb"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/sp80/589a99af/metadata.json",
+    "before": "1bc7fd70bf907a962c5952b88f5c938db737e35f14928cb2dc4eb8dea0975989",
+    "after": "7d2ec99f0e55650a4eaefc0a2b29e51ae2ee25a31e0f84a4b273c07eee86d105"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/su15/1944f8ab/metadata.json",
+    "before": "c4fa273bea4d7e412d2b289792436ca2fefa71a2348099227c7d937ad681589e",
+    "after": "a156613a49b76c335e0c3e59e853f4df424ece1b05221626f27a6abd2e744278"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/cd82/fb555c5d/metadata.json",
+    "before": "b2454f24a3296d6b4be257dcf168376dc9ef9e4acd191a576d8ad50f42857f5e",
+    "after": "5e2962fbdc17fd2f78d6c7a591b2090f810db31c4a440d8fb0c616f4faf30bbe"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/lf52/271a04aa/metadata.json",
+    "before": "2795f7081e9bb7e6f4e87d739d16d290f3b783d7deadec71a0814e5f1e1185f7",
+    "after": "8f11bd3af0d5ada405227fe97b866a981ca6c82243428b98c26497572c663572"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/m0r0/492f87ba/metadata.json",
+    "before": "1f58c10f43b5cca28310ea3e12bb943f85879a3e831bb66cb1b964093030157b",
+    "after": "0b41b5de461af1da44e1e9813eaaa7c278bccd88fe373080568fba228ca17c77"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/ar25/0c556536/metadata.json",
+    "before": "57d786250a57abc5b34b0eb62f77502d605177a88823f306329767a0868b057d",
+    "after": "73487600cb1bdff73bd51e20f89625e8483f3765bcf04d1101184d591d775ad6"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/tr87/cd924810/metadata.json",
+    "before": "8b5acef460032c54aabdd0461fe3d32d7ceb1d95e939686149721083a5478dc1",
+    "after": "a067925efa0abd6b1f5cd23907c7adae4b84d272428115296e6f12bf7290de44"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/ft09/0d8bbf25/metadata.json",
+    "before": "17a98cef98dc6c416e8a896ffa443d9c9ad4127df6b1bdaae82f3684cca73e04",
+    "after": "22bd627ca099f9288a47f11a7dd5a111251e3c7337cc6feafd3d6cc3ce9a1cda"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/tn36/ef4dde99/metadata.json",
+    "before": "4c5bd78a7677bca96fbef24df4a61d986703903ece598fd2cdc4ceba2da19168",
+    "after": "a780edeb6bca0265ef4dbd61680bfe5e7fb94773ac8c91ddc115bef172de0659"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/tu93/0768757b/metadata.json",
+    "before": "db024370ddc900c86a40aaca33e2d2d59403b5bccc3fbfc13084d1c0e208b978",
+    "after": "6b022fc062c505a1909327df88027df18bccd3c8ddc4c22456e6a7e673c899a4"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/wa30/ee6fef47/metadata.json",
+    "before": "5d34ec2ccf4e4ea35d766aad215bdb3a74df4f7dabeb2d31a22a2ec81bc1aeac",
+    "after": "162aac96afdbd351ab616a04a5ec2db2c50726a6cccf61fd1e0cf80d973b01b7"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/sc25/635fd71a/metadata.json",
+    "before": "2f75b8e93fd02857777d4c339fb896bd7d3ed083ed9725eadecc989bb4e5824a",
+    "after": "e7e352bcf1b04e60b493f5a6c491b74a32cb1c4a3b993366ab05955588db7c4d"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/ka59/38d34dbb/metadata.json",
+    "before": "81ec4dfd75f39bf4c92ede2f17b28c105c7a70e41ab353868b40340fd4916d91",
+    "after": "31190c1fb56bb421da2d312e271ebb84a48c146090bc662575a4573032206ba8"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/r11l/495a7899/metadata.json",
+    "before": "a9cbef82e90027c183078d88742c1a34123c5ef14f7a8d2225299a007bbd0a0c",
+    "after": "57b02ba9c4b22318267905ff2dbefc920e766abe035f1890ceeb6c3ae29cc523"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/g50t/5849a774/metadata.json",
+    "before": "c1b474b6a50f7cfcba0696ea59b6e20b8d3f8ebe75f91fd6e321f932c9a356c8",
+    "after": "2ecd462337f8a56e26b34f719161f3b641d4aae93303b4a783a478b276500c15"
+  },
+  {
+    "path": "data/ARC-AGI-3-Kaggle-Starter/environment_files/s5i5/18d95033/metadata.json",
+    "before": "76514a73ed1893e110959e1297a1ed54ec5a97aabc25b3c0bc791750a97f4a77",
+    "after": "a407e5c0cd35aa240aafda9ef488f035f44a4a83c9f3d45d5cce5a8bd3d8c19f"
+  }
+]

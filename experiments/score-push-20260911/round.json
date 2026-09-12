@@ -1,0 +1,33 @@
+{
+  "observed_utc": "2026-09-12T05:09:12+00:00",
+  "authorization": "Finish predeclared experiments; submit qualifying candidate, otherwise conservative baseline.",
+  "agi2": {
+    "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+    "version": 11,
+    "bundle": "agi2/out/audited16",
+    "notebook_sha256": "45dcee6ee48ab20b4a9212a49151b321617762cb3b03289fae1acf08e8ace113",
+    "remote_source_verified": true,
+    "selection": "conservative augment16 baseline; no candidate met promotion standard",
+    "receipt": "agi2-receipt.json",
+    "submission_id": 56164865,
+    "submission_status": "COMPLETE",
+    "status": "scored",
+    "public_score": 29.31
+  },
+  "agi3": {
+    "trial": "experiments/agi3-coverage-v2-offline",
+    "protocol_sha256": "2c83e0d24a2233c8f00741fd52d59da684e11b8d5d0ac6524b552c6904f50ad1",
+    "selection": "coverage only if full predeclared gate passes, else stable",
+    "decision": "agi3-decision.json",
+    "receipt": "agi3-receipt.json",
+    "selected_arm": "stable",
+    "kernel": "uts3125025522741/arc-agi-3-sweep-agent",
+    "version": 4,
+    "status": "scored",
+    "assessment": "inconclusive_do_not_promote",
+    "submission_id": 56166407,
+    "submission_status": "COMPLETE",
+    "public_score": 0.03
+  },
+  "status": "both_scored_complete"
+}

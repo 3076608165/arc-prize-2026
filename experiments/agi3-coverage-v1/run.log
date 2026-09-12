@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "D:\ARC Prize 2026\agi3\paired_experiment.py", line 187, in <module>
+    execute(args.directory)
+  File "D:\ARC Prize 2026\agi3\paired_experiment.py", line 171, in execute
+    raise ValueError("Source/runtime changed during execution")
+ValueError: Source/runtime changed during execution

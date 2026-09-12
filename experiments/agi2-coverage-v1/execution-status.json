@@ -1,0 +1,19 @@
+{
+  "observed_utc": "2026-09-11T11:19:53.030026+00:00",
+  "arms": {
+    "16": {
+      "kernel": "uts3125025522741/arc-agi-2-coverage-16",
+      "version": 1,
+      "status": "downloaded",
+      "server_status": "uts3125025522741/arc-agi-2-coverage-16 has status \"KernelWorkerStatus.COMPLETE\"",
+      "download_response": "Output file downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment16\\coverage_audit/rank--1.jsonl\nOutput file downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment16\\coverage_audit/rank-0.jsonl\nOutput file downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment16\\coverage_audit/rank-1.jsonl\nOutput file downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment16\\coverage_audit/rank-2.jsonl\nOutput file downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment16\\coverage_audit/rank-3.jsonl\nOutput file downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment16\\coverage_summary.json\nOutput file downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment16\\submission.json\nKernel log downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment16\\arc-agi-2-coverage-16.log"
+    },
+    "8": {
+      "kernel": "uts3125025522741/arc-agi-2-coverage-8",
+      "version": 1,
+      "status": "downloaded",
+      "server_status": "uts3125025522741/arc-agi-2-coverage-8 has status \"KernelWorkerStatus.COMPLETE\"",
+      "download_response": "Output file downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment8\\coverage_audit/rank--1.jsonl\nOutput file downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment8\\coverage_audit/rank-0.jsonl\nOutput file downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment8\\coverage_audit/rank-1.jsonl\nOutput file downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment8\\coverage_audit/rank-2.jsonl\nOutput file downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment8\\coverage_audit/rank-3.jsonl\nOutput file downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment8\\coverage_summary.json\nOutput file downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment8\\submission.json\nKernel log downloaded to D:\\ARC Prize 2026\\experiments\\agi2-coverage-v1\\augment8\\arc-agi-2-coverage-8.log"
+    }
+  }
+}

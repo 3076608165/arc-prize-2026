@@ -1,0 +1,18 @@
+{
+  "kernel": "uts3125025522741/arc-agi-3-sweep-agent",
+  "version": 4,
+  "competition": "arc-prize-2026-arc-agi-3",
+  "message": "20260911 stable v4: complete 12-pair offline gate; conservative fallback; candidate did not meet predeclared gate",
+  "status": "submitted",
+  "kernel_status": "uts3125025522741/arc-agi-3-sweep-agent has status \"KernelWorkerStatus.COMPLETE\"",
+  "response": "0 submissions remaining today.",
+  "submission": {
+    "ref": "56166407",
+    "fileName": "submission.parquet",
+    "date": "2026-09-11 13:35:52.433000",
+    "description": "20260911 stable v4: complete 12-pair offline gate; conservative fallback; candidate did not meet predeclared gate",
+    "status": "SubmissionStatus.PENDING",
+    "publicScore": "",
+    "privateScore": ""
+  }
+}

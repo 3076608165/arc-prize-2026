@@ -22,6 +22,7 @@ So validate the plumbing with `--hours 1` first; only then spend a full run.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import shutil
@@ -226,7 +227,12 @@ def main() -> int:
     ap.add_argument("--hours", type=float, default=1.0,
                     help="wall-clock budget. Upstream uses 11.83 (12h - 10min).")
     ap.add_argument("--out", default="agi2/out/nvarc")
+    ap.add_argument("--kernel-id", default=OUR_ID)
+    ap.add_argument("--title", default=OUR_TITLE)
+    ap.add_argument("--worker-hash-seed", type=int, default=None,
+                    help="set PYTHONHASHSEED for subsequently launched workers")
     ap.add_argument("--refresh", action="store_true", help="re-pull upstream")
+    ap.add_argument("--audit-coverage", action="store_true", help="record per-task stage and candidate coverage events")
     ap.add_argument("--save-candidates", action="store_true",
                     help="copy the decoded-candidate store into kernel output so "
                          "selection algorithms can be compared offline")
@@ -249,6 +255,8 @@ def main() -> int:
         ap.error("--augment and --subset cannot be negative")
     if args.subset and args.full_eval:
         ap.error("--subset and --full-eval are mutually exclusive")
+    if args.worker_hash_seed is not None and not 0 <= args.worker_hash_seed <= 4294967295:
+        ap.error("--worker-hash-seed must be in [0, 4294967295]")
 
     src_nb = fetch_upstream(force=args.refresh)
     nb = json.loads(src_nb.read_text(encoding="utf-8"))
@@ -280,8 +288,16 @@ def main() -> int:
         raise SystemExit("could not find the four-task allowlist in starter.py; "
                          "upstream changed shape, re-read it before pushing")
 
+    if args.audit_coverage:
+        from coverage_audit import patch_notebook
+        patch_notebook(nb)
+
     nb["cells"].insert(0, {"cell_type": "markdown", "metadata": {},
                            "source": ATTRIBUTION.splitlines(keepends=True)})
+    if args.worker_hash_seed is not None:
+        nb["cells"].insert(1, {"cell_type": "code", "metadata": {}, "outputs": [],
+            "execution_count": None, "source": ["import os\n",
+                f'os.environ["PYTHONHASHSEED"] = "{args.worker_hash_seed}"\n']})
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -290,8 +306,8 @@ def main() -> int:
     # Carry every source the upstream notebook depends on. Dropping any of
     # these produces a run that fails minutes in, having already spent quota.
     meta = {
-        "id": OUR_ID,
-        "title": OUR_TITLE,
+        "id": args.kernel_id,
+        "title": args.title,
         "code_file": "submission.ipynb",
         "language": "python",
         "kernel_type": "notebook",
@@ -323,6 +339,11 @@ def main() -> int:
         "commit_subset": subset_ids or ("all" if args.full_eval else "upstream-four"),
         "competition_tasks": "all", "save_candidates": args.save_candidates,
         "cellvote": args.cellvote,
+        "audit_coverage": args.audit_coverage,
+        "worker_hash_seed": args.worker_hash_seed,
+        "kernel_id": args.kernel_id,
+        "upstream_notebook_sha256": hashlib.sha256(src_nb.read_bytes()).hexdigest(),
+        "notebook_sha256": hashlib.sha256((out / "submission.ipynb").read_bytes()).hexdigest(),
     }, indent=2) + "\n", encoding="utf-8")
 
     print(f"upstream      : {UPSTREAM}")

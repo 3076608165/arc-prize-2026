@@ -1,0 +1,4 @@
+{"status": "waiting", "kernel_status": "uts3125025522741/arc-agi-2-nvarc-repro has status \"KernelWorkerStatus.RUNNING\""}
+{"status": "waiting", "kernel_status": "uts3125025522741/arc-agi-2-nvarc-repro has status \"KernelWorkerStatus.COMPLETE\""}
+{"status": "submitting"}
+{"status": "submitted", "response": "0 submissions remaining today.", "submission": {"ref": "56164865", "fileName": "submission.json", "date": "2026-09-11 11:57:27.453000", "description": "20260911 conservative augment16 v11: coverage audit and fixed worker hash seed; no improvement claim", "status": "SubmissionStatus.PENDING", "publicScore": "", "privateScore": ""}}

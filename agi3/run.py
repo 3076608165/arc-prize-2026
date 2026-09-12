@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import re
 import subprocess
@@ -22,6 +23,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 STARTER = ROOT / "data" / "ARC-AGI-3-Kaggle-Starter"
 AGENTS = {
+    "stable": ROOT / "agi3" / "stable_agent.py",
+    "coverage": ROOT / "agi3" / "coverage_agent.py",
     "state": ROOT / "agi3" / "state_agent.py",
     "objects": ROOT / "agi3" / "object_agent.py",
     "warm": ROOT / "agi3" / "warm_agent.py",
@@ -31,7 +34,7 @@ AGENTS = {
     # it replaced rather than only against the random floor.
     "argmax": ROOT / "agi3" / "argmax_agent.py",
     # Same policy as explore but EXPLORE_RATE=0.15, isolating the exploit
-    # phase as the only variable. Currently the losing arm.
+    # phase as the only variable. Earlier claims of a loss were retracted.
     "exploit": ROOT / "agi3" / "exploit_agent.py",
 }
 AB_ARMS = ("random", "exploit", "explore")
@@ -85,6 +88,37 @@ PER_ENV_PATCH = PER_ENV_ANCHOR + '''
     print("PER_ENV_JSON " + _json.dumps(_rows))'''
 
 PER_ENV = re.compile(r"^PER_ENV_JSON (.*)$", re.M)
+RUN_GAMES = re.compile(r"^RUN_GAMES_JSON (.*)$", re.M)
+TRACE = re.compile(r"^TRACE_JSON (.*)$", re.M)
+
+# These global streams belong to environment rendering, not policy sampling.
+# The engine's own seed remains 0, so seeds in the paired round vary policy only.
+ENVIRONMENT_SETUP = '''    import random as _global_random
+    import numpy as _np
+    import hashlib as _hashlib
+    import json as _trace_json
+    import os as _trace_os
+    _global_random.seed(0)
+    _np.random.seed(0)
+'''
+ENVIRONMENT_SEED = '''        _environment_seed = int.from_bytes(_hashlib.sha256(
+            ("ARC_ENV_V1:" + game_id).encode()).digest()[:4], "big")
+        _global_random.seed(_environment_seed)
+        _np.random.seed(_environment_seed)
+'''
+TRACE_SETUP = '''        if _trace_os.environ.get("ARC_REPLAY_TRACE") == "1":
+            _trace = _hashlib.sha256()
+            _original_choose = agent.choose_action
+            def _traced_choose(frames, latest_frame, *args, **kwargs):
+                _action = _original_choose(frames, latest_frame, *args, **kwargs)
+                _payload = [latest_frame.frame, str(latest_frame.state),
+                            latest_frame.levels_completed, latest_frame.available_actions,
+                            _action.value, getattr(_action, "data", None)]
+                _trace.update(_trace_json.dumps(_payload, sort_keys=True,
+                              separators=(",", ":")).encode())
+                return _action
+            agent.choose_action = _traced_choose
+'''
 
 
 def true_score(rows: list[dict]) -> float:
@@ -118,6 +152,30 @@ def patched_runner(agent: str) -> Path:
     if agent_anchor not in src:
         raise SystemExit("play_local.py agent loader changed; inspect before running")
     src = src.replace(agent_anchor, 'Path(__import__("os").environ["ARC_AGENT_SOURCE"])')
+    mode = 'arc_agi.Arcade(operation_mode=OperationMode.NORMAL)'
+    if src.count(mode) != 1:
+        raise SystemExit("play_local.py environment mode changed; inspect before running")
+    src = src.replace(mode, 'arc_agi.Arcade(operation_mode=OperationMode.OFFLINE)')
+    setup_anchor = '    arc = arc_agi.Arcade('
+    src = src.replace(setup_anchor, ENVIRONMENT_SETUP + setup_anchor, 1)
+    make_anchor = '        env = arc.make(game_id, render_mode=args.render)'
+    if src.count(make_anchor) != 1:
+        raise SystemExit("play_local.py environment constructor changed")
+    src = src.replace(make_anchor, ENVIRONMENT_SEED + make_anchor)
+    loop_anchor = '        agent.main()'
+    if src.count(loop_anchor) != 1:
+        raise SystemExit("play_local.py agent loop changed")
+    src = src.replace(loop_anchor, TRACE_SETUP + loop_anchor + '\n'
+        '        if _trace_os.environ.get("ARC_REPLAY_TRACE") == "1":\n'
+        '            print("TRACE_JSON " + _trace_json.dumps({"game": game_id, "sha256": _trace.hexdigest()}))')
+    src = src.replace('    MyAgentCls = load_my_agent_class()',
+                      '    game_ids = sorted(game_ids)\n'
+                      '    print("RUN_GAMES_JSON " + __import__("json").dumps(game_ids))\n'
+                      '    MyAgentCls = load_my_agent_class()')
+    cap = 'MyAgentCls.MAX_ACTIONS = min(MyAgentCls.MAX_ACTIONS, args.max_steps)'
+    if cap not in src:
+        raise SystemExit("play_local.py action cap changed; inspect before running")
+    src = src.replace(cap, cap + ' - int(__import__("os").environ.get("ARC_EXACT_BUDGET", "0"))')
     out = STARTER / "scripts" / f"_play_local_scored_{agent}.py"
     out.write_text(src.replace(PER_ENV_ANCHOR, PER_ENV_PATCH), encoding="utf-8")
     return out
@@ -130,7 +188,20 @@ def venv_python() -> Path:
     raise SystemExit(f"No venv under {STARTER}. Run: bash scripts/setup.sh")
 
 
-def play(agent: str, games: str, steps: int, seed: int = 0) -> dict:
+def validate_results(per_game: dict, rows: list[dict], expected: list[str]) -> None:
+    ids = [(r.get("game_id") or r.get("id") or "").split("-")[0] for r in rows]
+    if not expected or len(expected) != len(set(expected)):
+        raise ValueError("Missing or duplicate expected game IDs")
+    if len(ids) != len(set(ids)) or set(ids) != set(expected) or set(per_game) != set(expected):
+        raise ValueError("Missing, duplicated, or unexpected game results")
+    for row in rows:
+        value = row.get("score")
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+            raise ValueError("Missing or non-finite per-game score")
+
+
+def play(agent: str, games: str, steps: int, seed: int = 0, exact_budget: bool = False,
+         trace: bool = False) -> dict:
     src = AGENTS[agent]
     if not src.exists():
         raise SystemExit(f"missing agent source {src}")
@@ -139,15 +210,19 @@ def play(agent: str, games: str, steps: int, seed: int = 0) -> dict:
     if games:
         cmd += ["--game", games]
     env = {**os.environ, "PYTHONIOENCODING": "utf-8", "ARC_SEED": str(seed),
-           "PYTHONHASHSEED": "0", "ARC_AGENT_SOURCE": str(src.resolve())}
+           "PYTHONHASHSEED": "0", "ARC_AGENT_SOURCE": str(src.resolve()),
+           "ARC_EXACT_BUDGET": str(int(exact_budget)), "ARC_REPLAY_TRACE": str(int(trace))}
     # The child prints UTF-8; this box's locale is GBK, so decode explicitly.
     proc = subprocess.run(
         cmd, cwd=STARTER, capture_output=True, text=True,
         encoding="utf-8", errors="replace", env=env,
     )
 
-    per_game, score, rows = {}, None, []
+    per_game, score, rows, expected = {}, None, [], []
     for line in proc.stdout.splitlines():
+        if m := RUN_GAMES.match(line):
+            expected = json.loads(m.group(1))
+            continue
         if m := PER_ENV.match(line):
             rows = json.loads(m.group(1))
             continue
@@ -163,7 +238,14 @@ def play(agent: str, games: str, steps: int, seed: int = 0) -> dict:
         sys.stderr.write(proc.stdout[-3000:] + "\n" + proc.stderr[-3000:])
         raise SystemExit(f"{agent}: incomplete run or missing per-game scorecard "
                          f"(exit {proc.returncode})")
-    return {"score": score, "games": per_game, "true": true_score(rows), "rows": rows}
+    validate_results(per_game, rows, expected)
+    if exact_budget and any(g["actions"] > steps for g in per_game.values()):
+        raise ValueError("Runner exceeded the declared action budget")
+    traces = [json.loads(m.group(1)) for m in TRACE.finditer(proc.stdout)]
+    if trace and {r["game"] for r in traces} != set(expected):
+        raise ValueError("Missing trajectory traces")
+    return {"score": score, "games": per_game, "true": true_score(rows), "rows": rows,
+            "expected_games": expected, "exact_budget": exact_budget, "traces": traces}
 
 
 def report(label: str, res: dict) -> None:

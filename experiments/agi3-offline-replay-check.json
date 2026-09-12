@@ -1,0 +1,113 @@
+{
+  "status": "passed",
+  "games": 25,
+  "steps_per_game": 100,
+  "policy_seed": 1000,
+  "fresh_process_runs": 2,
+  "observation_action_traces_identical": true,
+  "runtime_metadata_and_source_unchanged": true,
+  "elapsed_seconds": 31.59400000000096,
+  "traces": [
+    {
+      "game": "ar25",
+      "sha256": "f0a52edc907936f130aa31eed576a4902d2a4fe9c4a9c6e976e81d3a2ab2b33e"
+    },
+    {
+      "game": "bp35",
+      "sha256": "4992d23adb7a1687f1b0e6561805cbeb33046814183598dc821c288ea4e5f275"
+    },
+    {
+      "game": "cd82",
+      "sha256": "e7a988a05944060695087a7916cdc768db822aab792e0479675d70fb3c27a96a"
+    },
+    {
+      "game": "cn04",
+      "sha256": "f9c2f6283bb91fd30331ac235da8650b5959e211439ee71883fd88f6343af8b2"
+    },
+    {
+      "game": "dc22",
+      "sha256": "7a0b20224bf6abea2458e2457fb4bc201e01da1b2daaa8750addae295f5ced7a"
+    },
+    {
+      "game": "ft09",
+      "sha256": "a8dfa28abebf13cc98fe7349908093e797622f4390442cdc94a4439b1215e168"
+    },
+    {
+      "game": "g50t",
+      "sha256": "fd1539948cc4d7d15fb5f54f0e8731dccd37494ebf90bf57ffc046fa417f01e9"
+    },
+    {
+      "game": "ka59",
+      "sha256": "3967590c1d2f310e5d3356bb73ffba58c8182da28835d3b02203160be1e438f9"
+    },
+    {
+      "game": "lf52",
+      "sha256": "5e697d08352fdcbe8f31c6aff506a8280148018f0ad0722d96cc6cc543e5d151"
+    },
+    {
+      "game": "lp85",
+      "sha256": "4d253c70b8993dabe3afc882f98ca0501328b9a3da249857474e5d4921b4859e"
+    },
+    {
+      "game": "ls20",
+      "sha256": "0aba29481aaa5ca3b8677c650538aa63368754f5407db7a1804ea765ffd50089"
+    },
+    {
+      "game": "m0r0",
+      "sha256": "383c12ea8d763798194db252af0b646a0a46088dde0c9f3e064f2785ad9bd622"
+    },
+    {
+      "game": "r11l",
+      "sha256": "0a79a6650eb1e7c00fd9bb87c76e5a7c0c6fef2be2297c13ed3946ca9f61de39"
+    },
+    {
+      "game": "re86",
+      "sha256": "16ff21cd682fc2928515f64d35604ae264ad1c24bc68f5432fcb1e50aa151897"
+    },
+    {
+      "game": "s5i5",
+      "sha256": "3850f3c3fe9fb0ad67bbc4c681aa3267eec17f4d5330823ff91724dc1028be03"
+    },
+    {
+      "game": "sb26",
+      "sha256": "f8696284e467ed6653d2366fd7202ceb19a0a2654da6ce4640bcbc157ee1b4f1"
+    },
+    {
+      "game": "sc25",
+      "sha256": "2a747312ea0954f754d8331f30e50e7e92117dac0fdc813288b0da869b4c6eae"
+    },
+    {
+      "game": "sk48",
+      "sha256": "5d981885cf4f36d97d865131ad766290b47a773d53790ab60ee7dbf017fe538b"
+    },
+    {
+      "game": "sp80",
+      "sha256": "c94382bed34356107daada87cf8f1a71f416ae5a33491e52c7ad2bc69359db5a"
+    },
+    {
+      "game": "su15",
+      "sha256": "17a699ece127c3cc7f65496b804cb1f887c630123fc05b0c68039be3687cd452"
+    },
+    {
+      "game": "tn36",
+      "sha256": "942d599d1089f3532043d24c12bc558ffb79c40840e94f6f4b1f6e9825efed62"
+    },
+    {
+      "game": "tr87",
+      "sha256": "0bb6bfd11ff8af0e82bd203b1e86ffa08be29095e51298db910b6618415bc434"
+    },
+    {
+      "game": "tu93",
+      "sha256": "c258274321d9d97cd03c9e062edb2ff8cecdb1fb63a12c2ede08a68d4300213c"
+    },
+    {
+      "game": "vc33",
+      "sha256": "c66765499ca4a1a47c26a3b40da1c2d7b51bca4c4368d8f00b059ccca300a755"
+    },
+    {
+      "game": "wa30",
+      "sha256": "c9eee919e6e2dbc7e3a1501d1784c0246e72adc51ce39998f7ed1422d70889cc"
+    }
+  ],
+  "limits": "A short determinism regression, not a performance experiment or proof for all later game states."
+}

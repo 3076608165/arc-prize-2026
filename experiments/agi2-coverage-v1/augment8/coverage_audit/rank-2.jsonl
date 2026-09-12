@@ -1,0 +1,282 @@
+{"rank": 2, "task": null, "event": "worker_started", "time": 1789044092.2887468, "deadline": 1789047412.5448048}
+{"rank": 2, "task": "136b0064", "event": "task_started", "time": 1789044103.68993}
+{"rank": 2, "task": "136b0064", "event": "training_started", "time": 1789044106.4539123}
+{"rank": 2, "task": "136b0064", "event": "training_completed", "time": 1789044153.9280953}
+{"rank": 2, "task": "136b0064", "event": "batches_planned", "time": 1789044154.4773092, "count": 4}
+{"rank": 2, "task": "136b0064", "event": "decode_batch_started", "time": 1789044154.4853706, "subkeys": ["136b0064_0.permute4150723698.ex012", "136b0064_0.permute9302675184.ex012", "136b0064_0.rot90.rot90.permute5386701942.ex021", "136b0064_0.rot90.rot90.permute8579032416.ex120"]}
+{"rank": 2, "task": "136b0064", "event": "dfs_returned", "time": 1789044162.6290312, "elapsed": 8.143429040908813, "capped": false}
+{"rank": 2, "task": "136b0064", "event": "batch_completed", "time": 1789044162.6292465}
+{"rank": 2, "task": "136b0064", "event": "decode_batch_started", "time": 1789044162.6370058, "subkeys": ["136b0064_0.rot90.permute4281673590.ex102", "136b0064_0.rot90.permute4950812673.ex201", "136b0064_0.rot90.rot90.rot90.permute1654278039.ex210", "136b0064_0.rot90.rot90.rot90.permute4965803712.ex210"]}
+{"rank": 2, "task": "136b0064", "event": "dfs_returned", "time": 1789044169.353362, "elapsed": 6.7161664962768555, "capped": false}
+{"rank": 2, "task": "136b0064", "event": "batch_completed", "time": 1789044169.3535464}
+{"rank": 2, "task": "136b0064", "event": "decode_batch_started", "time": 1789044169.3613515, "subkeys": ["136b0064_0.transpose.permute1602397845.ex201", "136b0064_0.transpose.permute9180254367.ex021", "136b0064_0.transpose.rot90.rot90.permute0986123745.ex021", "136b0064_0.transpose.rot90.rot90.permute5436201789.ex021"]}
+{"rank": 2, "task": "136b0064", "event": "dfs_returned", "time": 1789044177.1504204, "elapsed": 7.788872480392456, "capped": false}
+{"rank": 2, "task": "136b0064", "event": "batch_completed", "time": 1789044177.150652}
+{"rank": 2, "task": "136b0064", "event": "decode_batch_started", "time": 1789044177.158584, "subkeys": ["136b0064_0.transpose.rot90.permute4907281356.ex102", "136b0064_0.transpose.rot90.permute5980213764.ex102", "136b0064_0.transpose.rot90.rot90.rot90.permute6142358709.ex021", "136b0064_0.transpose.rot90.rot90.rot90.permute7690351428.ex210"]}
+{"rank": 2, "task": "136b0064", "event": "dfs_returned", "time": 1789044187.6092427, "elapsed": 10.450464010238647, "capped": false}
+{"rank": 2, "task": "136b0064", "event": "batch_completed", "time": 1789044187.6094246}
+{"rank": 2, "task": "136b0064", "event": "task_finished", "time": 1789044187.6097732, "elapsed": 83.91987109184265, "past_deadline": false}
+{"rank": 2, "task": "142ca369", "event": "task_started", "time": 1789044187.610417}
+{"rank": 2, "task": "142ca369", "event": "training_started", "time": 1789044190.5911095}
+{"rank": 2, "task": "142ca369", "event": "training_completed", "time": 1789044307.628224}
+{"rank": 2, "task": "142ca369", "event": "batches_planned", "time": 1789044308.3140416, "count": 8}
+{"rank": 2, "task": "142ca369", "event": "decode_batch_started", "time": 1789044308.3324878, "subkeys": ["142ca369_0.permute4150723698.ex120", "142ca369_0.permute6720984531.ex021", "142ca369_0.rot90.rot90.permute7931086254.ex012", "142ca369_0.rot90.rot90.permute9302675184.ex120"]}
+{"rank": 2, "task": "142ca369", "event": "dfs_returned", "time": 1789044343.5363486, "elapsed": 35.203667879104614, "capped": false}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044348.8993266, "output_id": "142ca369_0", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044354.279067, "output_id": "142ca369_0", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044354.2800932, "output_id": "142ca369_0", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "batch_completed", "time": 1789044354.280212}
+{"rank": 2, "task": "142ca369", "event": "decode_batch_started", "time": 1789044354.298117, "subkeys": ["142ca369_0.rot90.permute1258796043.ex201", "142ca369_0.rot90.permute5386701942.ex021", "142ca369_0.rot90.rot90.rot90.permute2908315674.ex012", "142ca369_0.rot90.rot90.rot90.permute8579032416.ex012"]}
+{"rank": 2, "task": "142ca369", "event": "dfs_returned", "time": 1789044417.5979586, "elapsed": 63.299663066864014, "capped": false}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044422.9750798, "output_id": "142ca369_0", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044428.3690536, "output_id": "142ca369_0", "count": 2}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044433.766699, "output_id": "142ca369_0", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044433.7678258, "output_id": "142ca369_0", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "batch_completed", "time": 1789044433.7679408}
+{"rank": 2, "task": "142ca369", "event": "decode_batch_started", "time": 1789044433.786216, "subkeys": ["142ca369_1.permute1602397845.ex201", "142ca369_1.permute6827490351.ex102", "142ca369_1.rot90.rot90.permute9180254367.ex210", "142ca369_1.rot90.rot90.permute9368452107.ex102"]}
+{"rank": 2, "task": "142ca369", "event": "dfs_returned", "time": 1789044496.1871996, "elapsed": 62.400779247283936, "capped": false}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044501.7654629, "output_id": "142ca369_1", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044501.7666898, "output_id": "142ca369_1", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044512.942917, "output_id": "142ca369_1", "count": 2}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044512.9444478, "output_id": "142ca369_1", "count": 2}
+{"rank": 2, "task": "142ca369", "event": "batch_completed", "time": 1789044512.944583}
+{"rank": 2, "task": "142ca369", "event": "decode_batch_started", "time": 1789044512.9625773, "subkeys": ["142ca369_1.rot90.permute5436201789.ex021", "142ca369_1.rot90.permute8024967315.ex210", "142ca369_1.rot90.rot90.rot90.permute0986123745.ex012", "142ca369_1.rot90.rot90.rot90.permute7068392154.ex201"]}
+{"rank": 2, "task": "142ca369", "event": "dfs_returned", "time": 1789044553.2854514, "elapsed": 40.32270312309265, "capped": false}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044558.7827842, "output_id": "142ca369_1", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044558.7837815, "output_id": "142ca369_1", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044564.319796, "output_id": "142ca369_1", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044564.320853, "output_id": "142ca369_1", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "batch_completed", "time": 1789044564.320967}
+{"rank": 2, "task": "142ca369", "event": "decode_batch_started", "time": 1789044564.3386877, "subkeys": ["142ca369_0.transpose.permute4950812673.ex012", "142ca369_0.transpose.permute9316478025.ex012", "142ca369_0.transpose.rot90.rot90.permute4281673590.ex201", "142ca369_0.transpose.rot90.rot90.permute7284135096.ex102"]}
+{"rank": 2, "task": "142ca369", "event": "dfs_returned", "time": 1789044656.3100421, "elapsed": 91.97115659713745, "capped": false}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044661.652062, "output_id": "142ca369_0", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044672.354818, "output_id": "142ca369_0", "count": 2}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044672.355886, "output_id": "142ca369_0", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044677.684088, "output_id": "142ca369_0", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "batch_completed", "time": 1789044677.6842198}
+{"rank": 2, "task": "142ca369", "event": "decode_batch_started", "time": 1789044677.7020912, "subkeys": ["142ca369_0.transpose.rot90.permute1654278039.ex021", "142ca369_0.transpose.rot90.permute3170468295.ex201", "142ca369_0.transpose.rot90.rot90.rot90.permute4965803712.ex120", "142ca369_0.transpose.rot90.rot90.rot90.permute7568409321.ex210"]}
+{"rank": 2, "task": "142ca369", "event": "dfs_returned", "time": 1789044713.863558, "elapsed": 36.16128182411194, "capped": false}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044713.8647072, "output_id": "142ca369_0", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044713.8662634, "output_id": "142ca369_0", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044719.1622763, "output_id": "142ca369_0", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "batch_completed", "time": 1789044719.162408}
+{"rank": 2, "task": "142ca369", "event": "decode_batch_started", "time": 1789044719.1806073, "subkeys": ["142ca369_1.transpose.permute5980213764.ex021", "142ca369_1.transpose.permute6703249158.ex021", "142ca369_1.transpose.rot90.rot90.permute4907281356.ex012", "142ca369_1.transpose.rot90.rot90.permute7562830149.ex102"]}
+{"rank": 2, "task": "142ca369", "event": "dfs_returned", "time": 1789044785.9678187, "elapsed": 66.78700757026672, "capped": false}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044797.025503, "output_id": "142ca369_1", "count": 2}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044802.5618162, "output_id": "142ca369_1", "count": 2}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044808.0748084, "output_id": "142ca369_1", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044819.0809498, "output_id": "142ca369_1", "count": 2}
+{"rank": 2, "task": "142ca369", "event": "batch_completed", "time": 1789044819.081098}
+{"rank": 2, "task": "142ca369", "event": "decode_batch_started", "time": 1789044819.09914, "subkeys": ["142ca369_1.transpose.rot90.permute7613284905.ex120", "142ca369_1.transpose.rot90.permute7690351428.ex120", "142ca369_1.transpose.rot90.rot90.rot90.permute6142358709.ex201", "142ca369_1.transpose.rot90.rot90.rot90.permute6150492378.ex012"]}
+{"rank": 2, "task": "142ca369", "event": "dfs_returned", "time": 1789044881.1472483, "elapsed": 62.04792666435242, "capped": false}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044892.3366356, "output_id": "142ca369_1", "count": 2}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044892.3376539, "output_id": "142ca369_1", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044897.9370284, "output_id": "142ca369_1", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "candidates_written", "time": 1789044897.93804, "output_id": "142ca369_1", "count": 1}
+{"rank": 2, "task": "142ca369", "event": "batch_completed", "time": 1789044897.9381435}
+{"rank": 2, "task": "142ca369", "event": "task_finished", "time": 1789044897.9385068, "elapsed": 710.3280832767487, "past_deadline": false}
+{"rank": 2, "task": "1818057f", "event": "task_started", "time": 1789044897.9392753}
+{"rank": 2, "task": "1818057f", "event": "training_started", "time": 1789044900.7977943}
+{"rank": 2, "task": "1818057f", "event": "training_completed", "time": 1789044958.8885803}
+{"rank": 2, "task": "1818057f", "event": "batches_planned", "time": 1789044959.4585238, "count": 4}
+{"rank": 2, "task": "1818057f", "event": "decode_batch_started", "time": 1789044959.470359, "subkeys": ["1818057f_0.permute4150723698.ex012", "1818057f_0.permute9302675184.ex012", "1818057f_0.rot90.rot90.permute5386701942.ex021", "1818057f_0.rot90.rot90.permute8579032416.ex120"]}
+{"rank": 2, "task": "1818057f", "event": "dfs_returned", "time": 1789045008.9524403, "elapsed": 49.48186731338501, "capped": false}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045012.6812518, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045012.682657, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045012.6839452, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045012.6852217, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "batch_completed", "time": 1789045012.685311}
+{"rank": 2, "task": "1818057f", "event": "decode_batch_started", "time": 1789045012.6970592, "subkeys": ["1818057f_0.rot90.permute4281673590.ex102", "1818057f_0.rot90.permute4950812673.ex201", "1818057f_0.rot90.rot90.rot90.permute1654278039.ex210", "1818057f_0.rot90.rot90.rot90.permute4965803712.ex210"]}
+{"rank": 2, "task": "1818057f", "event": "dfs_returned", "time": 1789045062.1490285, "elapsed": 49.45175123214722, "capped": false}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045065.8169477, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045065.818386, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045065.8196933, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045065.8209429, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "batch_completed", "time": 1789045065.8210607}
+{"rank": 2, "task": "1818057f", "event": "decode_batch_started", "time": 1789045065.8327544, "subkeys": ["1818057f_0.transpose.permute1602397845.ex201", "1818057f_0.transpose.permute9180254367.ex021", "1818057f_0.transpose.rot90.rot90.permute0986123745.ex021", "1818057f_0.transpose.rot90.rot90.permute5436201789.ex021"]}
+{"rank": 2, "task": "1818057f", "event": "dfs_returned", "time": 1789045115.0474105, "elapsed": 49.214462757110596, "capped": false}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045115.0490036, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045115.0502841, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045115.051542, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045115.0527925, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "batch_completed", "time": 1789045115.052883}
+{"rank": 2, "task": "1818057f", "event": "decode_batch_started", "time": 1789045115.0643642, "subkeys": ["1818057f_0.transpose.rot90.permute4907281356.ex102", "1818057f_0.transpose.rot90.permute5980213764.ex102", "1818057f_0.transpose.rot90.rot90.rot90.permute6142358709.ex021", "1818057f_0.transpose.rot90.rot90.rot90.permute7690351428.ex210"]}
+{"rank": 2, "task": "1818057f", "event": "dfs_returned", "time": 1789045164.2396216, "elapsed": 49.17506289482117, "capped": false}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045164.241295, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045164.2426276, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045164.2439067, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "candidates_written", "time": 1789045164.245179, "output_id": "1818057f_0", "count": 1}
+{"rank": 2, "task": "1818057f", "event": "batch_completed", "time": 1789045164.245268}
+{"rank": 2, "task": "1818057f", "event": "task_finished", "time": 1789045164.2456558, "elapsed": 266.3063817024231, "past_deadline": false}
+{"rank": 2, "task": "20a9e565", "event": "task_started", "time": 1789045164.2462754}
+{"rank": 2, "task": "20a9e565", "event": "training_started", "time": 1789045167.7628603}
+{"rank": 2, "task": "20a9e565", "event": "training_completed", "time": 1789045308.279738}
+{"rank": 2, "task": "20a9e565", "event": "batches_planned", "time": 1789045309.027047, "count": 8}
+{"rank": 2, "task": "20a9e565", "event": "decode_batch_started", "time": 1789045309.0527258, "subkeys": ["20a9e565_0.permute4150723698.ex120", "20a9e565_0.permute6720984531.ex021", "20a9e565_0.rot90.rot90.permute7931086254.ex012", "20a9e565_0.rot90.rot90.permute9302675184.ex120"]}
+{"rank": 2, "task": "20a9e565", "event": "dfs_returned", "time": 1789045314.8581138, "elapsed": 5.805175304412842, "capped": false}
+{"rank": 2, "task": "20a9e565", "event": "batch_completed", "time": 1789045314.8583045}
+{"rank": 2, "task": "20a9e565", "event": "decode_batch_started", "time": 1789045314.8828564, "subkeys": ["20a9e565_0.rot90.permute1258796043.ex201", "20a9e565_0.rot90.permute5386701942.ex021", "20a9e565_0.rot90.rot90.rot90.permute2908315674.ex012", "20a9e565_0.rot90.rot90.rot90.permute8579032416.ex012"]}
+{"rank": 2, "task": "20a9e565", "event": "dfs_returned", "time": 1789045323.7551644, "elapsed": 8.872097730636597, "capped": false}
+{"rank": 2, "task": "20a9e565", "event": "batch_completed", "time": 1789045323.7565176}
+{"rank": 2, "task": "20a9e565", "event": "decode_batch_started", "time": 1789045323.7810493, "subkeys": ["20a9e565_1.permute1602397845.ex201", "20a9e565_1.permute6827490351.ex102", "20a9e565_1.rot90.rot90.permute9180254367.ex210", "20a9e565_1.rot90.rot90.permute9368452107.ex102"]}
+{"rank": 2, "task": "20a9e565", "event": "dfs_returned", "time": 1789045330.7285333, "elapsed": 6.947306871414185, "capped": false}
+{"rank": 2, "task": "20a9e565", "event": "batch_completed", "time": 1789045330.7294009}
+{"rank": 2, "task": "20a9e565", "event": "decode_batch_started", "time": 1789045330.753681, "subkeys": ["20a9e565_1.rot90.permute5436201789.ex021", "20a9e565_1.rot90.permute8024967315.ex210", "20a9e565_1.rot90.rot90.rot90.permute0986123745.ex012", "20a9e565_1.rot90.rot90.rot90.permute7068392154.ex201"]}
+{"rank": 2, "task": "20a9e565", "event": "dfs_returned", "time": 1789045341.1394684, "elapsed": 10.385604858398438, "capped": false}
+{"rank": 2, "task": "20a9e565", "event": "candidates_written", "time": 1789045347.931619, "output_id": "20a9e565_1", "count": 1}
+{"rank": 2, "task": "20a9e565", "event": "candidates_written", "time": 1789045347.9323611, "output_id": "20a9e565_1", "count": 1}
+{"rank": 2, "task": "20a9e565", "event": "batch_completed", "time": 1789045347.9324663}
+{"rank": 2, "task": "20a9e565", "event": "decode_batch_started", "time": 1789045347.9572937, "subkeys": ["20a9e565_0.transpose.permute4950812673.ex012", "20a9e565_0.transpose.permute9316478025.ex012", "20a9e565_0.transpose.rot90.rot90.permute4281673590.ex201", "20a9e565_0.transpose.rot90.rot90.permute7284135096.ex102"]}
+{"rank": 2, "task": "20a9e565", "event": "dfs_returned", "time": 1789045365.7337265, "elapsed": 17.776256561279297, "capped": false}
+{"rank": 2, "task": "20a9e565", "event": "candidates_written", "time": 1789045372.7559266, "output_id": "20a9e565_0", "count": 1}
+{"rank": 2, "task": "20a9e565", "event": "batch_completed", "time": 1789045372.7560735}
+{"rank": 2, "task": "20a9e565", "event": "decode_batch_started", "time": 1789045372.7810378, "subkeys": ["20a9e565_0.transpose.rot90.permute1654278039.ex021", "20a9e565_0.transpose.rot90.permute3170468295.ex201", "20a9e565_0.transpose.rot90.rot90.rot90.permute4965803712.ex120", "20a9e565_0.transpose.rot90.rot90.rot90.permute7568409321.ex210"]}
+{"rank": 2, "task": "20a9e565", "event": "dfs_returned", "time": 1789045379.336803, "elapsed": 6.555582284927368, "capped": false}
+{"rank": 2, "task": "20a9e565", "event": "batch_completed", "time": 1789045379.3376021}
+{"rank": 2, "task": "20a9e565", "event": "decode_batch_started", "time": 1789045379.3619137, "subkeys": ["20a9e565_1.transpose.permute5980213764.ex021", "20a9e565_1.transpose.permute6703249158.ex021", "20a9e565_1.transpose.rot90.rot90.permute4907281356.ex012", "20a9e565_1.transpose.rot90.rot90.permute7562830149.ex102"]}
+{"rank": 2, "task": "20a9e565", "event": "dfs_returned", "time": 1789045384.724328, "elapsed": 5.362230539321899, "capped": false}
+{"rank": 2, "task": "20a9e565", "event": "batch_completed", "time": 1789045384.7248783}
+{"rank": 2, "task": "20a9e565", "event": "decode_batch_started", "time": 1789045384.7491713, "subkeys": ["20a9e565_1.transpose.rot90.permute7613284905.ex120", "20a9e565_1.transpose.rot90.permute7690351428.ex120", "20a9e565_1.transpose.rot90.rot90.rot90.permute6142358709.ex201", "20a9e565_1.transpose.rot90.rot90.rot90.permute6150492378.ex012"]}
+{"rank": 2, "task": "20a9e565", "event": "dfs_returned", "time": 1789045390.6278005, "elapsed": 5.87846565246582, "capped": false}
+{"rank": 2, "task": "20a9e565", "event": "batch_completed", "time": 1789045390.6284642}
+{"rank": 2, "task": "20a9e565", "event": "task_finished", "time": 1789045390.628798, "elapsed": 226.38252067565918, "past_deadline": false}
+{"rank": 2, "task": "247ef758", "event": "task_started", "time": 1789045390.6293619}
+{"rank": 2, "task": "247ef758", "event": "training_started", "time": 1789045393.443781}
+{"rank": 2, "task": "247ef758", "event": "training_completed", "time": 1789045451.2284508}
+{"rank": 2, "task": "247ef758", "event": "batches_planned", "time": 1789045451.8521044, "count": 8}
+{"rank": 2, "task": "247ef758", "event": "decode_batch_started", "time": 1789045451.86254, "subkeys": ["247ef758_0.permute4150723698.ex120", "247ef758_0.permute6720984531.ex021", "247ef758_0.rot90.rot90.permute7931086254.ex012", "247ef758_0.rot90.rot90.permute9302675184.ex120"]}
+{"rank": 2, "task": "247ef758", "event": "dfs_returned", "time": 1789045483.197402, "elapsed": 31.33463954925537, "capped": false}
+{"rank": 2, "task": "247ef758", "event": "batch_completed", "time": 1789045483.1997097}
+{"rank": 2, "task": "247ef758", "event": "decode_batch_started", "time": 1789045483.2105572, "subkeys": ["247ef758_0.rot90.permute1258796043.ex201", "247ef758_0.rot90.permute5386701942.ex021", "247ef758_0.rot90.rot90.rot90.permute2908315674.ex012", "247ef758_0.rot90.rot90.rot90.permute8579032416.ex012"]}
+{"rank": 2, "task": "247ef758", "event": "dfs_returned", "time": 1789045523.413952, "elapsed": 40.20318579673767, "capped": false}
+{"rank": 2, "task": "247ef758", "event": "candidates_written", "time": 1789045526.3064861, "output_id": "247ef758_0", "count": 1}
+{"rank": 2, "task": "247ef758", "event": "candidates_written", "time": 1789045529.2038739, "output_id": "247ef758_0", "count": 1}
+{"rank": 2, "task": "247ef758", "event": "batch_completed", "time": 1789045529.204018}
+{"rank": 2, "task": "247ef758", "event": "decode_batch_started", "time": 1789045529.2139676, "subkeys": ["247ef758_1.permute1602397845.ex201", "247ef758_1.permute6827490351.ex102", "247ef758_1.rot90.rot90.permute9180254367.ex210", "247ef758_1.rot90.rot90.permute9368452107.ex102"]}
+{"rank": 2, "task": "247ef758", "event": "dfs_returned", "time": 1789045567.39968, "elapsed": 38.1854829788208, "capped": false}
+{"rank": 2, "task": "247ef758", "event": "candidates_written", "time": 1789045570.020125, "output_id": "247ef758_1", "count": 1}
+{"rank": 2, "task": "247ef758", "event": "batch_completed", "time": 1789045570.0202458}
+{"rank": 2, "task": "247ef758", "event": "decode_batch_started", "time": 1789045570.0305154, "subkeys": ["247ef758_1.rot90.permute5436201789.ex021", "247ef758_1.rot90.permute8024967315.ex210", "247ef758_1.rot90.rot90.rot90.permute0986123745.ex012", "247ef758_1.rot90.rot90.rot90.permute7068392154.ex201"]}
+{"rank": 2, "task": "247ef758", "event": "dfs_returned", "time": 1789045606.6773458, "elapsed": 36.646626234054565, "capped": false}
+{"rank": 2, "task": "247ef758", "event": "candidates_written", "time": 1789045609.2668111, "output_id": "247ef758_1", "count": 1}
+{"rank": 2, "task": "247ef758", "event": "candidates_written", "time": 1789045611.879953, "output_id": "247ef758_1", "count": 2}
+{"rank": 2, "task": "247ef758", "event": "batch_completed", "time": 1789045611.8801038}
+{"rank": 2, "task": "247ef758", "event": "decode_batch_started", "time": 1789045611.890862, "subkeys": ["247ef758_0.transpose.permute4950812673.ex012", "247ef758_0.transpose.permute9316478025.ex012", "247ef758_0.transpose.rot90.rot90.permute4281673590.ex201", "247ef758_0.transpose.rot90.rot90.permute7284135096.ex102"]}
+{"rank": 2, "task": "247ef758", "event": "dfs_returned", "time": 1789045649.9665487, "elapsed": 38.07543897628784, "capped": false}
+{"rank": 2, "task": "247ef758", "event": "batch_completed", "time": 1789045649.9694164}
+{"rank": 2, "task": "247ef758", "event": "decode_batch_started", "time": 1789045649.9798267, "subkeys": ["247ef758_0.transpose.rot90.permute1654278039.ex021", "247ef758_0.transpose.rot90.permute3170468295.ex201", "247ef758_0.transpose.rot90.rot90.rot90.permute4965803712.ex120", "247ef758_0.transpose.rot90.rot90.rot90.permute7568409321.ex210"]}
+{"rank": 2, "task": "247ef758", "event": "dfs_returned", "time": 1789045692.5072057, "elapsed": 42.52718448638916, "capped": false}
+{"rank": 2, "task": "247ef758", "event": "candidates_written", "time": 1789045695.4341612, "output_id": "247ef758_0", "count": 1}
+{"rank": 2, "task": "247ef758", "event": "batch_completed", "time": 1789045695.4342887}
+{"rank": 2, "task": "247ef758", "event": "decode_batch_started", "time": 1789045695.4445796, "subkeys": ["247ef758_1.transpose.permute5980213764.ex021", "247ef758_1.transpose.permute6703249158.ex021", "247ef758_1.transpose.rot90.rot90.permute4907281356.ex012", "247ef758_1.transpose.rot90.rot90.permute7562830149.ex102"]}
+{"rank": 2, "task": "247ef758", "event": "dfs_returned", "time": 1789045721.264063, "elapsed": 25.819257497787476, "capped": false}
+{"rank": 2, "task": "247ef758", "event": "batch_completed", "time": 1789045721.2647312}
+{"rank": 2, "task": "247ef758", "event": "decode_batch_started", "time": 1789045721.2746005, "subkeys": ["247ef758_1.transpose.rot90.permute7613284905.ex120", "247ef758_1.transpose.rot90.permute7690351428.ex120", "247ef758_1.transpose.rot90.rot90.rot90.permute6142358709.ex201", "247ef758_1.transpose.rot90.rot90.rot90.permute6150492378.ex012"]}
+{"rank": 2, "task": "247ef758", "event": "dfs_returned", "time": 1789045755.9629626, "elapsed": 34.68816161155701, "capped": false}
+{"rank": 2, "task": "247ef758", "event": "batch_completed", "time": 1789045755.9657195}
+{"rank": 2, "task": "247ef758", "event": "task_finished", "time": 1789045755.9661112, "elapsed": 365.3367462158203, "past_deadline": false}
+{"rank": 2, "task": "271d71e2", "event": "task_started", "time": 1789045755.9665756}
+{"rank": 2, "task": "271d71e2", "event": "training_started", "time": 1789045758.870845}
+{"rank": 2, "task": "271d71e2", "event": "training_completed", "time": 1789045815.201018}
+{"rank": 2, "task": "271d71e2", "event": "batches_planned", "time": 1789045815.791492, "count": 4}
+{"rank": 2, "task": "271d71e2", "event": "decode_batch_started", "time": 1789045815.804422, "subkeys": ["271d71e2_0.permute4150723698.ex012", "271d71e2_0.permute9302675184.ex012", "271d71e2_0.rot90.rot90.permute5386701942.ex021", "271d71e2_0.rot90.rot90.permute8579032416.ex120"]}
+{"rank": 2, "task": "271d71e2", "event": "dfs_returned", "time": 1789045883.1958601, "elapsed": 67.39121508598328, "capped": false}
+{"rank": 2, "task": "271d71e2", "event": "batch_completed", "time": 1789045883.199899}
+{"rank": 2, "task": "271d71e2", "event": "decode_batch_started", "time": 1789045883.21204, "subkeys": ["271d71e2_0.rot90.permute4281673590.ex102", "271d71e2_0.rot90.permute4950812673.ex201", "271d71e2_0.rot90.rot90.rot90.permute1654278039.ex210", "271d71e2_0.rot90.rot90.rot90.permute4965803712.ex210"]}
+{"rank": 2, "task": "271d71e2", "event": "dfs_returned", "time": 1789045942.6197438, "elapsed": 59.407490491867065, "capped": false}
+{"rank": 2, "task": "271d71e2", "event": "batch_completed", "time": 1789045942.6281836}
+{"rank": 2, "task": "271d71e2", "event": "decode_batch_started", "time": 1789045942.6404588, "subkeys": ["271d71e2_0.transpose.permute1602397845.ex201", "271d71e2_0.transpose.permute9180254367.ex021", "271d71e2_0.transpose.rot90.rot90.permute0986123745.ex021", "271d71e2_0.transpose.rot90.rot90.permute5436201789.ex021"]}
+{"rank": 2, "task": "271d71e2", "event": "dfs_returned", "time": 1789046003.4204407, "elapsed": 60.779772996902466, "capped": false}
+{"rank": 2, "task": "271d71e2", "event": "batch_completed", "time": 1789046003.426937}
+{"rank": 2, "task": "271d71e2", "event": "decode_batch_started", "time": 1789046003.4395704, "subkeys": ["271d71e2_0.transpose.rot90.permute4907281356.ex102", "271d71e2_0.transpose.rot90.permute5980213764.ex102", "271d71e2_0.transpose.rot90.rot90.rot90.permute6142358709.ex021", "271d71e2_0.transpose.rot90.rot90.rot90.permute7690351428.ex210"]}
+{"rank": 2, "task": "271d71e2", "event": "dfs_returned", "time": 1789046048.8585107, "elapsed": 45.41873335838318, "capped": false}
+{"rank": 2, "task": "271d71e2", "event": "batch_completed", "time": 1789046048.8587124}
+{"rank": 2, "task": "271d71e2", "event": "task_finished", "time": 1789046048.8591564, "elapsed": 292.89257073402405, "past_deadline": false}
+{"rank": 2, "task": "28a6681f", "event": "task_started", "time": 1789046048.8597}
+{"rank": 2, "task": "28a6681f", "event": "training_started", "time": 1789046051.586027}
+{"rank": 2, "task": "28a6681f", "event": "training_completed", "time": 1789046092.6278672}
+{"rank": 2, "task": "28a6681f", "event": "batches_planned", "time": 1789046093.1841283, "count": 4}
+{"rank": 2, "task": "28a6681f", "event": "decode_batch_started", "time": 1789046093.1901982, "subkeys": ["28a6681f_0.permute4150723698.ex012", "28a6681f_0.permute9302675184.ex012", "28a6681f_0.rot90.rot90.permute5386701942.ex021", "28a6681f_0.rot90.rot90.permute8579032416.ex120"]}
+{"rank": 2, "task": "28a6681f", "event": "dfs_returned", "time": 1789046104.648181, "elapsed": 11.457782745361328, "capped": false}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046105.9788153, "output_id": "28a6681f_0", "count": 1}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046105.9795501, "output_id": "28a6681f_0", "count": 1}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046107.320261, "output_id": "28a6681f_0", "count": 1}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046107.3210652, "output_id": "28a6681f_0", "count": 1}
+{"rank": 2, "task": "28a6681f", "event": "batch_completed", "time": 1789046107.321167}
+{"rank": 2, "task": "28a6681f", "event": "decode_batch_started", "time": 1789046107.3276193, "subkeys": ["28a6681f_0.rot90.permute4281673590.ex102", "28a6681f_0.rot90.permute4950812673.ex201", "28a6681f_0.rot90.rot90.rot90.permute1654278039.ex210", "28a6681f_0.rot90.rot90.rot90.permute4965803712.ex210"]}
+{"rank": 2, "task": "28a6681f", "event": "dfs_returned", "time": 1789046124.4444344, "elapsed": 17.116623401641846, "capped": false}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046125.7743614, "output_id": "28a6681f_0", "count": 1}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046127.1210983, "output_id": "28a6681f_0", "count": 1}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046129.8499098, "output_id": "28a6681f_0", "count": 2}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046131.2185166, "output_id": "28a6681f_0", "count": 1}
+{"rank": 2, "task": "28a6681f", "event": "batch_completed", "time": 1789046131.2186368}
+{"rank": 2, "task": "28a6681f", "event": "decode_batch_started", "time": 1789046131.2251313, "subkeys": ["28a6681f_0.transpose.permute1602397845.ex201", "28a6681f_0.transpose.permute9180254367.ex021", "28a6681f_0.transpose.rot90.rot90.permute0986123745.ex021", "28a6681f_0.transpose.rot90.rot90.permute5436201789.ex021"]}
+{"rank": 2, "task": "28a6681f", "event": "dfs_returned", "time": 1789046152.3459423, "elapsed": 21.120606184005737, "capped": false}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046153.696362, "output_id": "28a6681f_0", "count": 1}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046155.0570998, "output_id": "28a6681f_0", "count": 2}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046156.4397442, "output_id": "28a6681f_0", "count": 1}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046156.4405766, "output_id": "28a6681f_0", "count": 1}
+{"rank": 2, "task": "28a6681f", "event": "batch_completed", "time": 1789046156.4407005}
+{"rank": 2, "task": "28a6681f", "event": "decode_batch_started", "time": 1789046156.4471138, "subkeys": ["28a6681f_0.transpose.rot90.permute4907281356.ex102", "28a6681f_0.transpose.rot90.permute5980213764.ex102", "28a6681f_0.transpose.rot90.rot90.rot90.permute6142358709.ex021", "28a6681f_0.transpose.rot90.rot90.rot90.permute7690351428.ex210"]}
+{"rank": 2, "task": "28a6681f", "event": "dfs_returned", "time": 1789046191.5934365, "elapsed": 35.14614486694336, "capped": false}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046191.5947502, "output_id": "28a6681f_0", "count": 2}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046192.9400814, "output_id": "28a6681f_0", "count": 1}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046194.291738, "output_id": "28a6681f_0", "count": 2}
+{"rank": 2, "task": "28a6681f", "event": "candidates_written", "time": 1789046194.29289, "output_id": "28a6681f_0", "count": 2}
+{"rank": 2, "task": "28a6681f", "event": "batch_completed", "time": 1789046194.2930233}
+{"rank": 2, "task": "28a6681f", "event": "task_finished", "time": 1789046194.293368, "elapsed": 145.43366956710815, "past_deadline": false}
+{"rank": 2, "task": "2c181942", "event": "task_started", "time": 1789046194.293909}
+{"rank": 2, "task": "2c181942", "event": "training_started", "time": 1789046197.7471373}
+{"rank": 2, "task": "2c181942", "event": "training_completed", "time": 1789046334.9622061}
+{"rank": 2, "task": "2c181942", "event": "batches_planned", "time": 1789046335.588026, "count": 4}
+{"rank": 2, "task": "2c181942", "event": "decode_batch_started", "time": 1789046335.611234, "subkeys": ["2c181942_0.permute4150723698.ex012", "2c181942_0.permute9302675184.ex012", "2c181942_0.rot90.rot90.permute5386701942.ex021", "2c181942_0.rot90.rot90.permute8579032416.ex120"]}
+{"rank": 2, "task": "2c181942", "event": "dfs_returned", "time": 1789046418.640789, "elapsed": 83.02934336662292, "capped": false}
+{"rank": 2, "task": "2c181942", "event": "candidates_written", "time": 1789046425.9762912, "output_id": "2c181942_0", "count": 1}
+{"rank": 2, "task": "2c181942", "event": "batch_completed", "time": 1789046425.9764109}
+{"rank": 2, "task": "2c181942", "event": "decode_batch_started", "time": 1789046425.9996796, "subkeys": ["2c181942_0.rot90.permute4281673590.ex102", "2c181942_0.rot90.permute4950812673.ex201", "2c181942_0.rot90.rot90.rot90.permute1654278039.ex210", "2c181942_0.rot90.rot90.rot90.permute4965803712.ex210"]}
+{"rank": 2, "task": "2c181942", "event": "dfs_returned", "time": 1789046509.6746707, "elapsed": 83.67479157447815, "capped": false}
+{"rank": 2, "task": "2c181942", "event": "candidates_written", "time": 1789046517.0677855, "output_id": "2c181942_0", "count": 1}
+{"rank": 2, "task": "2c181942", "event": "batch_completed", "time": 1789046517.0679078}
+{"rank": 2, "task": "2c181942", "event": "decode_batch_started", "time": 1789046517.0914333, "subkeys": ["2c181942_0.transpose.permute1602397845.ex201", "2c181942_0.transpose.permute9180254367.ex021", "2c181942_0.transpose.rot90.rot90.permute0986123745.ex021", "2c181942_0.transpose.rot90.rot90.permute5436201789.ex021"]}
+{"rank": 2, "task": "2c181942", "event": "dfs_returned", "time": 1789046609.0253396, "elapsed": 91.93370699882507, "capped": false}
+{"rank": 2, "task": "2c181942", "event": "batch_completed", "time": 1789046609.030904}
+{"rank": 2, "task": "2c181942", "event": "decode_batch_started", "time": 1789046609.0537488, "subkeys": ["2c181942_0.transpose.rot90.permute4907281356.ex102", "2c181942_0.transpose.rot90.permute5980213764.ex102", "2c181942_0.transpose.rot90.rot90.rot90.permute6142358709.ex021", "2c181942_0.transpose.rot90.rot90.rot90.permute7690351428.ex210"]}
+{"rank": 2, "task": "2c181942", "event": "dfs_returned", "time": 1789046725.0031545, "elapsed": 115.94921112060547, "capped": false}
+{"rank": 2, "task": "2c181942", "event": "candidates_written", "time": 1789046732.3976796, "output_id": "2c181942_0", "count": 2}
+{"rank": 2, "task": "2c181942", "event": "candidates_written", "time": 1789046732.3992708, "output_id": "2c181942_0", "count": 1}
+{"rank": 2, "task": "2c181942", "event": "batch_completed", "time": 1789046732.399363}
+{"rank": 2, "task": "2c181942", "event": "task_finished", "time": 1789046732.3997028, "elapsed": 538.1057953834534, "past_deadline": false}
+{"rank": 2, "task": "36a08778", "event": "task_started", "time": 1789046732.400184}
+{"rank": 2, "task": "36a08778", "event": "training_started", "time": 1789046735.5777388}
+{"rank": 2, "task": "36a08778", "event": "training_completed", "time": 1789046836.3582582}
+{"rank": 2, "task": "36a08778", "event": "batches_planned", "time": 1789046837.046832, "count": 8}
+{"rank": 2, "task": "36a08778", "event": "decode_batch_started", "time": 1789046837.063152, "subkeys": ["36a08778_0.permute4150723698.ex031524", "36a08778_0.permute6720984531.ex021543", "36a08778_0.rot90.rot90.permute7931086254.ex405132", "36a08778_0.rot90.rot90.permute9302675184.ex105324"]}
+{"rank": 2, "task": "36a08778", "event": "dfs_returned", "time": 1789046889.5048933, "elapsed": 52.44149899482727, "capped": false}
+{"rank": 2, "task": "36a08778", "event": "candidates_written", "time": 1789046894.1254725, "output_id": "36a08778_0", "count": 1}
+{"rank": 2, "task": "36a08778", "event": "candidates_written", "time": 1789046894.1265337, "output_id": "36a08778_0", "count": 1}
+{"rank": 2, "task": "36a08778", "event": "candidates_written", "time": 1789046898.7481298, "output_id": "36a08778_0", "count": 2}
+{"rank": 2, "task": "36a08778", "event": "candidates_written", "time": 1789046898.7491837, "output_id": "36a08778_0", "count": 1}
+{"rank": 2, "task": "36a08778", "event": "batch_completed", "time": 1789046898.749276}
+{"rank": 2, "task": "36a08778", "event": "decode_batch_started", "time": 1789046898.7654984, "subkeys": ["36a08778_0.rot90.permute1258796043.ex532401", "36a08778_0.rot90.permute5386701942.ex542013", "36a08778_0.rot90.rot90.rot90.permute2908315674.ex251403", "36a08778_0.rot90.rot90.rot90.permute8579032416.ex304521"]}
+{"rank": 2, "task": "36a08778", "event": "dfs_returned", "time": 1789046964.5739615, "elapsed": 65.80825185775757, "capped": false}
+{"rank": 2, "task": "36a08778", "event": "candidates_written", "time": 1789046969.0874822, "output_id": "36a08778_0", "count": 2}
+{"rank": 2, "task": "36a08778", "event": "candidates_written", "time": 1789046969.089141, "output_id": "36a08778_0", "count": 2}
+{"rank": 2, "task": "36a08778", "event": "candidates_written", "time": 1789046978.1256006, "output_id": "36a08778_0", "count": 2}
+{"rank": 2, "task": "36a08778", "event": "candidates_written", "time": 1789046982.5819278, "output_id": "36a08778_0", "count": 1}
+{"rank": 2, "task": "36a08778", "event": "batch_completed", "time": 1789046982.5820727}
+{"rank": 2, "task": "36a08778", "event": "decode_batch_started", "time": 1789046982.602129, "subkeys": ["36a08778_1.permute1602397845.ex023451", "36a08778_1.permute6827490351.ex345120", "36a08778_1.rot90.rot90.permute9180254367.ex104352", "36a08778_1.rot90.rot90.permute9368452107.ex125430"]}
+{"rank": 2, "task": "36a08778", "event": "dfs_returned", "time": 1789047140.338622, "elapsed": 157.7362880706787, "capped": false}
+{"rank": 2, "task": "36a08778", "event": "candidates_written", "time": 1789047154.0499284, "output_id": "36a08778_1", "count": 2}
+{"rank": 2, "task": "36a08778", "event": "candidates_written", "time": 1789047154.0536797, "output_id": "36a08778_1", "count": 2}
+{"rank": 2, "task": "36a08778", "event": "candidates_written", "time": 1789047161.034138, "output_id": "36a08778_1", "count": 1}
+{"rank": 2, "task": "36a08778", "event": "batch_completed", "time": 1789047161.034262}
+{"rank": 2, "task": "36a08778", "event": "decode_batch_started", "time": 1789047161.0545924, "subkeys": ["36a08778_1.rot90.permute5436201789.ex305412", "36a08778_1.rot90.permute8024967315.ex145203", "36a08778_1.rot90.rot90.rot90.permute0986123745.ex052341", "36a08778_1.rot90.rot90.rot90.permute7068392154.ex403215"]}
+{"rank": 2, "task": "36a08778", "event": "dfs_returned", "time": 1789047376.9316216, "elapsed": 215.8768060207367, "capped": false}
+{"rank": 2, "task": "36a08778", "event": "candidates_written", "time": 1789047391.1072123, "output_id": "36a08778_1", "count": 2}
+{"rank": 2, "task": "36a08778", "event": "candidates_written", "time": 1789047398.1952803, "output_id": "36a08778_1", "count": 2}
+{"rank": 2, "task": "36a08778", "event": "candidates_written", "time": 1789047405.2383404, "output_id": "36a08778_1", "count": 1}
+{"rank": 2, "task": "36a08778", "event": "candidates_written", "time": 1789047419.247321, "output_id": "36a08778_1", "count": 2}
+{"rank": 2, "task": "36a08778", "event": "batch_completed", "time": 1789047419.2474513}
+{"rank": 2, "task": "36a08778", "event": "task_truncated", "time": 1789047419.2475567, "reason": "global_deadline"}
+{"rank": 2, "task": "36a08778", "event": "task_finished", "time": 1789047419.247918, "elapsed": 686.8477177619934, "past_deadline": true}
+{"rank": 2, "task": null, "event": "worker_deadline_stop", "time": 1789047419.2483466}

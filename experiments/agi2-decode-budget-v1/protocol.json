@@ -1,0 +1,40 @@
+{
+  "created_utc": "2026-09-10T12:48:56.055186+00:00",
+  "policy": {
+    "name": "unanimous-first-eight-v1",
+    "stage": "Non-transposed views: two permutations of each of four rotations",
+    "minimum_nonempty_views": 8,
+    "per_rotation_views": 2,
+    "gate": [
+      "Exactly eight first-stage views exist and each contains valid candidates.",
+      "The minimum-beam-score grid agrees exactly across all eight views.",
+      "The upstream top-two grid set agrees between rotations {0,2} and {1,3}."
+    ],
+    "action": "Keep upstream top-two selection on these eight views and omit the two later transposed-view batches for this output.",
+    "selector": "Frozen upstream score_full_probmul_3; unchanged ranking formula",
+    "threshold_search": false,
+    "test_truth_used_by_policy": false
+  },
+  "implementation_sha256": "ead38c05d5a897b4027989161471949bfb65dd5ed7ddb90a02d0f2db372076ba",
+  "store": "D:\\ARC Prize 2026\\agi2\\out\\v7\\inference_outputs",
+  "store_fingerprint": {
+    "files": 1723,
+    "manifest_sha256": "ee82904dfcf13c10dbb60654eae6bb8a0fcd46e379d31378781e3279b24afaee"
+  },
+  "decoder": "D:\\ARC Prize 2026\\agi2\\out\\v7\\arc_decoder.py",
+  "decoder_sha256": "b38b6b1bdd5f47dbd587a9809ad2ec20cdf9ce5723736a7fb7470e9b1ce61f1d",
+  "outcomes": [
+    "number of stopping decisions",
+    "known later emitting views omitted",
+    "top-two exact wins/losses against unchanged full cached pool"
+  ],
+  "diagnostic_gate": "At least 10 eligible outputs, zero lost exact outputs, and at least 10% of all known emitting views omitted before proposing a prospective GPU test; no automatic promotion.",
+  "limitations": [
+    "Single historical public pool, already inspected by prior experiments; not an untouched holdout.",
+    "Missing candidate files may mean no valid completion or a truncated/unstarted batch; absence is not measured runtime.",
+    "Counted saved emitting views cannot be converted to GPU seconds without an audited prospective run.",
+    "Replaying unchanged candidates cannot simulate extra tail tasks or altered deadline allocation.",
+    "Agreement can repeat a wrong hypothesis; it is a stopping heuristic, not a correctness certificate.",
+    "Stopping removes later scores that might rank a correct answer differently; per-output losses must be reported."
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "status": "invalidated_before_any_saved_result",
+  "completed_runs": 0,
+  "required_runs": 24,
+  "launch_attempt": "started_after_execution_permissions_opened",
+  "reviewer_reported_reset_local": "2026-09-10T22:57:00+10:00",
+  "note": "Frozen round is running. Completed runs are recorded atomically in results.json; do not interpret partial scores as a promotion decision.",
+  "started_confirmed_utc": "2026-09-10T12:38:19.447848+00:00",
+  "process_id": 8548,
+  "previous_blocking_reason": "Automatic approval reviewer usage limit exhausted.",
+  "reason": "All 25 metadata.json byte hashes changed when NORMAL mode refreshed online environments. No agent/runtime Python hash changed. Original metadata content was not snapshotted, so semantic equivalence is not assumed.",
+  "replacement_protocol": "experiments/agi3-coverage-v2-offline/protocol.json"
+}

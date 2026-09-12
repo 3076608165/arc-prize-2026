@@ -1,0 +1,51 @@
+{
+  "context_control": {
+    "games": {
+      "lp85": {
+        "levels": 0,
+        "actions": 100,
+        "state": "GameState.NOT_FINISHED"
+      },
+      "vc33": {
+        "levels": 0,
+        "actions": 100,
+        "state": "GameState.NOT_FINISHED"
+      }
+    },
+    "traces": [
+      {
+        "game": "lp85",
+        "sha256": "3cdba6b0604304f2a4ca4e000bc77ef3f4ddcb22355d371343ee90033000ef7f"
+      },
+      {
+        "game": "vc33",
+        "sha256": "e5c52f06898d8325c1024bb10766a41139218bef3217e915f10cf397abd0d0ed"
+      }
+    ]
+  },
+  "context": {
+    "games": {
+      "lp85": {
+        "levels": 0,
+        "actions": 100,
+        "state": "GameState.NOT_FINISHED"
+      },
+      "vc33": {
+        "levels": 0,
+        "actions": 100,
+        "state": "GameState.NOT_FINISHED"
+      }
+    },
+    "traces": [
+      {
+        "game": "lp85",
+        "sha256": "3cdba6b0604304f2a4ca4e000bc77ef3f4ddcb22355d371343ee90033000ef7f"
+      },
+      {
+        "game": "vc33",
+        "sha256": "e5c52f06898d8325c1024bb10766a41139218bef3217e915f10cf397abd0d0ed"
+      }
+    ]
+  },
+  "interpretation": "Compatibility and budget smoke only; no comparative performance claim."
+}

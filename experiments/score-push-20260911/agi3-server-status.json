@@ -1,0 +1,12 @@
+{
+  "observed_utc": "2026-09-12T05:09:12+00:00",
+  "submission": {
+    "ref": "56166407",
+    "fileName": "submission.parquet",
+    "date": "2026-09-11 13:35:52.433000",
+    "description": "20260911 stable v4: complete 12-pair offline gate; conservative fallback; candidate did not meet predeclared gate",
+    "status": "SubmissionStatus.COMPLETE",
+    "publicScore": "0.03",
+    "privateScore": ""
+  }
+}

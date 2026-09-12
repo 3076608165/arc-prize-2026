@@ -1,0 +1,30 @@
+{
+  "objective": "Measure candidate coverage under an enforced public-data deadline; separately score exact predictions and common processed outputs.",
+  "public_tasks": 120,
+  "public_test_outputs": 167,
+  "arms": [
+    16,
+    8
+  ],
+  "wall_budget_hours_each": 1,
+  "task_order": "Same sorted task IDs",
+  "worker_hash_seed": 0,
+  "hardware": "Four L4 workers per notebook, pinned upstream image and model",
+  "automatic_competition_submission": false,
+  "primary_outcomes": [
+    "number of queued, started, trained, fully decoded tasks",
+    "outputs with real candidates",
+    "global and per-task truncation counts",
+    "exact accuracy over all 167 public outputs and common processed outputs"
+  ],
+  "limits": [
+    "One run per arm is a diagnostic, not an established superiority claim.",
+    "Alphabetical deadline prefixes are not a random sample of all tasks.",
+    "Public 120-task load is not the hidden 240-task distribution.",
+    "Scoring-only competition results cannot establish coverage when rerun audit artifacts are inaccessible."
+  ],
+  "artifacts": {
+    "16": "agi2/out/coverage-benchmark16",
+    "8": "agi2/out/coverage-benchmark8"
+  }
+}

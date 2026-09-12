@@ -1,0 +1,2 @@
+{"arm": "16", "kernel": "uts3125025522741/arc-agi-2-coverage-16", "version": 1, "status": "running_or_queued", "server_status": "uts3125025522741/arc-agi-2-coverage-16 has status \"KernelWorkerStatus.RUNNING\""}
+{"arm": "8", "kernel": "uts3125025522741/arc-agi-2-coverage-8", "version": 1, "status": "running_or_queued", "server_status": "uts3125025522741/arc-agi-2-coverage-8 has status \"KernelWorkerStatus.RUNNING\""}

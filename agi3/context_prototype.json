@@ -1,0 +1,11 @@
+{
+  "status": "prototype_not_promoted",
+  "source_sha256": {
+    "context_control_agent.py": "e341167b6741aee358f4ef3f801f59b598eb445fed5caf3428c693a0004ab7b5",
+    "context_agent.py": "b97c59fe74cd2ce5737dac86dc8e032c961582a31d720347fec7cfc8b1822091"
+  },
+  "base_sha256": "e9fe069c16bda2846de41f02b5bb7b2442b3433c278e6274778a62596c19281a",
+  "intervention": "Only USE_CONTEXT_MEMORY differs within the generated pair",
+  "coverage_bound": "4096 pixels within 4552 click calls in a fixed level",
+  "public_performance_claim": null
+}
