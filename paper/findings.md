@@ -507,6 +507,35 @@ candidates by whether the resulting model reproduces the held-out pair -- and
 unlike everything above it costs decode-stage compute, which is the expensive
 half.
 
+### REFUTED: the deadline-coverage hypothesis
+
+The section below argued that the submission runs 50 minutes from the 12h
+wall, that the score drift is tail tasks being lost to it, and that halving the
+augmentation count should therefore *raise* the score. The leaderboard said no:
+
+| submission | config | score |
+|---|---|---|
+| v4 x5, identical | augment 16 | 30.14, 29.72, 28.47, 28.47, 28.89 |
+| **v10** | **augment 8** | **27.64** |
+| v11 | augment 16, audited | 29.31 |
+
+Augment-8 landed below every one of five baseline samples -- 2.1 sd below their
+mean, with the predicted direction being *up*. One sample cannot prove harm,
+but it rules out the predicted gain.
+
+Codex's 1h public diagnostic explains why the local evidence misled. Under a
+1h cutoff, augment-8 covers 40 outputs to augment-16's 32 and scores 13/172 to
+4/172 -- coverage dominates when the run is truncated. On the 26 outputs both
+reached, each got 4 right: equal quality per task. So the diagnostic was
+*correct about the truncated regime*, and the full 11.83h run is evidently not
+in that regime. The "50-minute margin" arithmetic is wrong somewhere -- the
+hidden tasks may be faster, or the margin larger -- and the "monotone decline"
+that motivated it broke on the fifth sample (28.89 after 28.47).
+
+What survives: per-task work is fixed and not elastic, which v8 established
+directly. What does not: the claim that the run is deadline-bound. Nothing was
+being lost to the wall, so halving the work only cost quality.
+
 ### Per-task work is fixed, and the submission runs at the wall
 
 `--subset 24` holds the task set fixed and changes only the wall-clock budget.
