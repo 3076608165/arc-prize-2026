@@ -154,6 +154,39 @@ against 167, not 120.
 
 ---
 
+## REVERSAL: the ARC-AGI-3 leaderboard is deterministic; the 14x was ours
+
+The variance probe of 2026-09-12 resubmitted byte-identical *seeded* code on
+both boards, with the readings declared in advance in
+`experiments/score-push-20260912/round.json`.
+
+| track | seeded version | sample 1 | sample 2 | spread | predeclared reading |
+|---|---|---|---|---|---|
+| ARC-AGI-3 | v4 (sha256 game seed) | 0.03 | **0.03** | **0.00** | within 2x -> our RNG dominated |
+| ARC-AGI-2 | v11 (worker hash seed) | 29.31 | **30.56** | 1.25 | between thresholds; leans Kaggle-side |
+
+**ARC-AGI-3 reproduces to two decimals.** The 14x identical-code spread
+measured on v2 -- 0.01, 0.04, 0.12, 0.12, 0.14, 0.15, 0.18 -- was not the
+board. It was `hash(self.game_id)` being re-randomised in every Kaggle process.
+Kaggle's ARC-AGI-3 rerun is deterministic given our seed.
+
+This retracts the strongest claim in this file. "ARC-AGI-3 is not a measuring
+device at all" is wrong: it is a precise one for seeded code. What survives is
+narrower and still worth saying -- *any* single-run comparison by anyone whose
+agent seeds from `hash()` or the clock is inside that noise, and the reference
+starter agent seeds from `time.time()`.
+
+Two consequences cut opposite ways. Seeded local A/Bs should now transfer to
+the board in ordering, which makes local iteration meaningful again. And the
+lucky 0.18 draws are gone: a fixed seed is one draw from that 0.01-0.18
+distribution, and ours landed at 0.03.
+
+**ARC-AGI-2 is the opposite.** Seeding the workers did not collapse the
+spread -- 1.25 points on n=2 against 1.67 on five mis-seeded samples. The
+residual is Kaggle-side: bf16 GPU kernels are not bitwise deterministic, and
+the DFS is cut by wall-clock, so the same code decodes slightly differently
+each run. The ~2-point resolution floor stands for that board.
+
 ## RETRACTION: every pre-2026-09-10 ARC-AGI-3 ablation was mis-seeded
 
 Agent seeding used `hash(self.game_id)`. Python randomises string hashing per
