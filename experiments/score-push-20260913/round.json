@@ -1,0 +1,35 @@
+{
+  "date": "2026-09-13",
+  "agi2": {
+    "ref": 56204329,
+    "kernel_version": 11,
+    "what": "v11 identical resubmit #3",
+    "prior_samples": [
+      29.31,
+      30.56
+    ],
+    "reading": "n=3 range <=1.0 -> worker seeding removed some variance; >=1.5 -> residual is GPU/wall-clock and the ~2pt floor stands.",
+    "honest_note": "No decision depends on this sample; the floor is 1-2 pts either way and no candidate improvement is waiting on it. Last identical resubmit without a decision dependency."
+  },
+  "agi3": {
+    "what": "stable_agent with the best of seeds 0-4 by LOCAL true score (25 public games, 5000 actions/game), embedded as the default ARC_SEED",
+    "prior": "seed 0 scored 0.03 on the board twice (deterministic).",
+    "decision_dependency": "First point for calibrating local->board transfer on seeded code. Accumulating (local, board) pairs across seeds over days lets us test rank correlation, which was never possible while seeding was broken.",
+    "predeclared_reading": {
+      "board(seed2) < 0.03": "ordering transfers, weakly (n=2)",
+      "board(seed2) >= 0.03": "ordering does not transfer at n=2",
+      "absolute": "local 0.30 vs board 0.03 on identical deterministic code = distribution shift between public and hidden games, not noise"
+    },
+    "not_a_claim": "Picking a seed is drawing from the 0.01-0.18 distribution, not an improvement to the agent. The value is the calibration pair, not the score.",
+    "local_sweep": {
+      "seed0": 0.3045,
+      "seed1": 0.1177,
+      "seed2": 0.1473,
+      "seed3": 0.1191,
+      "seed4": 0.1231,
+      "cap": 5000,
+      "games": 25
+    },
+    "plan_change": "Local-best is seed 0, already on the board at 0.03 (10x below local). Submitting seed 2 (local 2nd, 0.1473) instead: the only thing left to test is whether ORDERING transfers, since absolute score clearly does not."
+  }
+}
