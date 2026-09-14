@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-14",
+  "yesterday": {
+    "agi2": "v11 x3 = 29.31, 30.56, 30.97 (range 1.66). Worker-seed fix did NOT reduce variance (v4 x5 range was 1.67). Residual is Kaggle-side. ~2pt floor stands. 30.97 is a new best.",
+    "agi3": "seed0 local 0.305 -> board 0.03; seed2 local 0.147 -> board 0.06. Absolute gap 10x, ordering REVERSED. Public 25 games do not predict hidden games at n=2."
+  },
+  "agi2": {
+    "what": "v10 (augment 8) identical resubmit #2",
+    "decision_dependency": "The refutation of the deadline hypothesis rests on ONE sample (27.64) against a ~1.7pt board spread. Codex's proposed dynamic-16/8 direction is only worth building if augment8 is not strictly worse. This sample decides that.",
+    "predeclared": {
+      "<= 28.0": "refutation solid at n=2; dynamic-16/8 is dead, do not build it",
+      "28.5-29.5": "augment8 is inside the augment16 band; the deadline story is wrong but augment8 is not harmful; dynamic-16/8 has no expected gain either way",
+      ">= 30": "27.64 was a low draw; reopen the question, n=3 needed"
+    }
+  },
+  "agi3": {
+    "what": "stable agent, ARC_SEED default = 1 (local WORST of 5: 0.1177)",
+    "decision_dependency": "If the local-worst seed scores >= the local-best seed's 0.03 on the board, local evaluation on the public 25 is confirmed uninformative for the hidden set (n=3, all inconsistent). Then: stop investing in the local ARC-AGI-3 harness for ranking; the board is the only evaluator and it gives one deterministic bit per day.",
+    "predeclared": {
+      "< 0.03": "first sign local ordering carries anything; n=3 still weak",
+      ">= 0.03": "local worst >= local best on the board; local ranking is uninformative; redirect ARC-AGI-3 effort away from local tuning"
+    }
+  }
+}

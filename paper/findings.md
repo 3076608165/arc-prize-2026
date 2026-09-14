@@ -154,6 +154,34 @@ against 167, not 120.
 
 ---
 
+## Two more closures, 2026-09-13
+
+**The residual ARC-AGI-2 variance is Kaggle's, not ours.** v11 (worker hash
+seed fixed) resubmitted three times: 29.31, 30.56, 30.97 -- a 1.66-point
+range, indistinguishable from the mis-seeded v4's 1.67 over five. Fixing our
+seeding removed nothing. The remaining spread is GPU nondeterminism and
+wall-clock, which we cannot touch. The ~2-point resolution floor is final.
+(30.97 is also a new best.)
+
+**The public 25 games do not predict the hidden games -- not in level, not in
+order.** Same deterministic agent, two seeds:
+
+| seed | local (25 public, 5000 cap) | board |
+|---|---|---|
+| 0 | **0.305** | 0.03 |
+| 2 | 0.147 | **0.06** |
+
+Absolute gap 10x; ordering reversed. With the board now known to be
+deterministic, this is not noise -- it is distribution shift between the public
+and hidden game sets. The local ARC-AGI-3 harness, which was worth building to
+find the scorer bug and the seeding bug, is not a proxy for the board. At n=2
+this is suggestive; today's seed-1 submission (local worst) makes it n=3.
+
+The consequence, if it holds: ARC-AGI-3 improvement can only be validated on
+the board, which is deterministic but yields exactly one evaluation per day
+with no local prediction of it. That is a very slow hill-climb on a function
+we cannot see.
+
 ## REVERSAL: the ARC-AGI-3 leaderboard is deterministic; the 14x was ours
 
 The variance probe of 2026-09-12 resubmitted byte-identical *seeded* code on
