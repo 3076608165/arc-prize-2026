@@ -1,0 +1,36 @@
+{
+  "date": "2026-09-15",
+  "yesterday": {
+    "agi2": "56223660 (augment8 v10 identical resubmit #2) submitted 06:27Z; still PENDING at 15:00Z of a ~11.8h run. Gate not readable yet.",
+    "agi3": "stable agent seed 1 (local WORST of 5, 0.1177) -> board 0.21, the project's highest ARC-AGI-3 score. Predeclared gate fired: local ordering does not transfer. Byte-identical reruns at seed 0 returned 0.03 and 0.03, so the board is deterministic given the seed and the 7x seed spread is a step function of the trajectory."
+  },
+  "agi3": {
+    "status": "decided; waiting for the 00:00Z slot to free",
+    "what": "unsampled seed of the stable agent (seed 3), unchanged otherwise",
+    "decision_dependency": "none. This is a draw, not a measurement.",
+    "predeclared": {
+      "any value": "record it; keep the best two scores across the competition. No A/B may be read from a single board result."
+    },
+    "why_not_local": "Three paired (local, board) points now disagree in ordering, rho = -1.0. Local ranking is retired for this board."
+  },
+  "agi2": {
+    "status": "blocked on 56223660",
+    "predeclared": {
+      "<= 28.0": "refutation solid at n=2; dynamic-16/8 is dead, do not build it",
+      "28.5-29.5": "augment8 sits inside the augment16 band; no direction is indicated",
+      ">= 30.0": "27.64 was a low draw; reopen at n=3"
+    },
+    "branches": {
+      "if dynamic-16/8 dies": "the only remaining decode-stage lever on the table is the 2B ensemble, which is blocked on the unsloth Qwen3 load failure (kernel arc-agi-2-exp-2b). Its ceiling is measured by agi2/ensemble_oracle.py, not guessed.",
+      "if it reopens": "another identical v11 sample at n=3, then the same decode-stage question."
+    },
+    "slot_use": "No ARC-AGI-2 submission is declared until 56223660 lands. A fourth identical v11 resubmit has no decision dependency left."
+  },
+  "kernels_at_snapshot": {
+    "arc-agi-2-exp-2b": "ERROR",
+    "arc-agi-2-exp-inf4": "ERROR",
+    "arc-agi-2-exp-ep2": "ERROR",
+    "arc-agi-2-exp-aug24": "ERROR"
+  },
+  "eligibility_gap": "As of 2026-09-14 this checkout had no LICENSE and no git remote, so nothing was prize-eligible. LICENSE (MIT-0) and NOTICE.md were added locally on 2026-09-15; the remote is still missing."
+}

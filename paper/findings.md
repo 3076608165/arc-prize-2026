@@ -646,6 +646,57 @@ resolution.
 
 ---
 
+## The seed is the lottery ticket, and local ordering is inverted (2026-09-15)
+
+The REVERSAL section above ended with a prediction: with seeding fixed, "seeded
+local A/Bs should now transfer to the board in ordering, which makes local
+iteration meaningful again". Today's submission refutes it — and the same table
+shows what the board actually responds to.
+
+`experiments/score-push-20260914/round.json` declared the reading in advance:
+`board(seed1) >= 0.03` means local ordering does not transfer. Board(seed1) =
+**0.21**, the highest ARC-AGI-3 score this project has recorded.
+
+| ref | agent | seed | local, 25 public games x 5000 actions | board |
+|---|---|---|---|---|
+| 56166407 | stable v4 | 0 (local **best** of 5) | 0.3045 | 0.03 |
+| 56179026 | stable v4, byte-identical resubmit | 0 | 0.3045 | 0.03 |
+| 56204668 | stable v4 | 2 (local 2nd) | 0.1473 | 0.06 |
+| 56223681 | stable v4 | 1 (local **worst** of 5) | 0.1177 | **0.21** |
+
+Local order 0 > 2 > 1. Board order 1 > 2 > 0. Spearman rho = -1.0.
+
+At n=3 a perfect inversion is p = 1/3 on its own, so this is weak evidence of an
+*inversion* and strong evidence against the transfer claim it was testing: the
+seed local measurement recommended is the seed the board likes least, and the
+one it ranked last is the one that scored 7x higher.
+
+Two things this separates that the earlier sections ran together.
+
+**The board is deterministic.** Two byte-identical reruns of the seeded v4 agent
+returned 0.03 and 0.03. That half of the REVERSAL stands.
+
+**The seed still moves the score 7x** (0.03 to 0.21). Determinism was being read
+as "the board is a measuring device". What it actually means is that the board
+is a *deterministic step function of the agent's trajectory*, and the seed
+chooses which step you land on: one extra level cleared in one game is the whole
+distance between 0.03 and 0.21. The metric has no resolution between those two
+points, only discrete jumps. It also revises the REVERSAL's closing claim that
+"the lucky 0.18 draws are gone" — the luck did not disappear with the RNG, it
+moved into the seed.
+
+**What changes.** Local ARC-AGI-3 evaluation is retired as a ranking device: it
+does not order agents, it does not order seeds, and three paired (local, board)
+points now disagree in ordering. The public 25 games and the hidden set are
+different distributions and no amount of local tuning closes that.
+
+What replaces it is not a better local metric, it is the board slot itself.
+ARC-AGI-3 allows 1 submission/day and counts the best 2 across the whole
+competition, so the daily slot becomes: draw an **unsampled** seed for the
+stable agent, submit it, keep the two highest. Never spend the slot on a draw
+already known to be bad, never drop a good one. The returned number is a draw,
+not a capability estimate, and no A/B may be run on it at n=1.
+
 ## What this gives the writeup
 
 - **Theory**: a stated hypothesis (the ARC-AGI-2 bottleneck is exact
