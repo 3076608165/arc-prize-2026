@@ -18,6 +18,16 @@ So validate the plumbing with `--hours 1` first; only then spend a full run.
     python agi2/repro_nvarc.py --hours 1        # cheap plumbing check
     python agi2/repro_nvarc.py --hours 11.83    # the real thing
     kaggle kernels push -p agi2/out/nvarc
+
+The knob that changes capability rather than cost is `--base-model`: the whole
+family is per-task LoRA test-time training on a grid-SFT checkpoint, and the
+attached one is a 4B. It is only a one-line swap if the candidate carries the
+same 16-token ARC vocab -- see `set_base_model()`.
+
+    python agi2/repro_nvarc.py --hours 4 --subset 24 --save-candidates \
+        --out agi2/out/exp-m8b \
+        --kernel-id uts3125025522741/arc-agi-2-exp-m8b --title "ARC AGI 2 exp m8b" \
+        --base-model owner/slug/Transformers/default/1
 """
 from __future__ import annotations
 
@@ -173,6 +183,72 @@ def set_infer_augment(nb: dict, n: int) -> bool:
     return False
 
 
+MODEL_MOUNT = "/kaggle/input/models"
+
+
+def mount_path(ref: str) -> str:
+    """Kaggle model ref -> the path the *kernel* sees.
+
+    `model_sources` is written `<owner>/<slug>/<Framework>/<instance>/<version>`
+    and the mount lowercases the framework segment and nothing else. Verified
+    against upstream, which attaches
+    `sorokin/qwen3_4b_grids15_sft139/Transformers/bfloat16/1` and reads
+    `/kaggle/input/models/sorokin/qwen3_4b_grids15_sft139/transformers/bfloat16/1`.
+    """
+    owner, slug, framework, instance, version = ref.split("/")
+    return f"{MODEL_MOUNT}/{owner}/{slug}/{framework.lower()}/{instance}/{version}"
+
+
+def set_base_model(nb: dict, ref: str) -> bool:
+    """Point the pipeline at a different attached base model.
+
+    The whole family is per-task LoRA test-time training on top of a grid-SFT
+    checkpoint, and the attached one is a 4B. A larger checkpoint with the
+    *same custom tokenizer* is a one-line swap. One with a stock Qwen tokenizer
+    is not: `turbo_dfs` restricts the search to the 16 ids in `ARC_VOCAB`
+    (0-9 plus separators, USER_TOKEN_ID=11, ASSISTANT_TOKEN_ID=12, PAD_ID=13,
+    EOS_ID=15) and the collator masks on those ids. A wrong tokenizer does not
+    crash -- it trains and scores garbage, which costs a full run to discover.
+    """
+    pat = re.compile(r'model_name="[^"]*"')
+    for cell in nb["cells"]:
+        if cell["cell_type"] != "code":
+            continue
+        txt = cell_text(cell)
+        if pat.search(txt):
+            cell["source"] = pat.sub(f'model_name="{mount_path(ref)}"',
+                                     txt).splitlines(keepends=True)
+            return True
+    return False
+
+
+def add_model_probe(nb: dict) -> bool:
+    """Log the swapped checkpoint's tokenizer before training starts.
+
+    `turbo_dfs` restricts the search to the 16 ids in `ARC_VOCAB` and the
+    collator masks on USER_TOKEN_ID / ASSISTANT_TOKEN_ID / EOS_ID. A checkpoint
+    with a different tokenizer does not necessarily fail loudly -- it can train,
+    decode, and score something that is not a grid answer. Two lines of log turn
+    a wasted 4-hour run into a two-minute one.
+    """
+    anchor = "    model = FastLanguageModel.get_peft_model(model, **peft_params)"
+    probe = (
+        "\n    # --- base-model probe (added by agi2/repro_nvarc.py) ----------------\n"
+        '    print(f"base model  : {model_name}", flush=True)\n'
+        '    print(f"vocab size  : {getattr(tokenizer, \'vocab_size\', \'?\')}", flush=True)\n'
+        '    print(f"ARC_TOKENS  : {tokenizer.decode(ARC_TOKENS)!r}", flush=True)\n'
+    )
+    for cell in nb["cells"]:
+        if cell["cell_type"] != "code":
+            continue
+        txt = cell_text(cell)
+        if txt.count(anchor) == 1:
+            cell["source"] = txt.replace(anchor, probe + "\n" + anchor).splitlines(
+                keepends=True)
+            return True
+    return False
+
+
 def add_cellvote(nb: dict) -> bool:
     """Append our per-cell voting selector to the arc_decoder.py cell.
 
@@ -268,6 +344,12 @@ def main() -> int:
                          "The dominant per-task cost.")
     ap.add_argument("--epochs", type=int, default=0, help="num_train_epochs (upstream 1)")
     ap.add_argument("--infer-augment", type=int, default=0, help="inference views (upstream 2)")
+    ap.add_argument("--base-model", default="",
+                    help="swap the attached base checkpoint, as a Kaggle model ref "
+                         "`<owner>/<slug>/<Framework>/<instance>/<version>` (upstream: "
+                         "sorokin/qwen3_4b_grids15_sft139/Transformers/bfloat16/1). "
+                         "Only safe if the checkpoint carries the same 16-token "
+                         "ARC vocab -- see set_base_model().")
     ap.add_argument("--subset", type=int, default=0,
                     help="commit-mode: queue the first N evaluation tasks instead "
                          "of upstream's 4, for controlled compute experiments")
@@ -283,6 +365,8 @@ def main() -> int:
         ap.error("--subset and --full-eval are mutually exclusive")
     if args.worker_hash_seed is not None and not 0 <= args.worker_hash_seed <= 4294967295:
         ap.error("--worker-hash-seed must be in [0, 4294967295]")
+    if args.base_model and len(args.base_model.split("/")) != 5:
+        ap.error("--base-model must be `<owner>/<slug>/<Framework>/<instance>/<version>`")
 
     src_nb = fetch_upstream(force=args.refresh)
     nb = json.loads(src_nb.read_text(encoding="utf-8"))
@@ -308,6 +392,10 @@ def main() -> int:
         raise SystemExit("could not find num_train_epochs")
     if args.infer_augment and not set_infer_augment(nb, args.infer_augment):
         raise SystemExit("could not find eval_ds augment")
+    if args.base_model and not set_base_model(nb, args.base_model):
+        raise SystemExit("could not find `model_name=`; upstream changed shape")
+    if args.base_model and not add_model_probe(nb):
+        raise SystemExit("could not find the get_peft_model anchor for the model probe")
 
     subset_ids = []
     if args.subset:
@@ -350,7 +438,8 @@ def main() -> int:
         "dataset_sources": up_meta.get("dataset_sources", []),
         "kernel_sources": up_meta.get("kernel_sources", []),
         "competition_sources": up_meta.get("competition_sources", []),
-        "model_sources": up_meta.get("model_sources", []),
+        "model_sources": ([args.base_model] if args.base_model
+                          else up_meta.get("model_sources", [])),
     }
     if up_meta.get("machine_shape"):
         meta["machine_shape"] = up_meta["machine_shape"]
@@ -367,6 +456,9 @@ def main() -> int:
     (out / "experiment.json").write_text(json.dumps({
         "upstream": UPSTREAM, "hours": args.hours,
         "train_augment": args.augment or 16,
+        "infer_augment": args.infer_augment or 2,
+        "epochs": args.epochs or 1,
+        "base_model": args.base_model or (up_meta.get("model_sources") or [""])[0],
         "commit_subset": subset_ids or ("all" if args.full_eval else "upstream-four"),
         "competition_tasks": "all", "save_candidates": args.save_candidates,
         "cellvote": args.cellvote,
