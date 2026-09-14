@@ -10,6 +10,7 @@ number is on disk either way.
     python scripts/wait_for_score.py 56223660                 # poll until scored
     python scripts/wait_for_score.py 56223681 --comp arc-prize-2026-arc-agi-3
 """
+import calendar
 import json
 import sys
 import time
@@ -42,6 +43,18 @@ def main():
     comp = (sys.argv[sys.argv.index("--comp") + 1] if "--comp" in sys.argv
             else "arc-prize-2026-arc-agi-2")
     once = "--once" in sys.argv
+
+    #: The submission's own start time and the competition's runtime cap bound
+    #: when a result can first exist: a run that started at T cannot have scored
+    #: before T + 720 min. Polling inside that window is provably wasted calls,
+    #: so wait it out in one sleep and spend the polls after it.
+    if "--not-before" in sys.argv and not once:
+        at = sys.argv[sys.argv.index("--not-before") + 1]
+        delay = calendar.timegm(time.strptime(at, "%Y-%m-%dT%H:%M:%SZ")) - time.time()
+        if delay > 0:
+            print(f"sleeping {delay / 60:.0f} min: no result can exist before {at}", flush=True)
+            time.sleep(delay)
+
     while True:
         # ponytail: only the two newest rows per competition are read, which is
         # why NOT_LISTED keeps polling instead of exiting -- the next daily
