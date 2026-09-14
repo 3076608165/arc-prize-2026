@@ -98,3 +98,5 @@
 {"t": "2026-09-14T14:43:32Z", "kernels": {"arc-agi-2-exp-aug24": "ERROR", "arc-agi-2-exp-ep2": "ERROR", "arc-agi-2-exp-inf4": "ERROR"}, "submissions": {"arc-prize-2026-arc-agi-2": [{"ref": "56223660", "status": "PENDING", "public": ""}], "arc-prize-2026-arc-agi-3": [{"ref": "56223681", "status": "COMPLETE", "public": "0.21"}]}}
 {"t": "2026-09-14T14:48:39Z", "kernels": {"arc-agi-2-exp-aug24": "ERROR", "arc-agi-2-exp-ep2": "ERROR", "arc-agi-2-exp-inf4": "ERROR"}, "submissions": {"arc-prize-2026-arc-agi-2": [{"ref": "56223660", "status": "PENDING", "public": ""}], "arc-prize-2026-arc-agi-3": [{"ref": "56223681", "status": "COMPLETE", "public": "0.21"}]}}
 {"t": "2026-09-14T15:05:00Z", "note": "watcher terminated with the session at 2026-09-14T14:48Z; no terminal reading for 56223660. The Kaggle submission log is authoritative - do not read a missing later line as still-pending.", "resubmit_gate": "re-check kaggle competitions submissions before trusting this file"}
+{"t": "2026-09-14T15:03:56Z", "waiting": {"ref": "56223660", "status": "PENDING", "public": ""}}
+{"t": "2026-09-14T15:04:00Z", "waiting": {"ref": "56223681", "status": "COMPLETE", "public": "0.21"}}
