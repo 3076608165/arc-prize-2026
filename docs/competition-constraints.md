@@ -132,3 +132,12 @@ Fix, in order: add `LICENSE` (MIT-0 or CC0 for our own code, Apache-2.0
 acceptable), push to a public remote, then keep pushing — the requirement is
 checked at prize time, not at submission time.
 
+**Decision, 2026-09-15: publish in mid-October, not now.** `LICENSE` (MIT-0)
+and `NOTICE.md` are in the tree as of commit `79c01fc`, so the licence question
+is closed; the remote is deliberately withheld until mid-October because
+publishing now hands the measured findings to the other teams. Hard backstop:
+kernels publishing is disabled from **2026-10-26 23:59 UTC**, and the prize
+rules are checked at prize time — so the remote must exist, public, before then.
+Until it does, nothing in this repo is prize-eligible, and no score gained in
+the meantime changes that.
+
