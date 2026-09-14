@@ -149,6 +149,30 @@ def set_train_augment(nb: dict, n: int) -> bool:
     return False
 
 
+def set_epochs(nb: dict, n: int) -> bool:
+    """num_train_epochs in arc_solver.py. Upstream: 1."""
+    import re as _re
+    pat=_re.compile(r"(num_train_epochs=)\d+")
+    for cell in nb["cells"]:
+        if cell["cell_type"]!="code": continue
+        txt=cell_text(cell)
+        if pat.search(txt):
+            cell["source"]=pat.sub(rf"\g<1>{n}",txt).splitlines(keepends=True); return True
+    return False
+
+
+def set_infer_augment(nb: dict, n: int) -> bool:
+    """eval_ds = puzzle_ds_multi.augment(n=...) -- inference views. Upstream: 2."""
+    import re as _re
+    pat=_re.compile(r"(eval_ds = puzzle_ds_multi\.augment\(n=)\d+")
+    for cell in nb["cells"]:
+        if cell["cell_type"]!="code": continue
+        txt=cell_text(cell)
+        if pat.search(txt):
+            cell["source"]=pat.sub(rf"\g<1>{n}",txt).splitlines(keepends=True); return True
+    return False
+
+
 def add_cellvote(nb: dict) -> bool:
     """Append our per-cell voting selector to the arc_decoder.py cell.
 
@@ -242,6 +266,8 @@ def main() -> int:
     ap.add_argument("--augment", type=int, default=0,
                     help="test-time-training augmentation count (upstream: 16). "
                          "The dominant per-task cost.")
+    ap.add_argument("--epochs", type=int, default=0, help="num_train_epochs (upstream 1)")
+    ap.add_argument("--infer-augment", type=int, default=0, help="inference views (upstream 2)")
     ap.add_argument("--subset", type=int, default=0,
                     help="commit-mode: queue the first N evaluation tasks instead "
                          "of upstream's 4, for controlled compute experiments")
@@ -277,6 +303,11 @@ def main() -> int:
     if args.augment and not set_train_augment(nb, args.augment):
         raise SystemExit("could not find `train_ds = puzzle_ds.augment(n=...)`; "
                          "upstream changed shape, re-read it before pushing")
+
+    if args.epochs and not set_epochs(nb, args.epochs):
+        raise SystemExit("could not find num_train_epochs")
+    if args.infer_augment and not set_infer_augment(nb, args.infer_augment):
+        raise SystemExit("could not find eval_ds augment")
 
     subset_ids = []
     if args.subset:
