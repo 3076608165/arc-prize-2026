@@ -20,7 +20,13 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from watch_exp3 import pending_scores  # reuse the status-token parser, do not re-derive it
 
 LOG = ROOT / "experiments" / "watch-exp3.jsonl"
-POLL_SECONDS = 300
+#: 5 min was inherited from watch_exp3, where it had to catch a free GPU session
+#: and launch the next arm in the same tick. Nothing here is latency-sensitive:
+#: a 12h competition rerun is being waited on, and the next submission slot does
+#: not open until 00:00Z, so 15 min costs ~5 min of staleness on an answer that
+#: took 8.5h to arrive and saves two thirds of the CLI calls. Lower it only if
+#: something downstream starts gating on the minute.
+POLL_SECONDS = 900
 
 
 def find(ref, comp):
