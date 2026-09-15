@@ -1,12 +1,16 @@
 {
   "date": "2026-09-15",
   "yesterday": {
-    "agi2": "56223660 (augment8 v10 identical resubmit #2) submitted 06:27Z; still PENDING at 15:00Z of a ~11.8h run. Gate not readable yet.",
+    "agi2": "56223660 (augment8 v10 identical resubmit #2) -> 27.64, byte-identical to the first sample (56140934, 27.64). Predeclared gate <= 28.0 fired: the refutation is solid at n=2 and dynamic-16/8 is dead. Do not build it.",
     "agi3": "stable agent seed 1 (local WORST of 5, 0.1177) -> board 0.21, the project's highest ARC-AGI-3 score. Predeclared gate fired: local ordering does not transfer. Byte-identical reruns at seed 0 returned 0.03 and 0.03, so the board is deterministic given the seed and the 7x seed spread is a step function of the trajectory."
   },
+  "decisions_closed": {
+    "dynamic-16-8": "dead. 27.64 twice against an augment16 band of 29.31/30.56/30.97.",
+    "2b-ensemble": "dead, measured before building. agi2/ensemble_oracle.py on the two stores v8 (4B) and exp-ep2 (2B), 34 shared scoreable outputs: oracle(4B) 9, oracle(2B) 9, oracle(4B|2B) 11 -- a ceiling of +2 tasks -- but every selector stays at 6/34 (4B alone 6, 2B alone 6, merged pool 6, cross-agree 6). The ceiling is real and the proposed mechanism cannot reach any of it, so the ensemble's expected gain is zero at an n this small. That was the last decode-stage lever on the table."
+  },
   "agi3": {
-    "status": "decided; waiting for the 00:00Z slot to free",
-    "what": "unsampled seed of the stable agent (seed 3), unchanged otherwise",
+    "status": "fired",
+    "what": "unsampled seed of the stable agent (seed 3), unchanged otherwise, kernel version 7",
     "decision_dependency": "none. This is a draw, not a measurement.",
     "predeclared": {
       "any value": "record it; keep the best two scores across the competition. No A/B may be read from a single board result."
@@ -14,23 +18,23 @@
     "why_not_local": "Three paired (local, board) points now disagree in ordering, rho = -1.0. Local ranking is retired for this board."
   },
   "agi2": {
-    "status": "blocked on 56223660",
-    "predeclared": {
-      "<= 28.0": "refutation solid at n=2; dynamic-16/8 is dead, do not build it",
-      "28.5-29.5": "augment8 sits inside the augment16 band; no direction is indicated",
-      ">= 30.0": "27.64 was a low draw; reopen at n=3"
-    },
-    "branches": {
-      "if dynamic-16/8 dies": "the only remaining decode-stage lever on the table is the 2B ensemble, which is blocked on the unsloth Qwen3 load failure (kernel arc-agi-2-exp-2b). Its ceiling is measured by agi2/ensemble_oracle.py, not guessed.",
-      "if it reopens": "another identical v11 sample at n=3, then the same decode-stage question."
-    },
-    "slot_use": "No ARC-AGI-2 submission is declared until 56223660 lands. A fourth identical v11 resubmit has no decision dependency left."
+    "status": "fired",
+    "what": "v11 identical resubmit #4 (kernel version 11, no new run) -- spend the slot, do not bank it",
+    "decision_dependency": "none. Both declared branches closed today; this is one more draw from a band of 29.31/30.56/30.97.",
+    "why_spend_it": "The rerun is not deterministic -- three byte-identical submissions returned three different numbers -- so a submitted version is a lottery ticket whose prize is a public number you may select. Under the hypothesis that run-level luck is shared between the public and private halves, selecting the highest draw is a weak edge; under the hypothesis that it is not, this is neutral. It is never negative, and an unused slot cannot be recovered."
+  },
+  "quota_observation": {
+    "what": "At 2026-09-15T03:46Z the CLI's first AGI-2 attempt printed '0 submissions remaining today.' and the submission landed anyway (ref 56244555, 03:48:58Z, confirmed in the server list). The string is the CLI's *success* line -- it reports the quota left after the write -- and it is indistinguishable from a refusal by text.",
+    "what_it_cost": "One wrongly-declared quota outage (this file's first version) and one duplicate attempt at 03:50:15Z that the server refused with 400 CreateCodeSubmission, i.e. the real exhausted-quota response.",
+    "rule": "Acceptance is decided by reading the submission list back, never by the CLI's text. scripts/fire_draws.py implements it: it retries only where the description is absent from the list, and refuses to retry at all unless --retry is passed.",
+    "also_refuted": "The repo note 'the daily quota refreshes at 10:00 local (00:00 UTC)' was never verified; both 2026-09-15 draws were accepted at 03:48Z and 03:50Z, so the boundary is at or before 03:48Z UTC and the note is consistent with observation after all."
   },
   "kernels_at_snapshot": {
     "arc-agi-2-exp-2b": "ERROR",
     "arc-agi-2-exp-inf4": "ERROR",
     "arc-agi-2-exp-ep2": "ERROR",
-    "arc-agi-2-exp-aug24": "ERROR"
+    "arc-agi-2-exp-aug24": "ERROR",
+    "arc-agi-3-sweep-agent": "COMPLETE at version 7 (seed 3)"
   },
   "eligibility_gap": "As of 2026-09-14 this checkout had no LICENSE and no git remote, so nothing was prize-eligible. LICENSE (MIT-0) and NOTICE.md were added locally on 2026-09-15; the remote is still missing."
 }

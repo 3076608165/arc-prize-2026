@@ -1,0 +1,16 @@
+[
+  {
+    "competition": "arc-prize-2026-arc-agi-3",
+    "kernel": "uts3125025522741/arc-agi-3-sweep-agent",
+    "version": 7,
+    "file": "submission.parquet",
+    "message": "20260915 stable seed3 (unsampled draw): seeds 0/1/2 read 0.03/0.21/0.06; local ordering is retired, this is a lottery ticket"
+  },
+  {
+    "competition": "arc-prize-2026-arc-agi-2",
+    "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+    "version": 11,
+    "file": "submission.json",
+    "message": "20260915 v11 identical resubmit #4: draw n=4 of the same notebook; selection is a best-of-draws game"
+  }
+]

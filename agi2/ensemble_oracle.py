@@ -32,7 +32,7 @@ import select_offline as SO  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 A = ("4B", ROOT / "agi2" / "out" / "v8")
-B = ("2B", ROOT / "agi2" / "out" / "exp-2b" / "result")
+B = ("2B", ROOT / "agi2" / "out" / "exp-ep2" / "result")  # pulled store; exp-2b/result holds no inference_outputs
 
 
 def load(d: Path):

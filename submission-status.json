@@ -30,15 +30,26 @@
     "latest_status_observed_utc": "2026-09-14T15:00:00+00:00",
     "best_public_score_interpretation": "Historical observed maximum, not a stable capability estimate or evidence for augment8.",
     "latest_score_interpretation": "Audited augment16 conservative baseline, submitted as version 11; no improvement claim.",
-    "pending_submission": {
+    "scored_submission": {
       "ref": 56223660,
       "submitted_utc": "2026-09-14T06:27:03Z",
       "what": "augment8 v10 identical resubmit #2",
-      "decision_dependency": "gates the dynamic-16/8 direction; refutation of the deadline hypothesis rests on one earlier sample",
-      "predeclared": "<=28.0 refutation solid, dynamic-16/8 dead; 28.5-29.5 inside the augment16 band; >=30.0 was a low draw, reopen at n=3",
-      "observed_status_utc": "2026-09-14T15:00:00+00:00",
-      "observed_status": "PENDING"
-    }
+      "public_score": 27.64,
+      "outcome": "Byte-identical to the first augment8 sample (56140934, 27.64). The predeclared gate '<= 28.0' fired: the refutation is solid at n=2 and dynamic-16/8 is dead."
+    },
+    "ensemble_oracle": {
+      "command": "python agi2/ensemble_oracle.py",
+      "stores": "agi2/out/v8 (4B) and agi2/out/exp-ep2/result (2B), 34 shared scoreable outputs",
+      "oracle_4b": "9/34",
+      "oracle_2b": "9/34",
+      "oracle_union": "11/34 (the ensemble ceiling, +2 tasks)",
+      "selectors": "4B alone 6/34, 2B alone 6/34, merged pool 6/34, cross-agree 6/34",
+      "outcome": "The ceiling exists and the mechanism cannot reach any of it. The 2B ensemble is dead before being built; measured to be discarded rather than built to be measured."
+    },
+    "latest_submission_id": 56244555,
+    "latest_submission_utc": "2026-09-15T03:48:58Z",
+    "latest_submission_what": "v11 identical resubmit #4 (kernel version 11, no new run): one more draw from the 29.31/30.56/30.97 band",
+    "latest_submission_status": "PENDING"
   },
   "arc_agi_3": {
     "latest_public_score": 0.21,
@@ -144,7 +155,11 @@
       "seed_2_relative_change_percent_rounded": -29,
       "conclusion": "Inconclusive. The originally cited +43% was one seed, not an established improvement. The objects submission decision did not meet the standard applied to warm."
     },
-    "active_kernel_version": 4,
+    "active_kernel_version": 7,
+    "latest_submission_id": 56244567,
+    "latest_submission_utc": "2026-09-15T03:50:06Z",
+    "latest_submission_what": "stable agent, ARC_SEED default 3 (an unsampled draw; seeds 0/1/2 read 0.03/0.21/0.06 on the board)",
+    "latest_submission_status": "PENDING",
     "submission_receipt": "experiments/score-push-20260911/agi3-receipt.json",
     "latest_status_observed_utc": "2026-09-14T15:00:00+00:00",
     "seed_ordering_probe": {

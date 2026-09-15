@@ -697,6 +697,61 @@ stable agent, submit it, keep the two highest. Never spend the slot on a draw
 already known to be bad, never drop a good one. The returned number is a draw,
 not a capability estimate, and no A/B may be run on it at n=1.
 
+---
+
+## The ensemble is dead at the oracle, and 27.64 landed twice (2026-09-15)
+
+Two closures in one round, both cheap, both predeclared.
+
+**The 2B ensemble has a ceiling it cannot be built to reach.** The 2025 winner's
+structural difference from the public recipe is an ensemble, which made "add a
+second model" the last untried decode-stage lever. `agi2/ensemble_oracle.py`
+answers whether it is worth building from artifacts already on disk — the 4B
+store (`agi2/out/v8`) and the 2B store (`agi2/out/exp-ep2/result`), 34 outputs
+that both scored:
+
+| | correct |
+|---|---|
+| oracle(4B) — any 4B candidate is right | 9/34 |
+| oracle(2B) — any 2B candidate is right | 9/34 |
+| **oracle(4B\|2B)** — the ensemble's ceiling | **11/34** |
+| selector, 4B alone | 6/34 |
+| selector, 2B alone | 6/34 |
+| selector, merged pool | 6/34 |
+| selector, cross-agree first — the actual mechanism | 6/34 |
+
+The two models are not redundant: each holds 2 correct answers the other does
+not. So a ceiling of +2 tasks is real, and every selector we can name collects
+**none** of it — merging the pools and preferring grids both models produced
+both return exactly what the 4B selector returns alone. The gap between the
+oracle line and the selector line is the same selection failure documented in
+*Four attacks on selection*, now measured on a pool that was designed to make it
+easier. The ensemble dies here, at zero build cost, instead of after a week of
+wiring one up under a 12-hour wall.
+
+Two caveats that limit how far this travels. n=34 is small; a +2/34 ceiling is
+not distinguishable from zero at this n, and the honest statement is "no
+detectable headroom", not "no headroom". And the 2B store was produced by a
+4-hour run against the 4B store's longer budget, so more samples could shift the
+ceiling — though not the selector behaviour, which is the binding constraint.
+
+**The gate fired again, identically.** The ARC-AGI-2 slot returned 27.64 for
+augment8 v10, byte-identical to the first sample (56140934) and against an
+augment16 band of 29.31/30.56/30.97. Predeclared: `<= 28.0` kills dynamic-16/8.
+It did. Note the shape of the two distributions rather than their centres: three
+reruns of the *same* augment16 notebook span 1.66 points, while two reruns of
+the same augment8 notebook agree to 0.00. Board-side variance is not a property
+of the notebook, and one point is not a measurable difference on this board.
+
+**A protocol trap worth naming.** Kaggle's CLI prints `N submissions remaining
+today.` on **success** — it reports the quota left *after* the write. Read as a
+refusal, it declares a quota outage that did not happen and hides a submission
+that did. This round it cost a duplicate attempt (refused, harmless) and one
+wrongly-recorded "quota did not reset" claim. Acceptance must be decided by
+reading the submission list back and matching the description; the CLI's text is
+not evidence either way. `scripts/fire_draws.py --self-test` encodes the four
+outcome combinations that make this concrete.
+
 ## What this gives the writeup
 
 - **Theory**: a stated hypothesis (the ARC-AGI-2 bottleneck is exact
