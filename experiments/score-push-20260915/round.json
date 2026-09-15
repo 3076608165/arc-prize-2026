@@ -9,8 +9,16 @@
     "2b-ensemble": "dead, measured before building. agi2/ensemble_oracle.py on the two stores v8 (4B) and exp-ep2 (2B), 34 shared scoreable outputs: oracle(4B) 9, oracle(2B) 9, oracle(4B|2B) 11 -- a ceiling of +2 tasks -- but every selector stays at 6/34 (4B alone 6, 2B alone 6, merged pool 6, cross-agree 6). The ceiling is real and the proposed mechanism cannot reach any of it, so the ensemble's expected gain is zero at an n this small. That was the last decode-stage lever on the table."
   },
   "agi3": {
-    "status": "fired",
+    "status": "scored",
     "what": "unsampled seed of the stable agent (seed 3), unchanged otherwise, kernel version 7",
+    "result": "ref 56244567 -> 0.04, COMPLETE",
+    "seed_draws_to_date": {
+      "0": 0.03,
+      "1": 0.21,
+      "2": 0.06,
+      "3": 0.04,
+      "reading": "Four draws, one at 0.21 and three in 0.03-0.06. Consistent with the deterministic step function: a hit is one extra level cleared in one game. The best two across the competition stand at 0.21 and 0.06, so the hit rate over the remaining ~48 daily slots is what the board is actually betting on; no draw may be read as a measurement (n=1 each)."
+    },
     "decision_dependency": "none. This is a draw, not a measurement.",
     "predeclared": {
       "any value": "record it; keep the best two scores across the competition. No A/B may be read from a single board result."

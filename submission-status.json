@@ -52,8 +52,10 @@
     "latest_submission_status": "PENDING"
   },
   "arc_agi_3": {
-    "latest_public_score": 0.21,
-    "latest_submission_id": 56223681,
+    "best_public_score": 0.21,
+    "best_submission_id": 56223681,
+    "latest_public_score": 0.04,
+    "latest_submission_id": 56244567,
     "latest_status": "COMPLETE",
     "prepared_notebook": "agi3/out/stable-20260911/submission.ipynb",
     "prepared_notebook_uploaded": true,
@@ -65,8 +67,8 @@
         "vc33": 1
       }
     },
-    "last_scored_submission_id": 56223681,
-    "last_scored_public_score": 0.21,
+    "last_scored_submission_id": 56244567,
+    "last_scored_public_score": 0.04,
     "public_score_distributions": {
       "pre_objects_history": {
         "scope": "Seven scored submissions before objects v3; includes different submission descriptions and is not asserted to be a single-code cohort.",
@@ -158,8 +160,9 @@
     "active_kernel_version": 7,
     "latest_submission_id": 56244567,
     "latest_submission_utc": "2026-09-15T03:50:06Z",
-    "latest_submission_what": "stable agent, ARC_SEED default 3 (an unsampled draw; seeds 0/1/2 read 0.03/0.21/0.06 on the board)",
-    "latest_submission_status": "PENDING",
+    "latest_submission_what": "stable agent, ARC_SEED default 3 (an unsampled draw; seeds 0/1/2 read 0.03/0.21/0.06 on the board) -> scored 0.04",
+    "latest_submission_status": "COMPLETE",
+    "latest_score_interpretation": "Seed 3, the fourth unsampled draw of the stable agent: 0.04. Draws to date 0.03 / 0.21 / 0.06 / 0.04. The best two stand at 0.21 and 0.06 and are a draw, not a capability.",
     "submission_receipt": "experiments/score-push-20260911/agi3-receipt.json",
     "latest_status_observed_utc": "2026-09-14T15:00:00+00:00",
     "seed_ordering_probe": {
