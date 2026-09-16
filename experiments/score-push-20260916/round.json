@@ -16,7 +16,9 @@
   },
   "agi3": {
     "what": "stable agent, seed 4 (an unsampled draw); kernel version 8 pushed 2026-09-16T04:00Z",
-    "kernel_status_at_snapshot": "RUNNING",
+    "submission_ref": 56268909,
+    "submitted_utc": "2026-09-16T04:04:43Z",
+    "kernel_status_at_snapshot": "COMPLETE",
     "decision_dependency": "none. A draw, not a measurement; local ranking is retired (rho = -1.0 at n=3).",
     "predeclared": {
       "any value": "record it; the best two across the competition (0.21 seed 1, 0.18 v2 resubmit #6) stand unless the draw beats one of them."
@@ -24,6 +26,12 @@
     "honest_value_note": "ARC-AGI-3 rank prizes are out of reach (board top ~7.5 against a project best of 0.21), so this slot buys selection optionality and writeup material only. It is fired because the slot cannot be banked and the flow is automated, not because a decision depends on it.",
     "draws_to_date": {"seed0": 0.03, "seed1": 0.21, "seed2": 0.06, "seed3": 0.04},
     "watcher": "experiments/fire-agi3-seed4.log (waits for KernelWorkerStatus.COMPLETE, then submits version 8)"
+  },
+  "record_correction": {
+    "what": "Two statements in the campaign record were stale, verified against the submission lists on 2026-09-16.",
+    "agi2_best_public": "30.97 (ref 56204329, 2026-09-13), not the 30.14 in submission-status.json; the top two are 30.97 and 30.56 (ref 56179025, 2026-09-12). The 30.14 was the best as of 2026-09-03.",
+    "agi3_best_two": "0.21 (ref 56223681, seed 1) and 0.18 (ref 56111992, v2 resubmit #6, 2026-09-09). The 2026-09-15 round note reads 'the best two stand at 0.21 and 0.06', which omits the earlier 0.18/0.16 cohort; selection is over ANY past submission, so the standing pair is 0.21 + 0.18.",
+    "why_it_matters": "Final selection is up to 2 submissions of the user's choice, so an AGI-3 draw now has to beat 0.18 to change the selected pair. This strengthens (does not change) the honest_value_note above."
   },
   "open_work": {
     "eligibility_gap": "Still no git remote: LICENSE (MIT-0) and NOTICE.md are local only, so nothing is prize-eligible yet. Publishing is deliberately deferred to mid-October, before kernelsPublishingDisabledDeadline 2026-10-26 23:59Z.",
