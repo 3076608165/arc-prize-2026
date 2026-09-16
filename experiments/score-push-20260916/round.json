@@ -1,0 +1,38 @@
+{
+  "date": "2026-09-16",
+  "policy": "Standing campaign policy, unchanged: one slot per board per day, best two submissions across the competition, an unused slot cannot be banked.",
+  "agi2": {
+    "what": "v11 identical resubmit #5 (kernel version 11, no new run)",
+    "submission_ref": 56268813,
+    "submitted_utc": "2026-09-16T03:58:52Z",
+    "status": "PENDING",
+    "decision_dependency": "weak-positive, not a measurement. Selection is best-of-draws over the selected pair, so this slot pays only if the draw beats 30.97 (1 of the 4 observed draws did: 28.89, 29.31, 30.56, 30.97). Expected value is non-negative and the slot cannot be recovered, so it is spent.",
+    "predeclared": {
+      ">= 30.97": "new best draw; it becomes the leading final submission and the selection pair is rewritten around it.",
+      "< 30.97": "no change to the selection; record the draw and move on. Not evidence about the method (n=1, byte-identical code)."
+    },
+    "score_band_to_date": [28.89, 29.31, 30.56, 30.97],
+    "watcher": "experiments/wait-56268813.log, gated until 2026-09-16T15:50Z (the run cannot have scored before its 12 h budget)"
+  },
+  "agi3": {
+    "what": "stable agent, seed 4 (an unsampled draw); kernel version 8 pushed 2026-09-16T04:00Z",
+    "kernel_status_at_snapshot": "RUNNING",
+    "decision_dependency": "none. A draw, not a measurement; local ranking is retired (rho = -1.0 at n=3).",
+    "predeclared": {
+      "any value": "record it; the best two across the competition (0.21 seed 1, 0.18 v2 resubmit #6) stand unless the draw beats one of them."
+    },
+    "honest_value_note": "ARC-AGI-3 rank prizes are out of reach (board top ~7.5 against a project best of 0.21), so this slot buys selection optionality and writeup material only. It is fired because the slot cannot be banked and the flow is automated, not because a decision depends on it.",
+    "draws_to_date": {"seed0": 0.03, "seed1": 0.21, "seed2": 0.06, "seed3": 0.04},
+    "watcher": "experiments/fire-agi3-seed4.log (waits for KernelWorkerStatus.COMPLETE, then submits version 8)"
+  },
+  "open_work": {
+    "eligibility_gap": "Still no git remote: LICENSE (MIT-0) and NOTICE.md are local only, so nothing is prize-eligible yet. Publishing is deliberately deferred to mid-October, before kernelsPublishingDisabledDeadline 2026-10-26 23:59Z.",
+    "reachable_money": "Paper Track ($450,000, deadline 2026-11-09) and the ARC-AGI-2 Grand Prize ($275,000, writeup, all artifacts open sourced, due within 7 days of 2026-11-02). Both are rubric-scored, not rank-scored. paper/outline.md maps the six criteria; paper/findings.md (765 lines) is the measured material.",
+    "agi2_levers_exhausted": [
+      "dynamic-16/8 decode: dead (27.64 twice against a 29.31/30.56/30.97 band)",
+      "2B ensemble: dead at the oracle (+2 ceiling, no selector above 6/34)",
+      "per-cell voting selection: dead (-6 tasks offline)",
+      "remaining: the daily best-of-draws on byte-identical v11"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+[
+  {
+    "competition": "arc-prize-2026-arc-agi-2",
+    "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+    "version": 11,
+    "file": "submission.json",
+    "message": "20260916 v11 identical resubmit #5: draw n=5 of the same notebook; best-of-draws selection, slot cannot be banked"
+  }
+]
