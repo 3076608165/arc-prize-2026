@@ -752,6 +752,29 @@ reading the submission list back and matching the description; the CLI's text is
 not evidence either way. `scripts/fire_draws.py --self-test` encodes the four
 outcome combinations that make this concrete.
 
+## The draw policy paid off, and it was a draw (2026-09-16)
+
+Seed 4 of the *unchanged* stable agent (kernel v8, only `ARC_SEED` differs from
+seed 3's build) returned **0.26** — the project's best ARC-AGI-3 score, above
+seed 1's 0.21 and to within a hair of the field median (0.27 when last read,
+2026-09-04). Ref 56268909, COMPLETE in ~2.5 h.
+
+| seed | 0 | 1 | 2 | 3 | **4** |
+|---|---|---|---|---|---|
+| board | 0.03 | 0.21 | 0.06 | 0.04 | **0.26** |
+
+Read it as the policy working, not the agent improving: 2 of 5 seeds happened to
+clear a level in a game the other 3 missed, which is exactly the deterministic
+step function described above — the score has no resolution between 0.03 and
+0.26, only discrete jumps. The two slots that count are now 0.26 + 0.21.
+
+What this does *not* change: no ARC-AGI-3 ablation is licensed by it (n=1 per
+seed, and the local ordering inversion stands), and the rank prizes stay out of
+reach (board top ~7.5). It also does not touch the ARC-AGI-2 conclusion that
+~2 points is the resolution floor there — the two boards fail in opposite ways.
+
+---
+
 ## What this gives the writeup
 
 - **Theory**: a stated hypothesis (the ARC-AGI-2 bottleneck is exact

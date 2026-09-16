@@ -19,13 +19,15 @@
     "submission_ref": 56268909,
     "submitted_utc": "2026-09-16T04:04:43Z",
     "kernel_status_at_snapshot": "COMPLETE",
-    "decision_dependency": "none. A draw, not a measurement; local ranking is retired (rho = -1.0 at n=3).",
+    "result": "0.26, COMPLETE (observed 2026-09-16T06:36Z) -- a new project best, above the previous 0.21 (seed 1)",
+    "decision_dependency": "none for the method; the draw policy itself is now supported: 2 of 5 seeds cleared a level in an otherwise-missed game (0.21, 0.26) while 3 landed at 0.03-0.06.",
     "predeclared": {
-      "any value": "record it; the best two across the competition (0.21 seed 1, 0.18 v2 resubmit #6) stand unless the draw beats one of them."
+      "any value": "record it; it replaces 0.18 as the second selected submission, behind 0.21 unless it beats it -- it did."
     },
-    "honest_value_note": "ARC-AGI-3 rank prizes are out of reach (board top ~7.5 against a project best of 0.21), so this slot buys selection optionality and writeup material only. It is fired because the slot cannot be banked and the flow is automated, not because a decision depends on it.",
-    "draws_to_date": {"seed0": 0.03, "seed1": 0.21, "seed2": 0.06, "seed3": 0.04},
-    "watcher": "experiments/fire-agi3-seed4.log (waits for KernelWorkerStatus.COMPLETE, then submits version 8)"
+    "selected_pair_after": "0.26 (seed 4) + 0.21 (seed 1)",
+    "honest_value_note": "ARC-AGI-3 rank prizes remain out of reach (board top ~7.5), so this slot buys selection optionality and writeup material only. It is fired because the slot cannot be banked and the flow is automated, not because a rank-dependent decision depends on it. It was still worth firing: the draw moved the project best 0.21 -> 0.26.",
+    "draws_to_date": {"seed0": 0.03, "seed1": 0.21, "seed2": 0.06, "seed3": 0.04, "seed4": 0.26},
+    "watcher": "experiments/wait-56268909.log (exited COMPLETE, 0.26)"
   },
   "record_correction": {
     "what": "Two statements in the campaign record were stale, verified against the submission lists on 2026-09-16.",

@@ -3,7 +3,7 @@
 ## Resolution limits, a mis-documented scorer, and a closed selection stage
 
 **Track:** ARC-AGI-2 / ARC-AGI-3 · **Submissions:** ARC-AGI-2 `56204329` (public 30.97),
-ARC-AGI-3 `56223681` (public 0.21)
+ARC-AGI-3 `56268909` (public 0.26)
 
 ## 1. The claim
 
@@ -11,7 +11,7 @@ Every result on these two boards rests on an unmeasured assumption: that one
 submission is one measurement. It is not. Resubmitting **byte-identical** code
 shows ARC-AGI-2 resolves about 2 points and ARC-AGI-3 resolves nothing at all
 until the agent's own seed is pinned — at which point it becomes exactly
-deterministic and the seed, not the board, moves the score 7x. Three further
+deterministic and the seed, not the board, moves the score about 9x. Three further
 measurements follow from taking that seriously: the reference implementation's
 aggregation function is documented as a mean and implemented as a max, which
 inverts ablations; the ARC-AGI-2 candidate-selection stage is closed, with a
@@ -89,7 +89,7 @@ margin, which is presumably where upstream tuned it.
 
 | | ARC-AGI-2 | ARC-AGI-3 |
 |---|---|---|
-| our best public | **30.97** | **0.21** |
+| our best public | **30.97** | **0.26** |
 | field median / max (2026-09-04) | 27.64 / 73.33 | 0.27 / 7.51 |
 | seeded-code reruns | 29.31→30.97 (1.66 pts) | 0.03, 0.03 (0.00) |
 | honest floor | 9-rule portfolio: 3.07% training, **0.00%** eval | starter random agent: 0.0489 |
@@ -103,7 +103,8 @@ was one-directional; pinning our worker-hash seed did **not** narrow it (three
 reruns: 29.31, 30.56, 30.97). The residual is platform-side bf16 and wall-clock
 nondeterminism, so ~2 points is the final floor. On the hidden ARC-AGI-3 set the
 metric is discrete: one extra level cleared in one game is the whole distance
-between 0.03 and 0.21.
+between 0.03 and 0.26. Five seeds of one unchanged agent, differing in nothing
+but the seed, returned 0.03, 0.21, 0.06, 0.04 and 0.26.
 
 ## 5. What did not work
 
