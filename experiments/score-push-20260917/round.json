@@ -1,0 +1,47 @@
+{
+  "date": "2026-09-17",
+  "policy": "Standing campaign policy, unchanged: one slot per board per day, best two submissions across the competition, an unused slot cannot be banked.",
+  "agi2": {
+    "what": "v11 identical resubmit #6 (kernel version 11, no new run)",
+    "submission_ref": 56292967,
+    "submitted_utc": "2026-09-17T03:12:27Z",
+    "status": "PENDING",
+    "decision_dependency": "weak-positive, not a measurement. Selection is best-of-draws over the selected pair; this slot pays only if the draw beats 30.97. Observed v11 draws: 29.31, 30.56, 30.97, 28.89, 29.31 (1 of 5 beat the band's top end at the time it was set). Slot cannot be recovered, so it is spent.",
+    "predeclared": {
+      ">= 30.97": "new best draw; it becomes the leading final submission and the selection pair is rewritten around it.",
+      "< 30.97": "no change to the selection; record the draw and move on. Not evidence about the method (n=1, byte-identical code)."
+    },
+    "score_band_to_date": [29.31, 30.56, 30.97, 28.89, 29.31],
+    "watcher": "experiments/score-push-20260917/wait-56292967.log, gated with --not-before 2026-09-17T15:45:00Z (a 12 h run cannot have scored before then)"
+  },
+  "agi3": {
+    "what": "stable agent, seed 5 (an unsampled draw); kernel version 9 pushed 2026-09-17T03:11Z, only ARC_SEED's fallback differs from seed 4's build",
+    "submission_ref": 56292969,
+    "submitted_utc": "2026-09-17T03:12:34Z",
+    "status": "PENDING",
+    "decision_dependency": "none for the method; the draw policy is already supported (2 of 5 seeds cleared a level in a game the other 3 missed). Nothing here depends on the rank: board top is 18.81.",
+    "predeclared": {
+      "any value": "record it; it replaces 0.18 as the second selected submission if it beats it. Selection is over any past submission, so 0.18 (v2 resubmit #6, 2026-09-09) is the standing bar, and 0.26 (seed 4) leads."
+    },
+    "selected_pair_before": "0.26 (seed 4) + 0.21 (seed 1) -- the 0.18 is behind both",
+    "draws_to_date": {"seed0": 0.03, "seed1": 0.21, "seed2": 0.06, "seed3": 0.04, "seed4": 0.26},
+    "honest_value_note": "Rank prizes stay out of reach (field max 18.81, median 0.29). The slot buys selection optionality and writeup material only. Fired because the slot cannot be banked and the flow is automated.",
+    "watcher": "experiments/score-push-20260917/wait-56292969.log (no --not-before: the kernel has completed in ~2.5 h every round so far)"
+  },
+  "leaderboard_read_20260917": {
+    "how": "kaggle competitions leaderboard -c <comp> -d, parsed locally; ranks are the board's own Rank column (tie-group) unless noted",
+    "agi2": {"teams": 2052, "our_score": 30.97, "our_rank": 446, "teams_strictly_ahead": 335, "field_median": 28.06, "field_max": 76.94, "note": "field max moved 73.33 -> 76.94 since the 2026-09-04 read; median 27.64 -> 28.06"},
+    "agi3": {"teams": 3104, "our_score": 0.26, "our_rank": 1700, "teams_at_or_above": 1701, "field_median": 0.29, "field_max": 18.81, "note": "field max moved 7.51 -> 18.81; our best draw (0.26) now sits at the field median (0.29)"}
+  },
+  "open_work": {
+    "eligibility_gap": "Still no git remote: LICENSE (MIT-0) and NOTICE.md are local only, so nothing is prize-eligible yet. Publishing is deliberately deferred to mid-October, before kernelsPublishingDisabledDeadline 2026-10-26 23:59Z.",
+    "entry_gate": "2026-10-26 entry + team merger deadline. Already entered on all three tracks (rules accepted, submissions exist), so the gate is satisfied but must not be broken by renaming kernels or leaving the team.",
+    "reachable_money": "Paper Track ($450,000, deadline 2026-11-09) and the ARC-AGI-2 Grand Prize ($275,000, writeup + all artifacts open sourced, due within 7 days of 2026-11-02). Both are rubric-scored, not rank-scored. paper/outline.md maps the six criteria; paper/findings.md is the measured material.",
+    "agi2_levers_exhausted": [
+      "dynamic-16/8 decode: dead (27.64 twice against a 29.31/30.56/30.97 band)",
+      "2B ensemble: dead at the oracle (+2 ceiling, no selector above 6/34)",
+      "per-cell voting selection: dead (-6 tasks offline)",
+      "remaining: the daily best-of-draws on byte-identical v11"
+    ]
+  }
+}
