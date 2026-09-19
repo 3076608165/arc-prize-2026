@@ -1,0 +1,32 @@
+[
+ {
+  "id": 3518548,
+  "date": "2026-08-31T08:25:14.410Z",
+  "votes": 14,
+  "body": "Same notebook that ran in less than 10 hours, repeatedly, timed out last night. We never timed out so far, we monitor time (as everyone else I guess)."
+ },
+ {
+  "id": 3521260,
+  "date": "2026-09-05T10:31:38.750Z",
+  "votes": 2,
+  "body": "I received a Kaggle system error less than 9 hours into a competition submission. This notebook version already had a successful \"Save and Run All\". I had previously made 18 competition submissions, all of which succeeded. Kaggle gave me back my daily submission, so I am currently rerunning the same submission."
+ },
+ {
+  "id": 3521171,
+  "date": "2026-09-05T03:44:21.757Z",
+  "votes": null,
+  "body": "Test to see if I get a downvote."
+ },
+ {
+  "id": 3518923,
+  "date": "2026-08-31T19:56:44.103Z",
+  "votes": 3,
+  "body": "It is bad practice to report what looks like an infrastructure issue? Asking because of downvote.\n\nOne can check on https://arc3.huikang.dev/leaderboard/?comp=arc2 that all our subs run in 10 hours on average, with a max of 10h30 since our best score.\n\nThat all of a sudden we use 2 hours more and that our time gating after each puzzle did not work is extremely suspicious."
+ },
+ {
+  "id": 3519891,
+  "date": "2026-09-02T12:29:28.967Z",
+  "votes": 1,
+  "body": "I resubmitted, and it ran in 9h10...\n\nThis confirms that the issue was not in our code."
+ }
+]

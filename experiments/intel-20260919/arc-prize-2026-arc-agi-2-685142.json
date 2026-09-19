@@ -1,0 +1,50 @@
+[
+ {
+  "id": 3429596,
+  "date": "2026-03-27T00:29:52.980Z",
+  "votes": 25,
+  "body": "Has anyone tried submitting last year's winning solution?\n\nhttps://www.kaggle.com/competitions/arc-prize-2025/writeups/nvarc\n\nI suspect it would achieve `Public LB 27` and `Private LB 24`! \n \n(edit: last year was 4xL4 and this year is 2xT2, so it cannot achieve these scores)\n\n========\n\n**UPDATE**: The code has been reconfigured for 2xT4 and published [here][1]\n\n**UPDATE 2**: This competition has upgraded the GPUs to 4xL4, so we can now submit last years solution\n\n[1]: https://www.kaggle.com/code/nihilisticneuralnet/9-58-nvarc-arc-2025-winning-solution-for-t4"
+ },
+ {
+  "id": 3429713,
+  "date": "2026-03-27T06:06:47.453Z",
+  "votes": 6,
+  "body": "That solution uses 4xL4 GPUs. We still don't have access to those.\n\n>NOTE: We are currently exploring options to provide better compute for this competition."
+ },
+ {
+  "id": 3431691,
+  "date": "2026-03-30T13:56:04.087Z",
+  "votes": 3,
+  "body": "UPDATE: The code has been reconfigured for 2xT4 and published [here][1]\n\n[1]: https://www.kaggle.com/code/nihilisticneuralnet/9-58-nvarc-arc-2025-winning-solution-for-t4"
+ },
+ {
+  "id": 3431632,
+  "date": "2026-03-30T12:22:22.530Z",
+  "votes": 4,
+  "body": "You won't get these scores with 2xT4. We used 4xL4."
+ },
+ {
+  "id": 3436730,
+  "date": "2026-04-06T16:01:08.233Z",
+  "votes": 1,
+  "body": "Yet, this competition is also all about synthetic training data. So here is one useful link from that writeup: https://www.kaggle.com/datasets/sorokin/nvarc-artifacts-puzzles"
+ },
+ {
+  "id": 3434774,
+  "date": "2026-04-03T08:03:06.360Z",
+  "votes": 2,
+  "body": "anyone trying[ topas](https://github.com/Bitterbot-AI/topas_DSLPv1)?"
+ },
+ {
+  "id": 3438315,
+  "date": "2026-04-08T23:13:19.220Z",
+  "votes": null,
+  "body": "UPDATE: This competition has upgraded the GPUs to 4xL4, so we can now submit last years solution"
+ },
+ {
+  "id": 3429598,
+  "date": "2026-03-27T00:31:25.840Z",
+  "votes": null,
+  "body": ""
+ }
+]

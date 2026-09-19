@@ -1,0 +1,14 @@
+[
+ {
+  "id": 3472358,
+  "date": "2026-06-14T03:03:23.363Z",
+  "votes": null,
+  "body": "TranscendPlexity generates verified deterministic Python solve() functions for ARC tasks offline. Zero LLM calls at inference.\n\n**Results:**\n- ARC-AGI-1: 400/400 (100%)\n- ARC-AGI-2 test: 102/240 (42.5%) with 100% accuracy on targeted tasks\n- 13 \"Impossible\" tasks solved (0% solve rate everywhere else)\n- ARC-AGI-3: FT09 WIN (6/6 levels), VC33 WIN (7/7 levels)\n- Inference cost: $0\n\n**Method:** Claude proposes solve(grid) \u2192 verified against training examples \u2192 only 100%-passing programs committed.\n\n**Open Source:**\n- Solvers (MIT): https://github.com/GitMonsters/SOLVED-540-of-540\n- 13 Impossible: https://github.com/GitMonsters/13-Impossible-ARC-Tasks-SOLVED\n\n**Notebooks:**\n- ARC-AGI-2: https://www.kaggle.com/code/evanpieser/arc-prize-2026-arc-agi-2-transcendplexity\n- ARC-AGI-3: https://www.kaggle.com/code/evanpieser/arc-prize-2026-arc-agi-3-starter\n- Paper + visualizations: https://www.kaggle.com/code/evanpieser/transcendplexity-arc-prize-2026-paper"
+ },
+ {
+  "id": 3473016,
+  "date": "2026-06-15T16:28:06.717Z",
+  "votes": null,
+  "body": "Have you submit this to the competition? If so, please share your leaderboard name and score"
+ }
+]

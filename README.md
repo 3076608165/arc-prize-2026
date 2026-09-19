@@ -123,6 +123,9 @@ nothing for 96%. Widening the global hypothesis space moves tasks from
 The 240 hidden leaderboard tasks come from the same distribution as the 120
 public eval tasks, so eval is the honest predictor — not training.
 
+What the teams above us are doing, and which of it travels, is surveyed in
+[docs/public-solutions-2026-09.md](docs/public-solutions-2026-09.md).
+
 ### Kaggle code-competition constraints
 
 - Notebook only, **no internet**, ≤ 12 h wall clock (CPU or GPU)

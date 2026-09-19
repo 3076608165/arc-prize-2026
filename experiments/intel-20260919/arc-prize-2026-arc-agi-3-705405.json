@@ -1,0 +1,52 @@
+[
+ {
+  "id": 3468830,
+  "date": "2026-06-09T21:39:16.350Z",
+  "body": "Hi everyone,\n\nWe want to sincerely apologize for a recent oversight regarding the daily submission limits for this competition, and share how we are addressing it.\n\n#### What happened:\nOur intended setting for this competition had been one submission per day. However, on May 27, a miscommunication over a mismatch between our settings and the written rules caused us to mistakenly change the competition settings to allow 5 submissions per day.\n\n#### The Impact:\nDuring this 13-day window, the system allowed up to 5 submissions per day. Understandably, several teams utilized these available submissions to test and improve their models. We want to be entirely clear that we do not view this as cheating or breaking the rules; teams were simply operating within the limits our system presented to them.\n\n#### Going forward:\nTo get back to the intended course, we are taking the following steps:\n- **Restoring the Cap:** Yesterday, June 8, we restored the submission limit back to one submission per day.\n- **Invalidating Surplus Submissions:** We are working now to invalidate any additional submissions teams made after their first successful submission for each day during that period. Because there are still 5 months remaining in the competition, this brief window of elevated submission allowance does not confer a material unfair advantage to teams, and resetting the counts now ensures all teams compete on equal footing for the remainder of the competition.\n\nWe understand that errors such as this are frustrating and disruptive. We very much appreciate your patience and continued participation in the Kaggle community.\n\nSincerely, \n\nMar\u00eda and the Kaggle team.\n"
+ },
+ {
+  "id": 3471349,
+  "date": "2026-06-11T10:42:32.280Z",
+  "body": "[Request] Is it possible to make submissions with a score of 0 not count toward the submission limit? Internal errors provide no logs at all, so it is difficult to debug or understand what went wrong."
+ },
+ {
+  "id": 3469203,
+  "date": "2026-06-10T20:34:29.933Z",
+  "body": "This is completely unfair. Everyone had access to the 5 submissions per day and could use them; there was no injustice! You just made me lose 100 places... \n\nI don't understand!\n\nSome candidates obtained scores by directly using the .py code from the games. This was addressed by implementing obfuscation, but their scores were not invalidated.\n\nI don't understand how, on the one hand, submissions obtained dishonestly are still valid, and on the other hand, you arbitrarily decide to delete valid submissions, since everyone could make the 5 submissions per day.\n\nThe error lies with the platform, not with dishonest use by the candidates.\n\nThis is arbitrary, unfair, and I'm not sure it's valid from a legal standpoint.\n\nThe fairest course of action would be to publicly state that this is a Kaggle bug, not to cancel submissions made during the period of authorization of 5 submissions per day, and to continue with one submission per day.\n\n\n@macruzbar \n\n\n@gregkamradt "
+ },
+ {
+  "id": 3479036,
+  "date": "2026-06-23T09:46:16.347Z",
+  "body": "Hi! I'm trying to reproduce the StochasticGoose ARC-AGI-3 notebook.\n\nI started from the published notebook and submitted it without intentionally changing the algorithm. However, my submissions are scoring around 0.03\u20130.11 public score, while I understood the notebook was achieving roughly 0.25.\n\nCould you clarify:\n\n1. Is the published notebook identical to the version that achieved 0.25?\n2. Were there additional files, weights, patches, or dependencies used that are not included?\n3. Has the ARC-AGI-3 environment changed since that score was obtained?\n\nAny guidance would be greatly appreciated. Thanks!\n"
+ },
+ {
+  "id": 3474949,
+  "date": "2026-06-19T04:49:35.377Z",
+  "body": "Hi Kaggle team,\nI curious to participitate in the kagle comepetions infact i participated in RNA folding but to speak honestly with you actualy if you are saying tee competitions are to push boundaries of in this new AI era in every field,so fro kaggle's point of view is your mission is to encourage any one from any corner of the world to compete with scientific temper or it more about just optics because genuinely speaking rather than focusin on the competition i mean to come up novel sotions actually i am spending more time in the submission issue oras ou mentioned i also try of sbumit mmy notebook trust me guys this submit 5 times per day was there few weeks back i tried to submit trust literally you can check i submitted 100 times but still it rejects and in AGI - 2  whenever i submits t ends up wih zero score so i am ust crious if kagge is runnig  these prestigious competition can't we make atleast our website interface in such a way so that participents focus more on solving the problems with scentific temper rather than facing issues like this and wasting so many hours of time in subission it self i am just curious is the competition about driving innovation or its an experiment to test the patience of humans while submission. thanks"
+ },
+ {
+  "id": 3483474,
+  "date": "2026-06-29T04:09:49.500Z",
+  "body": "Team, I am getting \"Kaggle Error\" during the submission, could you share a sample submission file (maybe a link to it) - 1 submission limit a day easily exhausts if a wrong format of parquet is uploaded. Ideally, a successful submission should be counted towards limit per day. \n\nPlease help!"
+ },
+ {
+  "id": 3471325,
+  "date": "2026-06-11T09:07:27.293Z",
+  "body": "Hi Mar\u00eda and the Kaggle team, thanks for the transparency. But I'd like to point out a problem with this fix.\n\nInvalidating the surplus submissions doesn't actually remove the advantage they created. During those 13 days, teams who submitted up to 5 times per day ran 50-60 extra experiments and learned exactly which approach scored best and what their ceiling was. That knowledge can't be erased. After the cap was restored, they can simply re-submit their already-validated best solution once, and the score comes right back. So deleting the records does not reset anyone to an equal footing - the real edge was the feedback/information from all those trials, not the submission count itself.\n\nMeanwhile, the teams actually penalized by this rollback are the ones who played it safe or submitted less - they lose positions through no fault of their own, while the teams who exploited the extra attempts keep the insight.\n\nA fairer option: rather than deleting valid submissions that everyone equally had the right to make, grant the same extra-submission budget to teams who joined the competition before the bug appeared but didn't get to benefit from it. That way everyone gets comparable opportunity to explore, instead of only some teams keeping the knowledge while others are pushed down the leaderboard. At minimum, please acknowledge this was a platform bug and avoid arbitrarily voiding submissions that were made entirely within the limits the system presented.\n\nThanks for considering this."
+ },
+ {
+  "id": 3482869,
+  "date": "2026-06-28T03:19:29.380Z",
+  "body": "Why it didn't resolved even now"
+ },
+ {
+  "id": 3480556,
+  "date": "2026-06-25T00:56:06.740Z",
+  "body": "Are you resolved our submission issue? If you\u2019re not, why you continue the competition? It is unfair for everyone who has disadvantage of submission issue"
+ },
+ {
+  "id": 3471374,
+  "date": "2026-06-11T11:58:11.660Z",
+  "body": "I hope this issue can be resolved as soon as possible, but it still does not seem to be fixed.\n\nI believe there are two connected problems: the recent change in the daily submission limit from 5 to 1, and the way submission limits are applied after a team merge.\n\nFor teams that merged during this issue period, the merged team may be unable to submit until the combined submission count falls back under the newly reduced limit. In practice, this means that teams are being blocked from submitting not because they intentionally exceeded the rules, but because a retroactive submission-limit change interacted unfairly with the team-merge system.\n\nThis creates a serious fairness issue, especially for teams that merged in good faith before or during the submission-limit change. We kindly ask Kaggle and the ARC AGI 3 organizers to review this situation and either restore the previous 5-submission daily limit or provide an exception/reset for affected merged teams."
+ }
+]

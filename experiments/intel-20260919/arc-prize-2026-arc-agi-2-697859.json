@@ -1,0 +1,62 @@
+[
+ {
+  "id": 3454666,
+  "date": "2026-05-07T16:48:56.703Z",
+  "votes": 10,
+  "body": "We used this submission primarily as a pipeline test for our Kaggle setup using an early, not fully-trained checkpoint. We're currently running the TOPAS architecture. It\u2019s a highly efficient, lightweight setup at only ~100M parameters, and it relies heavily on deep recursion.\n\nOur current compute footprint - we are training on a single consumer-grade RTX 4090. This checkpoint is 14 days into training. We estimate another ~10 days for the model to properly converge.\n\nLocally, using the same 14-day checkpoint, we are hitting ~36%. The massive drop on the leaderboard comes down in part to time management constraints within the Kaggle environment.\n\nBecause TOPAS utilizes deep recursion, our TTT becomes computationally heavy. During our initial sandbox tests, we were struggling to stay within the strict time limits and kept timing out. While tinkering to ensure the submission would actually complete, we overcompensated on our time-limit thresholds. This resulted in the model bailing out early to save time, ultimately failing to output a prediction on a large chunk of the puzzles.\n\nMoving forward as we wait for the model to fully converge over the next week and a half, we need to fine-tune our time-management so we convert [[0]] placeholders into real beam outputs."
+ },
+ {
+  "id": 3458738,
+  "date": "2026-05-16T14:38:24.043Z",
+  "votes": 3,
+  "body": "Notebook submission process is kinda flakey.   During our last submission attempt last night the notebook crash within 250s and I assumed we burnt the attempt for the day.  In the morning we had a new leaderboard score of 19.03%, but from a previous version of the notebook.  Makes no sense.  Now I don't know which variables to adjust for the next run."
+ },
+ {
+  "id": 3454708,
+  "date": "2026-05-07T18:55:43.517Z",
+  "votes": 4,
+  "body": "Squeezing your code to fit Kaggle compute limit is what makes this competition challenging. \n\nIt is good that your first submission went through, even if the score may disappoint you."
+ },
+ {
+  "id": 3454839,
+  "date": "2026-05-08T01:33:46.407Z",
+  "votes": 1,
+  "body": "Tweaked the config, patiently waited for the daily submission to become available... forgot to turn on the accelerator... promptly crashed... burnt the daily submission...   Ugh"
+ },
+ {
+  "id": 3456096,
+  "date": "2026-05-11T07:54:22.353Z",
+  "votes": null,
+  "body": "Really interesting architecture choice. Hitting ~36% locally with only ~100M params and a single RTX 4090 is honestly impressive, especially with deep recursive inference. The LB gap due to TTT constraints makes sense \u2014 recursive systems are brutal under hard inference budgets. Converting those [[0]] placeholders into actual beam outputs alone should recover a huge chunk of score. Curious to see where TOPAS lands once convergence + time scheduling are fully optimized over the next couple weeks.\n"
+ },
+ {
+  "id": 3456174,
+  "date": "2026-05-11T11:58:30.760Z",
+  "votes": -2,
+  "body": "why dont train another model to choose the bettest solution?"
+ },
+ {
+  "id": 3458394,
+  "date": "2026-05-15T19:03:21.467Z",
+  "votes": null,
+  "body": "I wonder how much model downscaling affects runtime in this case. E.g. would 50M model complete twice as fast?"
+ },
+ {
+  "id": 3456280,
+  "date": "2026-05-11T16:21:37.410Z",
+  "votes": null,
+  "body": "Unbelievably frustrating.  It's clear from the logs that the algo bailed on 56% of the second attempts...  no idea why... ffs"
+ },
+ {
+  "id": 3455681,
+  "date": "2026-05-10T04:23:07.403Z",
+  "votes": null,
+  "body": "I tried setting up TOPAS training on kaggle GPU for L4x4, but the training time for convergence is very brutal ;-;\n\nI would need to exclusively burn my GPU every week for this competition for weeks, probably even months."
+ },
+ {
+  "id": 3455165,
+  "date": "2026-05-08T19:00:23.420Z",
+  "votes": null,
+  "body": "ARC is not for the faint of heart.  Watching the model you nurtured for days output the correct answer multiple times in the beam pool only to have the scorer algo confidently pick the wrong one! "
+ }
+]
