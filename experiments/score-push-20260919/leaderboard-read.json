@@ -1,0 +1,18 @@
+{
+  "arc-prize-2026-arc-agi-2": {
+    "teams": 2085,
+    "our_score": 30.97,
+    "teams_strictly_ahead": 338,
+    "teams_at_or_above": 455,
+    "field_median": 28.06,
+    "field_max": 76.94
+  },
+  "arc-prize-2026-arc-agi-3": {
+    "teams": 3152,
+    "our_score": 0.26,
+    "teams_strictly_ahead": 1689,
+    "teams_at_or_above": 1730,
+    "field_median": 0.29,
+    "field_max": 18.81
+  }
+}

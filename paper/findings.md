@@ -775,6 +775,59 @@ reach (board top ~7.5). It also does not touch the ARC-AGI-2 conclusion that
 
 ---
 
+## Draw six, a lost day, and the cost of a dead watcher (2026-09-17 → 2026-09-19)
+
+Both 2026-09-17 slots came back inside their bands, so nothing was selected
+differently: the ARC-AGI-2 pair stays **30.97 + 30.56**, the ARC-AGI-3 pair stays
+**0.26 + 0.21**.
+
+| slot | ref | score | predeclared bar | outcome |
+|---|---|---|---|---|
+| ARC-AGI-2 v11 draw #6 | 56292967 | 30.14 | beat 30.97 to change the pair | pair unchanged |
+| ARC-AGI-3 seed 5 | 56292969 | 0.16 | beat 0.21 to change the pair | pair unchanged |
+
+The two bands, after six draws each:
+
+| | draws | range | above the current best |
+|---|---|---|---|
+| ARC-AGI-2 v11 | 29.31, 30.56, 30.97, 28.89, 29.31, 30.14 | 2.08 pts | 1 of 6 |
+| ARC-AGI-3 stable seeds | 0.03, 0.21, 0.06, 0.04, 0.26, 0.16 | 0.23 | 1 of 6 |
+
+Neither is a measurement of the method — both are byte-identical code. Read
+together with the 1.4%-vs-12x spread on identical resubmits above, the ARC-AGI-2
+band is a re-roll of a run whose own seed changes a fraction of the answers, and
+the ARC-AGI-3 band is the step function.
+
+**2026-09-18 was lost**: neither slot was fired, and an unused slot cannot be
+banked. It is the only day of the campaign so far with no submission on either
+board.
+
+**2026-09-19 fired both**: ARC-AGI-2 v11 draw #7 (ref 56348699, PENDING, 12 h run
+so no result can exist before ~15:45Z) and ARC-AGI-3 seed 6 (kernel version 10,
+sha256 c3099d23…, ref 56348735, PENDING).
+
+**The record-keeping failure is the transferable lesson.** The 9/17 ARC-AGI-2
+watcher logged its opening sleep line and then nothing — `wait-56292967.log` is
+one line long, and its result file was never written; the number was only
+recovered by reading the board back three days later. (The ARC-AGI-3 watcher
+beside it did finish and recorded 0.16, so this is a process-death problem, not a
+design one.) `scripts/wait_for_score.py` was written precisely to stop this ("the
+number is on disk either way"), and it did, for as long as the process lived.
+What a lost watcher actually costs is not the answer — the board keeps that — but
+the link between a predeclared bar and the number that came back, which is the
+only thing that makes a draw evidence rather than trivia. Mitigation used from
+this round on: re-read any ref whose result file is missing with `--once`, before
+firing the next day's slot.
+
+Leaderboard refreshed the same day (both fields grew, our scores did not):
+
+| competition | teams | our rank | our score | field median | field max |
+|---|---|---|---|---|---|
+| ARC-AGI-2 | 2085 | 448 | 30.97 | 28.06 | 76.94 |
+| ARC-AGI-3 | 3152 | 1729 | 0.26 | 0.29 | 18.81 |
+
+---
+
 ## What this gives the writeup
 
 - **Theory**: a stated hypothesis (the ARC-AGI-2 bottleneck is exact

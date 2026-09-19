@@ -12,3 +12,5 @@ kaggle.json
 # local eval outputs
 agi2/out/
 agi3/out/
+# leaderboard dumps (re-downloadable; the parsed read is what gets committed)
+experiments/**/*.zip
