@@ -878,6 +878,58 @@ survey reached from the other direction
 
 ---
 
+## The public baseline is what we already run (2026-09-19)
+
+The "our 30.97 against the notebook's 33.89" gap was explained as a configuration
+difference for two days. It is not one. Three checks, all cheap, all decisive:
+
+1. **Upstream is unchanged.** `kaggle kernels pull
+   mikelou1/arc-agi2-lb33-89-minimal-perfpatch` today returns a notebook whose
+   sha256 (`ee49384a10a4…`) is byte-identical to the copy cached on 2026-09-02.
+2. **Our live submission *is* that notebook.** Pulling our own kernel version 11
+   and diffing its code cells against upstream leaves: the budget line
+   (`12*3600 - 600` = 42600 s against our 42588 s, a 12-second difference), the
+   `coverage_audit` instrumentation that only appends JSONL logs, and
+   `PYTHONHASHSEED=0`. Nothing functional. The kernel metadata is identical too —
+   same `sorokin/pip-install-unsloth-flash-patch` source, same
+   `sorokin/qwen3_4b_grids15_sft139/Transformers/bfloat16/1` model, same docker
+   digest, same `NvidiaL4` shape.
+3. **The 33.89 does not reproduce for us on that code.** Seven submissions of this
+   exact configuration (v11: 29.31, 30.56, 30.97, 28.89, 29.31, 30.14) plus the
+   v4 lineage (30.14, 29.72, 28.47, 28.47, 28.89) give a mean of 29.5 and a
+   standard deviation of 0.84.
+
+A bootstrap over our own eleven draws says more draws do not get there: expected
+best single draw is 30.75 after 10 more, 30.95 after 30, 30.97 after 60 — the
+empirical distribution saturates. Parametrically (mean 29.5, sd 0.84) the expected
+best of 60 draws is ~31.5, and **33.89 sits about five standard deviations above
+our mean: not a draw-luck story, and not reachable by 119 draws either** (~31.9).
+So the notebook's title score is either a different platform epoch or an
+unreproducible outlier, and the config test we planned for the next slot would
+have measured nothing — the slot is spent on the same configuration we have been
+submitting all along.
+
+Why this matters even though it is a negative result: it removes the last
+"cheap" hypothesis for the gap and leaves exactly one, which is the one the public
+survey found from the other direction — a different model class, not a knob. The
+rank map makes the stakes concrete:
+
+| score band | teams | score → rank |
+|---|---|---|
+| 30.00-30.50 | 137 | 30.97 → 448 |
+| 30.50-31.00 | **241** | 31.50 → 222 |
+| 31.00-32.00 | 209 | 32.00 → 130 |
+| 32.00-33.00 | 100 | 33.00 → 30 |
+| 33.00-33.50 | 17 | 33.89 → 10 |
+| 33.50-34.00 | 3 | |
+
+Two thirds of the field we are standing in sits inside a 1.5-point window, which
+is why every slot in this band is worth hundreds of ranks — and why the honest
+summary of the campaign is now "the family is fixed at ~30 ± 1, and the remaining
+six weeks cannot change that without a new pipeline".
+
+---
+
 ## What this gives the writeup
 
 - **Theory**: a stated hypothesis (the ARC-AGI-2 bottleneck is exact

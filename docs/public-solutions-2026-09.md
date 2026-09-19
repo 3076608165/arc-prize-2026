@@ -118,13 +118,37 @@ alone; it is the board.
   `numToday: 1`, `numAllowedNow: 0` on both boards. Any team with >1 submission
   per active day accumulated that rate inside that window, not since.
 
+## Update, later the same day: no better public target exists
+
+Two checks were run against the "spend a slot on someone else's better config"
+idea, and both came back negative:
+
+- **The authors of the top solutions publish nothing that beats 33.89.** Kernel
+  lists for `sorokin` (NVARC), `cpmpml` (nvbanana) and `nihilisticneuralnet` show
+  no ARC-AGI-2 notebook with a claimed 2026 score; `sorokin/arc2-qwen3-unsloth-flash-lora-batch4-queue`
+  is dated 2025-11 and is the source our own lineage descends from, and CPMP has
+  said publicly that the leaders moved past what the 2025 recipe provides and will
+  not share before the deadline.
+- **The bigger-model path has an upload gate.** `nex-agi/Nex-N2-mini`,
+  `XYZAILab/XYZ-Aquila-mini` and `cyankiwi/Nex-N2-mini-AWQ-INT4` (the 35B MoE
+  family that discourse says is the current direction) return "No models found"
+  on Kaggle Models. Attaching them under the offline rule therefore means
+  uploading the ~23 GB int4 artifact ourselves as a Kaggle Model/Dataset first —
+  feasible, but it is days of plumbing before the first measurement, not a slot.
+
+So the next slot has no better target than the configuration we already run, and
+the survey's ranked actions stand: batch-invariance for attribution (no slot),
+then the model class (weeks), with the writeup pools as the reachable money.
+
 ## What this means for us, ranked
 
-1. **Close the ~3-point gap inside our own family first.** The public perfpatch
-   lineage claims 33.89; our fork of it draws 27.6-31.0. Before buying into a new
-   architecture, one slot on the unmodified configuration answers whether the gap
-   is our augmentation, our reduced per-task budget, or the other team's luck.
-   This is the cheapest test on the board.
+1. **~~Close the ~3-point gap inside our own family first.~~ VOID as of the same
+   day.** The public perfpatch lineage claims 33.89 and our fork draws 27.6-31.0,
+   which looked like a configuration gap worth one slot to test. It is not a
+   configuration gap: our live submission *is* that notebook (sha256-identical
+   source, identical kernel metadata), so there is nothing to test. See
+   [../paper/findings.md](../paper/findings.md) → "The public baseline is what we
+   already run".
 2. **Make the run batch-invariant.** Until it is, every slot is partly a coin
    flip and no CV is attributable — our own findings say a 1-point change is not
    measurable. This costs no submission slot, only an engineering pass.
