@@ -831,6 +831,53 @@ Leaderboard refreshed the same day (both fields grew, our scores did not):
 
 ---
 
+## Selection is not where the missing points are (2026-09-19)
+
+The saved full-eval decode store (`agi2/out/v7/inference_outputs`, 144 outputs,
+141 with ground truth, median 17 candidates per output) separates the two halves
+of the pipeline: the decode is paid for, so every re-ranking experiment below
+runs offline in seconds and costs no submission slot. `agi2/selector_search.py`
+holds the experiment and its self-test.
+
+| selector | top-2 solved | vs shipped |
+|---|---|---|
+| `score_full_probmul_3` (what the kernel ships) | 42/141 | 29.8% |
+| `score_kgmon` | 41/141 | -1 |
+| `score_cellvote` | 36/141 | -6 |
+| borda ensemble of all three | 41/141 | -1 |
+| shipped + training-pair filters (shape/palette/symmetry) | 41/141 | -1 |
+| kgmon + filters | 40/141 | -2 |
+| **ORACLE (any candidate in the pool)** | **51/141** | **+9** |
+
+**Nine outputs are already decoded correctly and merely ranked below two wrong
+guesses.** That is the honest size of the selection-side headroom, and four
+separate cheap attempts to recover it failed:
+
+1. **Structural filters lose.** Rules derived from each task's own training pairs —
+   output shape (identity / constant / integer-upscale), colour palette closure,
+   and every D4 symmetry all training outputs share — shrink the pool on 107 of
+   141 outputs and cost 1-2 outputs each time. The wrong candidates are
+   structurally indistinguishable from the right ones, which is itself the
+   interesting part: the model's errors are plausible grids, not broken ones.
+2. **Rank ensembling loses** (borda over the three scorers: -1). The three scorers
+   are not decorrelated enough to vote usefully.
+3. **Splitting the two attempts across configs loses.** Mixing top-1 from the v7
+   config with top-1 from each of v8 / v9 / augment24 / epochs2 on their shared
+   outputs: **0 outputs gained, 1-2 lost** in every comparison, i.e. spending the
+   second attempt on a different config is strictly worse than the same config's
+   second-best guess. (Small n — 29-35 shared outputs — and it measures only the
+   upside, not the per-task budget the split would cost.)
+4. The local eval proxy and the board agree, which is the one reassuring number
+   here: 29.8% locally against 30.97 on the board.
+
+So the +9 is not a ranking problem, it is a decode problem: recovering it needs
+candidates the current 4B TTT pipeline never generates, or a verifier stronger
+than "does the model like it". That is the same conclusion the public-solution
+survey reached from the other direction
+([../docs/public-solutions-2026-09.md](../docs/public-solutions-2026-09.md)).
+
+---
+
 ## What this gives the writeup
 
 - **Theory**: a stated hypothesis (the ARC-AGI-2 bottleneck is exact
