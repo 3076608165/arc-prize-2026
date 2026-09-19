@@ -19,13 +19,15 @@
     "what": "stable agent, seed 6 (an unsampled draw); kernel version 10 pushed 2026-09-19T04:56Z, only ARC_SEED's fallback differs from seed 5's build (sha256 c3099d23...)",
     "submission_ref": 56348735,
     "submitted_utc": "2026-09-19T04:57:59Z",
-    "status": "PENDING",
+    "status": "COMPLETE",
+    "score": "0.06 (observed 2026-09-19T07:28:50Z, ~2.5 h after submit)",
+    "decided": "below the 0.21 bar -> the selected pair is unchanged at 0.26 (seed 4) + 0.21 (seed 1)",
     "decision_dependency": "none for the method; the draw policy is already supported. Nothing here depends on the rank: board top is 18.81.",
     "predeclared": {
       "any value": "record it; it replaces 0.21 (seed 1) as the second selected submission only if it beats it. Selection is over any past submission, so the standing pair is 0.26 (seed 4) + 0.21 (seed 1)."
     },
     "selected_pair_before": "0.26 (seed 4) + 0.21 (seed 1)",
-    "draws_to_date": {"seed0": 0.03, "seed1": 0.21, "seed2": 0.06, "seed3": 0.04, "seed4": 0.26, "seed5": 0.16},
+    "draws_to_date": {"seed0": 0.03, "seed1": 0.21, "seed2": 0.06, "seed3": 0.04, "seed4": 0.26, "seed5": 0.16, "seed6": 0.06},
     "honest_value_note": "Rank prizes stay out of reach (field max 18.81, median 0.29). The slot buys selection optionality and writeup material only.",
     "watcher": "experiments/score-push-20260919/wait-56348735.log (no --not-before: the kernel has completed in ~2.5 h every round so far)"
   },

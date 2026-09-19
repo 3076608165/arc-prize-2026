@@ -786,12 +786,13 @@ differently: the ARC-AGI-2 pair stays **30.97 + 30.56**, the ARC-AGI-3 pair stay
 | ARC-AGI-2 v11 draw #6 | 56292967 | 30.14 | beat 30.97 to change the pair | pair unchanged |
 | ARC-AGI-3 seed 5 | 56292969 | 0.16 | beat 0.21 to change the pair | pair unchanged |
 
-The two bands, after six draws each:
+The two bands — six draws for ARC-AGI-2 (a seventh is still running), seven for
+ARC-AGI-3:
 
-| | draws | range | above the current best |
+| | draws | range | above the pair's 2nd slot |
 |---|---|---|---|
 | ARC-AGI-2 v11 | 29.31, 30.56, 30.97, 28.89, 29.31, 30.14 | 2.08 pts | 1 of 6 |
-| ARC-AGI-3 stable seeds | 0.03, 0.21, 0.06, 0.04, 0.26, 0.16 | 0.23 | 1 of 6 |
+| ARC-AGI-3 stable seeds | 0.03, 0.21, 0.06, 0.04, 0.26, 0.16, 0.06 | 0.23 | 1 of 7 |
 
 Neither is a measurement of the method — both are byte-identical code. Read
 together with the 1.4%-vs-12x spread on identical resubmits above, the ARC-AGI-2
@@ -804,7 +805,9 @@ board.
 
 **2026-09-19 fired both**: ARC-AGI-2 v11 draw #7 (ref 56348699, PENDING, 12 h run
 so no result can exist before ~15:45Z) and ARC-AGI-3 seed 6 (kernel version 10,
-sha256 c3099d23…, ref 56348735, PENDING).
+sha256 c3099d23…, ref 56348735). Seed 6 came back **0.06** at 07:28Z, ~2.5 h
+after submit: below the 0.21 bar, so the selected pair is unchanged — recording
+it and moving on, which is what was predeclared.
 
 **The record-keeping failure is the transferable lesson.** The 9/17 ARC-AGI-2
 watcher logged its opening sleep line and then nothing — `wait-56292967.log` is

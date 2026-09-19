@@ -129,3 +129,12 @@
 {"t": "2026-09-19T04:58:25Z", "waiting": {"ref": "56348735", "status": "PENDING", "public": ""}}
 {"t": "2026-09-19T04:58:40Z", "waiting": {"ref": "56292967", "status": "NOT_LISTED", "public": ""}}
 {"t": "2026-09-19T05:13:27Z", "waiting": {"ref": "56348735", "status": "PENDING", "public": ""}}
+{"t": "2026-09-19T05:28:30Z", "waiting": {"ref": "56348735", "status": "PENDING", "public": ""}}
+{"t": "2026-09-19T05:43:32Z", "waiting": {"ref": "56348735", "status": "PENDING", "public": ""}}
+{"t": "2026-09-19T05:58:35Z", "waiting": {"ref": "56348735", "status": "PENDING", "public": ""}}
+{"t": "2026-09-19T06:13:38Z", "waiting": {"ref": "56348735", "status": "PENDING", "public": ""}}
+{"t": "2026-09-19T06:28:40Z", "waiting": {"ref": "56348735", "status": "PENDING", "public": ""}}
+{"t": "2026-09-19T06:43:43Z", "waiting": {"ref": "56348735", "status": "PENDING", "public": ""}}
+{"t": "2026-09-19T06:58:45Z", "waiting": {"ref": "56348735", "status": "PENDING", "public": ""}}
+{"t": "2026-09-19T07:13:48Z", "waiting": {"ref": "56348735", "status": "PENDING", "public": ""}}
+{"t": "2026-09-19T07:28:50Z", "waiting": {"ref": "56348735", "status": "COMPLETE", "public": "0.06"}}
