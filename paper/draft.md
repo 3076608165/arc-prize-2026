@@ -90,7 +90,8 @@ margin, which is presumably where upstream tuned it.
 | | ARC-AGI-2 | ARC-AGI-3 |
 |---|---|---|
 | our best public | **30.97** | **0.26** |
-| field median / max (2026-09-04) | 27.64 / 73.33 | 0.27 / 7.51 |
+| our rank (2026-09-19) | 448 / 2085 | 1729 / 3152 |
+| field median / max (2026-09-19) | 28.06 / 76.94 | 0.29 / 18.81 |
 | seeded-code reruns | 29.31→30.97 (1.66 pts) | 0.03, 0.03 (0.00) |
 | honest floor | 9-rule portfolio: 3.07% training, **0.00%** eval | starter random agent: 0.0489 |
 
@@ -99,12 +100,15 @@ rules score zero on evaluation, and adding compositional search lifts training b
 57% relative and evaluation by nothing. Rule portfolios are not a route to this
 benchmark. Board precision: five byte-identical resubmits of the original
 notebook spanned 1.67 points (30.14, 29.72, 28.47, 28.47, 28.89) and the drift
-was one-directional; pinning our worker-hash seed did **not** narrow it (three
-reruns: 29.31, 30.56, 30.97). The residual is platform-side bf16 and wall-clock
-nondeterminism, so ~2 points is the final floor. On the hidden ARC-AGI-3 set the
-metric is discrete: one extra level cleared in one game is the whole distance
-between 0.03 and 0.26. Five seeds of one unchanged agent, differing in nothing
-but the seed, returned 0.03, 0.21, 0.06, 0.04 and 0.26.
+was one-directional; pinning our worker-hash seed did **not** narrow it — seven
+further reruns of that pinned configuration returned 29.31, 30.56, 30.97, 28.89,
+29.31, 30.14, 29.72 (mean 29.84, sd 0.75), and the twelve draws of the lineage
+together give mean 29.55, sd 0.80. The residual is platform-side bf16 and
+wall-clock nondeterminism, so ~2 points is the final floor. On the hidden
+ARC-AGI-3 set the metric is discrete: one extra level cleared in one game is the
+whole distance between 0.03 and 0.26. Seven seeds of one unchanged agent,
+differing in nothing but the seed, returned 0.03, 0.21, 0.06, 0.04, 0.26, 0.16
+and 0.06 (mean 0.117, sd 0.092).
 
 ## 5. What did not work
 
@@ -117,6 +121,35 @@ oracle — each model held two answers the other did not (+2/34 ceiling), and
 every selector collected **none** of it; an exploit-when-known policy on
 ARC-AGI-3 that cleared *more* levels (7.6 vs 6.0) and scored *less* (0.1356 vs
 0.1812).
+
+**The one remaining "cheap" explanation for our gap to the public baseline is
+refuted too.** The notebook we forked carries a claimed 33.89 while our fork
+draws 29.8 ± 0.8, which reads like a configuration gap worth one slot. It is not
+one: pulling upstream today returns a notebook whose sha256 (`ee49384a10a4…`) is
+byte-identical to the copy cached on 2026-09-02; our live submission differs from
+it in a 12-second budget line, append-only instrumentation and
+`PYTHONHASHSEED=0`; and the kernel metadata matches on every field (dataset
+source, model source, docker digest, `NvidiaL4`). A bootstrap over the twelve
+draws says more slots do not close it either — the empirical expected best
+saturates at 30.75 / 30.95 / 30.97 after 10 / 30 / 60 further draws, and
+parametrically 33.89 sits ~5 sd above our mean, so it is not reachable in 119
+draws either (~31.9). Either that title score comes from a different platform
+epoch or it is an unreproducible outlier.
+
+That matters because of where the floor sits, not how large it is: two thirds of
+the field around us is packed into a 1.5-point window, in which a single point is
+worth hundreds of ranks.
+
+| score band | teams | score band | teams |
+|---|---|---|---|
+| 30.00-30.50 | 137 | 32.00-33.00 | 100 |
+| 30.50-31.00 | **241** | 33.00-33.50 | 17 |
+| 31.00-32.00 | 209 | 33.50-34.00 | 3 |
+
+30.97 sits at rank 448 of 2085. The ~2-point instrument floor is therefore the
+binding constraint on this track rather than a methodological footnote: inside
+our band, and for any team in it, single-slot comparisons are uninformative in
+exactly the region where the leaderboard is densest.
 
 **We also retract our own strongest claim.** An apparent 14x identical-code
 spread on ARC-AGI-3 (0.01…0.18) was not the board: our agent seeded from
