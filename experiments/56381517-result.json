@@ -1,0 +1,8 @@
+{
+  "competition": "arc-prize-2026-arc-agi-2",
+  "observed_utc": "2026-09-21T04:52:00Z",
+  "ref": "56381517",
+  "status": "COMPLETE",
+  "public": "30.28",
+  "backfilled": "the 9/20 watcher logged its 12 h sleep line and died with its session; the score was read from the submissions table the next morning"
+}

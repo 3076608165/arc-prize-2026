@@ -930,6 +930,44 @@ six weeks cannot change that without a new pipeline".
 
 ---
 
+## Round nine: ARC-AGI-3 moves, ARC-AGI-2 does not (2026-09-20 → 2026-09-21)
+
+2026-09-20 fired both slots against a verified-available quota (`numAllowedNow 1`):
+ARC-AGI-2 v11 identical resubmit #8 (ref 56381517) and ARC-AGI-3 seed 7 (kernel
+version 11, ref 56381540).
+
+| board | ref | predeclared bar | result | verdict |
+|---|---|---|---|---|
+| ARC-AGI-2 v11 draw #8 | 56381517 | beat 30.56 to change the pair | **30.28** | pair unchanged at 30.97 + 30.56 |
+| ARC-AGI-3 seed 7 | 56381540 | beat 0.21 to hold the second slot | **0.27** | **NEW PROJECT BEST**: pair is now 0.27 + 0.26 |
+
+Seed 7 is the first draw in the campaign to move a selected pair, and it moved
+it the way the policy predicted rather than by luck of a new method: 0.27 against
+seed 4's 0.26 and seed 1's 0.21, all three the same agent differing only in the
+seed. The ARC-AGI-2 band is now eight draws of one pinned notebook — 29.31,
+30.56, 30.97, 28.89, 29.31, 30.14, 29.72, 30.28 (mean 29.90, sd 0.71) — with the
+observed maximum still the second draw, and the empirical bootstrap still
+saturating there. The ARC-AGI-3 band is eight seeds: 0.03, 0.21, 0.06, 0.04,
+0.26, 0.16, 0.06, 0.27 (mean 0.140, sd 0.101), which is a distribution with no
+middle: at two decimals the values are "cleared one level in one game" or not,
+and eight draws have now covered 0.03-0.27.
+
+**Third watcher death, same shape.** The 9/20 ARC-AGI-2 watcher logged its
+opening line (`sleeping 719 min: no result can exist before 2026-09-20T17:26:00Z`)
+and then nothing; the score was read from the submissions table the next morning
+and backfilled into `experiments/56381517-result.json`. Three of three failures
+now come from the same mechanism: a watcher launched at fire time whose first act
+is a 12-hour sleep cannot outlive the shell that started it. The mitigation that
+survives is the one already written down — the submissions table outlives every
+session, and the 12-hour gate means the cost of reading the board the next day is
+zero minutes of staleness.
+
+2026-09-21 fired both again (slots re-verified): ARC-AGI-2 v11 draw #9 (ref
+56416658) and ARC-AGI-3 seed 8 (kernel version 12, agent sha256 `9a530188…`, ref
+56416685 — the only difference from seed 7's build is `ARC_SEED`'s fallback).
+Predeclared: draw #9 pays only above 30.56; seed 8 replaces 0.26 only if it beats
+it.
+
 ## What this gives the writeup
 
 - **Theory**: a stated hypothesis (the ARC-AGI-2 bottleneck is exact

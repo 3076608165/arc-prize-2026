@@ -1,0 +1,95 @@
+{
+  "date": "2026-09-21",
+  "policy": "Standing campaign policy, unchanged: one slot per board per day, best two submissions across the competition, an unused slot cannot be banked. Both slots verified available before firing (competition_get_submission_limits: numAllowedNow 1 on each board, numToday 0).",
+  "recovery_note": "The 2026-09-20 AGI-2 watcher slept to 17:26Z and died with its session; the score was read from the submissions table instead (30.28). Both 9/20 results are recorded in this round's previous_round_results.",
+  "agi2": {
+    "what": "v11 identical resubmit #9 (kernel version 11, no new run; its session is COMPLETE)",
+    "submission_ref": 56416658,
+    "submitted_utc": "2026-09-21T04:53:09Z",
+    "status": "PENDING",
+    "decision_dependency": "weak-positive, not a measurement. Selection is best-of-draws over the selected pair; this slot pays only if the draw beats 30.56, the pair's second member. v11 draws: 29.31, 30.56, 30.97, 28.89, 29.31, 30.14, 29.72, 30.28 (1 of 8 beat 30.56). Slot cannot be banked, so it is spent.",
+    "predeclared": {
+      "> 30.97": "new best draw; it becomes the leading final submission and the pair is rewritten around it.",
+      "30.56 < x <= 30.97": "replaces the pair's second member; selection becomes 30.97 + x.",
+      "<= 30.56": "no change to the selection; record the draw and move on. Not evidence about the method (n=1, byte-identical code)."
+    },
+    "draw_band_to_date": {
+      "v11_draws": [
+        29.31,
+        30.56,
+        30.97,
+        28.89,
+        29.31,
+        30.14,
+        29.72,
+        30.28
+      ],
+      "v11_stats": {
+        "n": 8,
+        "mean": 29.9,
+        "sd": 0.71,
+        "min": 28.89,
+        "max": 30.97
+      },
+      "note": "eight byte-identical resubmits of the pinned v11 notebook; the observed max is 30.97 and the empirical bootstrap saturates there (no further draw is expected to exceed it, so this slot buys rank density, not a new high)."
+    },
+    "watcher": "experiments/score-push-20260921/wait-56416658.log, gated with --not-before 2026-09-21T17:26:00Z (a 12 h run cannot have scored before then)"
+  },
+  "agi3": {
+    "what": "stable agent, seed 8 (an unsampled draw); kernel version 12 pushed 2026-09-21T04:53Z, only ARC_SEED's fallback differs from seed 7's build (agent sha256 9a5301886667c8886e4bf4dfe52e598b18ed1e6ffff3e9dc918cae861d54d9b4)",
+    "submission_ref": 56416685,
+    "submitted_utc": "2026-09-21T04:54:19Z",
+    "status": "PENDING",
+    "decision_dependency": "none for the method; the draw policy is already supported. Selection is over any past submission, so this slot is optionality plus writeup material. Nothing depends on the rank: board top is 18.81.",
+    "predeclared": {
+      "any value": "record it; it replaces 0.26 (seed 4) as the second selected submission only if it beats it. Standing pair 0.27 (seed 7) + 0.26 (seed 4)."
+    },
+    "selected_pair_after_20260920": "0.27 (seed 7) + 0.26 (seed 4) -- seed 7's 0.27 was a new project best and DID replace 0.21 (seed 1), as predeclared",
+    "draws_to_date": {
+      "seed0": 0.03,
+      "seed1": 0.21,
+      "seed2": 0.06,
+      "seed3": 0.04,
+      "seed4": 0.26,
+      "seed5": 0.16,
+      "seed6": 0.06,
+      "seed7": 0.27,
+      "n": 8,
+      "mean": 0.14,
+      "sd": 0.1,
+      "min": 0.03,
+      "max": 0.27
+    },
+    "watcher": "experiments/score-push-20260921/wait-56416685.log (no --not-before: the kernel completed in ~1 min and the ref was live at 04:54Z)"
+  },
+  "previous_round_results": {
+    "agi2_56381517": {
+      "score": 30.28,
+      "draw": 8,
+      "predeclared": "<= 30.56 -> no change to the selection",
+      "verdict": "selection unchanged at 30.97 + 30.56; watcher died in its sleep, score backfilled from the submissions table"
+    },
+    "agi3_56381540": {
+      "score": 0.27,
+      "seed": 7,
+      "predeclared": "replaces 0.21 only if it beats it",
+      "verdict": "NEW PROJECT BEST: 0.27 > 0.26 (seed 4); the selected pair is now 0.27 + 0.26"
+    }
+  },
+  "leaderboard_read": {
+    "re_read_this_round": false,
+    "note": "The 2026-09-19 read stands (field grows ~30 teams/day; a two-day-old read is not stale for any decision this round): ARC-AGI-2 2085 teams, ours 30.97 -> rank 448, field median 28.06, max 76.94; ARC-AGI-3 3152 teams, ours 0.27 -> rank ~1729, field median 0.29, max 18.81."
+  },
+  "open_work": {
+    "eligibility_gap": "Still no git remote: LICENSE (MIT-0) and NOTICE.md are local only, so nothing is prize-eligible yet. Publishing deliberately deferred to mid-October, before kernelsPublishingDisabledDeadline 2026-10-26 23:59Z.",
+    "agi2_levers_exhausted": [
+      "the config gap to the public baseline: void (our v11 IS that notebook byte-for-byte apart from a 12 s budget line, logging and PYTHONHASHSEED)",
+      "dynamic-16/8 decode: dead (27.64 twice against a 29.31/30.56/30.97 band)",
+      "2B ensemble: dead at the oracle (+2 ceiling, no selector above 6/34)",
+      "per-cell voting selection: dead (-6 tasks offline); shape filter / identity demotion / nine rankers: 0, 0, -1",
+      "draws: empirical bootstrap saturates at 30.97 (n=8); the remaining value is rank density (one point = hundreds of ranks in our band)",
+      "open: a signal from OUTSIDE the candidate pool (leave-one-demo-out verification). Costs a new notebook build and a 12 h GPU run per measurement; not attempted yet."
+    ],
+    "reachable_money": "Paper Track ($450,000, deadline 2026-11-09) and the ARC-AGI-2 Grand Prize ($275,000, writeup + all artifacts open sourced, due within 7 days of 2026-11-02). Both rubric-scored, not rank-scored."
+  }
+}
