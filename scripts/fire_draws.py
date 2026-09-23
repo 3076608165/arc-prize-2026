@@ -63,8 +63,17 @@ def listed(target: dict, tries: int = 1) -> dict | None:
     return None
 
 
-def kernel_ready(kernel: str) -> bool:
-    status = kaggle("kernels", "status", kernel)
+def kernel_ref(kernel: str, version: int | None = None) -> str:
+    """Pin the readiness check to the arm's own version.
+
+    Arms live as successive versions of one kernel, so checking the bare ref would
+    gate today's arm on whatever *other* arm happens to be running today.
+    """
+    return f"{kernel}/{version}" if version else kernel
+
+
+def kernel_ready(kernel: str, version: int | None = None) -> bool:
+    status = kaggle("kernels", "status", kernel_ref(kernel, version))
     if any(word in status for word in ("ERROR", "CANCEL", "FAILED")):
         raise RuntimeError(f"kernel will never be submittable: {status}")
     return "KernelWorkerStatus.COMPLETE" in status
@@ -76,7 +85,7 @@ def fire(target: dict, log, poll: int, quota_wait: int, deadline: float,
         log({"event": "already_submitted", **target})
         return "already_submitted"
 
-    while not kernel_ready(target["kernel"]):
+    while not kernel_ready(target["kernel"], target.get("version")):
         if time.monotonic() > deadline:
             log({"event": "deadline", "stage": "kernel", **target})
             return "deadline"
@@ -123,6 +132,8 @@ def main() -> int:
         assert verdict(raised=False, in_list=False) == "uncertain"  # silent success
         assert verdict(raised=True, in_list=False) == "retry"
         assert verdict(raised=False, in_list=True) == "submitted"
+        assert kernel_ref("owner/nb", 12) == "owner/nb/12"   # the arm's own version
+        assert kernel_ref("owner/nb", None) == "owner/nb"
         print("self-test ok: the list decides, the text never does")
         return 0
     if args.targets is None:

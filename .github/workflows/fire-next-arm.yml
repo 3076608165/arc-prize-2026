@@ -1,0 +1,51 @@
+# The local machine's cron and Task Scheduler cannot fire while it is powered off.
+# This workflow is the only path that runs off-machine, so it exists for the case
+# "PC was off all day, slot would be lost".
+#
+# It is INERT until a private remote exists and two secrets are set:
+#
+#   gh repo create arc-prize-2026 --private --source . --push
+#   gh secret set KAGGLE_USERNAME --body <kaggle account>
+#   gh secret set KAGGLE_KEY      --body <kaggle api key>   # ~/.kaggle/credentials.json
+#
+# Deliberately a thin wrapper around the same repo script the local schedulers run:
+# the fire is idempotent and day-keyed, so double-firing from cloud + local is
+# harmless (the second one reads the submission list, finds the arm, and stops).
+#
+# Note the UTC/queue semantics: a slot is valid for the whole UTC day, so a missed
+# tick only matters if nothing fires before 24:00 UTC. The extra 20:00 UTC run
+# below is the safety net for exactly that.
+name: fire-next-arm
+
+on:
+  schedule:
+    - cron: "20 0 * * *"   # 00:20 UTC = 10:20 AEST, just after the daily reset
+    - cron: "0 20 * * *"   # 20:00 UTC, catch-up if the morning run was unavailable
+  workflow_dispatch:
+
+concurrency:
+  group: fire-next-arm
+  cancel-in-progress: false
+
+jobs:
+  fire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+      KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install --quiet kaggle
+      # The submission is issued by a *notebook version* that already exists on
+      # Kaggle; nothing here pushes kernels or spends GPU quota.
+      - run: python scripts/fire_next_arm.py --hours 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fire-arms-log
+          path: experiments/fire-arms.jsonl
+          if-no-files-found: ignore

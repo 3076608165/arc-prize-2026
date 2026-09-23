@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Daily ARC arm fire, resilient to the machine being asleep or off.
+
+  Why a Windows task as well as the Hermes cron: Hermes cron fires from the Hermes
+  gateway process, so a machine that is asleep or shut down at 10:05 simply misses
+  the tick with nothing to catch up. Two Task Scheduler-native settings fix the
+  failure modes without any code:
+
+    WakeToRun          - wake the machine out of sleep to run this
+    StartWhenAvailable - if the start was missed (powered off), run as soon as
+                         Windows is next available, which is the same UTC day
+                         whenever the user boots before midnight UTC
+
+  Firing is idempotent and day-keyed (scripts/fire_next_arm.py): running late, or
+  twice, re-reads the submission list and does nothing rather than double-spending
+  a slot.
+
+  Register (schtasks refuses this file's UTF-8 declaration: write a UTF-16 copy
+  with the declaration changed to matching "UTF-16" first, and re-do it whenever
+  the file changes):
+
+    python - <<'PY'
+    from pathlib import Path
+    src = Path("scripts/task-arc-fire.xml").read_text(encoding="utf-8")
+    Path("task-arc-fire-utf16.xml").write_text(
+        src.replace('encoding="UTF-8"', 'encoding="UTF-16"', 1), encoding="utf-16")
+    PY
+    schtasks /Create /TN "ARC fire next arm" /XML "<abs path>\task-arc-fire-utf16.xml" /F
+    schtasks /Query  /TN "ARC fire next arm" /V /FO LIST    # verify
+    schtasks /Delete /TN "ARC fire next arm" /F             # remove
+-->
+<Task version="1.4" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo>
+    <Description>Fire the next queued ARC Prize arm (idempotent; one submission per board per UTC day).</Description>
+    <URI>\ARC fire next arm</URI>
+  </RegistrationInfo>
+  <Triggers>
+    <CalendarTrigger>
+      <StartBoundary>2026-09-24T10:05:00</StartBoundary>
+      <Enabled>true</Enabled>
+      <ScheduleByDay>
+        <DaysInterval>1</DaysInterval>
+      </ScheduleByDay>
+    </CalendarTrigger>
+  </Triggers>
+  <Principals>
+    <Principal id="Author">
+      <LogonType>InteractiveToken</LogonType>
+      <RunLevel>LeastPrivilege</RunLevel>
+    </Principal>
+  </Principals>
+  <Settings>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+    <AllowHardTerminate>true</AllowHardTerminate>
+    <StartWhenAvailable>true</StartWhenAvailable>
+    <RunOnlyIfNetworkAvailable>true</RunOnlyIfNetworkAvailable>
+    <WakeToRun>true</WakeToRun>
+    <ExecutionTimeLimit>PT6H</ExecutionTimeLimit>
+    <Enabled>true</Enabled>
+    <Hidden>false</Hidden>
+    <RestartOnFailure>
+      <Interval>PT15M</Interval>
+      <Count>3</Count>
+    </RestartOnFailure>
+  </Settings>
+  <Actions Context="Author">
+    <Exec>
+      <Command>C:\Users\30766\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe</Command>
+      <Arguments>"D:\ARC Prize 2026\scripts\fire_next_arm.py"</Arguments>
+      <WorkingDirectory>D:\ARC Prize 2026</WorkingDirectory>
+    </Exec>
+  </Actions>
+</Task>

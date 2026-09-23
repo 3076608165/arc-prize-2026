@@ -1,0 +1,24 @@
+[
+  {
+    "id": "v12",
+    "arm": "two-pass pooled selection",
+    "competition": "arc-prize-2026-arc-agi-2",
+    "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+    "version": 12,
+    "file": "submission.json",
+    "message": "20260924 v12 two-pass pooled: decorrelated TTT pass B pooled with pass A, attempt_1 pinned to pass A top-1 (monotone); predeclared >= pass A alone, band 29.90 +/- 0.64",
+    "build": "agi2/out/nvarc-p2",
+    "predicts": "monotone, probably null (public evidence: a second decode round did not move LB)"
+  },
+  {
+    "id": "v13",
+    "arm": "Leg C verified induction pre-pass",
+    "competition": "arc-prize-2026-arc-agi-2",
+    "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+    "version": 13,
+    "file": "submission.json",
+    "message": "20260925 v13 legc verified-induction: train-verified DSL program outputs pre-empt attempt_1, base candidate demoted to attempt_2 (cross-family decorrelation); 10.83h base + 1h Leg C",
+    "build": "agi2/out/legc-v13",
+    "predicts": "a second family enters attempt_1 on tasks the TTT pool cannot solve"
+  }
+]
