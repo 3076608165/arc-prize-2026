@@ -475,6 +475,136 @@ def order_largest_first(nb: dict) -> bool:
     return False
 
 
+LEGC_REF = (ROOT / "experiments/intel-20260923/johntaylorai_swarm-arc2-legc-measure"
+            / "swarm-arc2-legc-measure.ipynb")
+LEGC_MODEL = "qwen-lm/qwen2.5-coder/Transformers/7b-instruct/1"
+LEGC_BUDGET_H = 1.0        # of the 12h wall; base keeps the rest
+LEGC_BASE_RESERVE_H = 9.8  # wall hours the base pipeline keeps for itself
+
+
+def add_legc(nb: dict, budget_h: float = LEGC_BUDGET_H,
+             reserve_h: float = LEGC_BASE_RESERVE_H,
+             ref: Path = LEGC_REF) -> bool:
+    """Lift the verified-induction pre-pass (Leg C) out of the public swarm notebook.
+
+    Leg C is the only candidate-side lever left that has never been measured in
+    our hands: a coder model writes a DSL program per task, an AST-whitelisted
+    sandbox checks it against ALL train pairs, and only train-verified programs
+    vote on the test outputs. It is a second family, so its mistakes are not the
+    TTT pool's mistakes -- which is exactly what attempt_2 has been missing (the
+    pool has +9 oracle headroom no ranker in the family can reach).
+
+    Four cells are lifted, not rewritten, from
+    `experiments/intel-20260923/johntaylorai_swarm-arc2-legc-measure` (its
+    kernel-metadata pins the coder model we attach in main()):
+
+      module   arc_induction_v2.py, 45k chars -- the solver, sandbox and selftest
+      selftest `--selftest`, 9 assertions on the sandbox, no GPU
+      launch   runs the pre-pass BEFORE the base pipeline, budget-capped
+      merge    after the submission cell: verified outputs pre-empt attempt_1,
+               the base candidate is demoted to attempt_2 (monotone union)
+
+    Safe by construction: with no model attached, a budget below 5 minutes, or any
+    internal failure it writes empty results and the merge is a no-op. The only
+    real cost is wall time, hence `budget_h` small and `reserve_h` large.
+    """
+    ref_nb = json.loads(Path(ref).read_text(encoding="utf-8"))
+    wanted = {"module": "%%writefile arc_induction_v2.py",
+              "selftest": "python arc_induction_v2.py --selftest",
+              "launch": "Leg C launch",
+              "merge": "Leg C merge"}
+    got = {}
+    for cell in ref_nb["cells"]:
+        if cell.get("cell_type") != "code":
+            continue
+        txt = cell_text(cell)
+        for name, marker in wanted.items():
+            if name not in got and marker in txt:
+                got[name] = txt
+    if len(got) != len(wanted):
+        return False
+
+    launch = re.sub(r"LEGC_BUDGET_H\s*=\s*[\d.]+", f"LEGC_BUDGET_H  = {budget_h}", got["launch"])
+    launch = re.sub(r"BASE_RESERVE_H\s*=\s*[\d.]+", f"BASE_RESERVE_H = {reserve_h}", launch)
+
+    def code_cell(src: str) -> dict:
+        return {"cell_type": "code", "metadata": {}, "outputs": [],
+                "execution_count": None, "source": src.splitlines(keepends=True)}
+
+    cells = nb["cells"]
+    texts = [cell_text(c) if c.get("cell_type") == "code" else "" for c in cells]
+    try:
+        idx_write = max(i for i, t in enumerate(texts) if t.startswith("%%writefile "))
+        idx_run = next(i for i, t in enumerate(texts) if "python starter.py" in t)
+        idx_sub = next(i for i, t in enumerate(texts) if "data.get_submission(" in t)
+    except (ValueError, StopIteration):
+        return False
+    if not idx_write < idx_run < idx_sub:
+        return False
+
+    cells.insert(idx_sub + 1, code_cell(got["merge"]))
+    cells.insert(idx_run, code_cell(launch))
+    cells.insert(idx_write + 1, code_cell(got["module"]))
+    cells.insert(idx_write + 2, code_cell(got["selftest"]))
+    return True
+
+
+_NUMERICS_PERF = """    logits_f = logits.float()
+    token_ids = _arc_token_ids(logits.device)
+    arc_logits = logits_f.index_select(-1, token_ids)
+    nll = (
+        torch.as_tensor(scores, dtype=torch.float32, device=logits.device).view(n, 1)
+        + torch.logsumexp(logits_f, dim=-1, keepdim=True)
+        - arc_logits
+    ).cpu()"""
+
+#: The baseline `turbo_dfs` body. Algebraically the same, numerically not: this
+#: one runs the full-vocabulary log_softmax on CPU and indexes the 12 ARC tokens
+#: afterwards, the perfpatch does the restricted logsumexp on GPU.
+_NUMERICS_ORIGINAL = (
+    "    nll = torch.tensor(scores, dtype=torch.float32).view(n, 1) "
+    "- logits.float().cpu().log_softmax(-1)")
+
+_NUMERICS_PERF_LOOP = """        for token_idx, t in enumerate(ARC_TOKENS):
+            score = nll[i, token_idx].item()"""
+
+_NUMERICS_ORIGINAL_LOOP = """        for t in ARC_TOKENS:
+            score = nll[i, t].item()"""
+
+
+def use_original_numerics(nb: dict) -> bool:
+    """Undo the perfpatch's NLL shortcut and get the baseline's arithmetic back.
+
+    The published baseline scores 33.89 and this notebook's lineage scores ~30; a
+    public control (johntaylorai/swarm-arc2-numerics-control) exists precisely to
+    decide whether that gap is the run environment or the patch. We have never run
+    the other side of it, and it is the cheapest open question on the board: if
+    the original arithmetic reads ~33.9, the patch is costing ~4 points, and if it
+    reads ~30 the gap is environmental.
+
+    Honest caveat, which is why it needs its own slot: the perfpatch is a *speed*
+    patch (12 NLL values to CPU instead of the whole vocabulary), so this arm also
+    removes speed, and a lower score here cannot distinguish "the patch changed the
+    beam" from "we attempted fewer tasks". Same task set, same budget, different
+    arithmetic -- and the coverage audit already records what was reached.
+    """
+    patches = ((_NUMERICS_PERF, _NUMERICS_ORIGINAL),
+               (_NUMERICS_PERF_LOOP, _NUMERICS_ORIGINAL_LOOP))
+    for cell in nb["cells"]:
+        if cell.get("cell_type") != "code":
+            continue
+        txt = cell_text(cell)
+        if "def turbo_dfs(" not in txt:
+            continue
+        if not all(txt.count(old) == 1 for old, _ in patches):
+            return False
+        for old, new in patches:
+            txt = txt.replace(old, new)
+        cell["source"] = txt.splitlines(keepends=True)
+        return True
+    return False
+
+
 def set_budget(nb: dict, hours: float) -> bool:
     """Rewrite the single `global_end_time = ...` line."""
     pat = re.compile(r"global_end_time\s*=\s*time\.time\(\)\s*\+[^\n]*")
@@ -534,6 +664,16 @@ def main() -> int:
     ap.add_argument("--largest-first", action="store_true",
                     help="order the shared task queue by descending input size "
                          "(needs --two-pass); scheduling only, pool unchanged")
+    ap.add_argument("--legc", action="store_true",
+                    help="lift the public verified-induction pre-pass (Leg C): a "
+                         "coder model writes train-verified DSL programs whose "
+                         "outputs pre-empt attempt_1 (needs the coder model "
+                         "attached; adds it to model_sources)")
+    ap.add_argument("--legc-budget-h", type=float, default=None,
+                    help=f"wall hours for Leg C (default {LEGC_BUDGET_H})")
+    ap.add_argument("--orig-numerics", action="store_true",
+                    help="undo the perfpatch NLL shortcut, i.e. run the published "
+                         "baseline's arithmetic (the swarm numerics control)")
     args = ap.parse_args()
     if not 0 < args.hours <= 11.83:
         ap.error("--hours must be positive and at most 11.83")
@@ -603,6 +743,22 @@ def main() -> int:
         if not order_largest_first(nb):
             raise SystemExit("could not reorder the queue; upstream changed shape")
 
+    if args.legc:
+        legc_budget = args.legc_budget_h if args.legc_budget_h is not None else LEGC_BUDGET_H
+        if not 0 < legc_budget <= 3:
+            ap.error("--legc-budget-h must be within (0, 3]")
+        if legc_budget + args.hours > 12:
+            ap.error(f"Leg C wants {legc_budget}h on top of a {args.hours}h budget; "
+                     "the rerun wall is 12h")
+        if not LEGC_REF.exists():
+            raise SystemExit(f"Leg C reference notebook missing: {LEGC_REF}")
+        if not add_legc(nb, budget_h=legc_budget):
+            raise SystemExit("could not lift Leg C; the reference notebook changed shape")
+
+    if args.orig_numerics and not use_original_numerics(nb):
+        raise SystemExit("could not find the perfpatch NLL block in arc_solver.py; "
+                         "upstream changed shape, re-read it before pushing")
+
     nb["cells"].insert(0, {"cell_type": "markdown", "metadata": {},
                            "source": ATTRIBUTION.splitlines(keepends=True)})
     if args.worker_hash_seed is not None:
@@ -633,6 +789,10 @@ def main() -> int:
         "model_sources": ([args.base_model] if args.base_model
                           else up_meta.get("model_sources", [])),
     }
+    if args.legc:
+        # Leg C needs its own coder model next to the base model; appending keeps
+        # the base attach (or the upstream default) intact.
+        meta["model_sources"] = list(meta["model_sources"]) + [LEGC_MODEL]
     if up_meta.get("machine_shape"):
         meta["machine_shape"] = up_meta["machine_shape"]
     # Carrying this is not optional. The unsloth/torch/numpy wheels in the
@@ -656,6 +816,10 @@ def main() -> int:
         "cellvote": args.cellvote,
         "two_pass": args.two_pass,
         "largest_first": args.largest_first,
+        "legc": args.legc,
+        "legc_budget_h": (args.legc_budget_h if args.legc_budget_h is not None
+                          else (LEGC_BUDGET_H if args.legc else 0.0)),
+        "orig_numerics": args.orig_numerics,
         "audit_coverage": args.audit_coverage,
         "worker_hash_seed": args.worker_hash_seed,
         "kernel_id": args.kernel_id,

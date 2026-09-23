@@ -127,5 +127,61 @@
     "agi3_slot_held": "No new method to test on ARC-AGI-3: nine seeds of the sweep agent span 0.03-0.27 and the only way up is a different agent class. The 9/24 ARC-AGI-3 slot is therefore deliberately unused (it cannot be banked either way) while the public duck-harness port is scoped from docs/intel-2026-09-23.md.",
     "selection_is_a_dead_lever": "Field evidence collected 2026-09-23 (docs/intel-2026-09-23.md, 'How the high scores select'): in this family selection = a ranker over the TTT candidate pool; attempt_1/attempt_2 are the top two of ONE ranking (score_kgmon by default, consensus count minus mean re-encoding score). The strongest public team in the family reports multiple alternative rankers helping CV only, a second decoding round with different seeds not moving the score, NLL thresholds being noise, and TRM candidates in the pool failing. Their measured wins were speed (largest-puzzles-first) and attribution (batch-invariant ops + cached adapters). Outside the family (55-83) no selection code is public; ARC-AGI-3 has no selection step at all (score = levels completed by an agent).",
     "v13_staged": "--largest-first (implemented + tested today, 26 agi2 tests green) is held for version 13 so that version 12's score stays attributable to the two-pass pooling alone."
+  },
+  "arms": {
+    "policy": "One arm per slot (1 slot per board per UTC day, reset 00:00 UTC). Each arm is a code difference built and tested locally, smoke-validated by its own commit run, then fired on the next free slot. No two arms are combined so a score move stays attributable.",
+    "queue": [
+      {
+        "id": "v12",
+        "build": "agi2/out/nvarc-p2",
+        "flags": [
+          "--two-pass"
+        ],
+        "kernel_version": 12,
+        "status": "pushed + commit run in flight",
+        "slot": "2026-09-24",
+        "predicts": "monotone vs pass A alone; field evidence says a second decode round does not move LB"
+      },
+      {
+        "id": "v13",
+        "build": "agi2/out/legc-v13",
+        "flags": [
+          "--legc",
+          "--legc-budget-h 1.0"
+        ],
+        "kernel_version": 13,
+        "status": "pushed + commit run in flight",
+        "slot": "2026-09-25",
+        "predicts": "verified-program outputs enter attempt_1 on tasks the TTT pool cannot solve; the commit log prints Leg C's own verified precision on the eval split"
+      },
+      {
+        "id": "v14",
+        "build": "agi2/out/orig-numerics-v14",
+        "flags": [
+          "--orig-numerics"
+        ],
+        "kernel_version": null,
+        "status": "built + tested, not pushed",
+        "slot": "2026-09-26",
+        "predicts": "answers the swarm numerics control in our hands: ~33.9 if the perfpatch arithmetic is the gap, ~30 if the gap is environmental; slower decode is a confound and the coverage audit records what was reached"
+      },
+      {
+        "id": "v15",
+        "build": "agi2/out/twopass-lf-v15",
+        "flags": [
+          "--two-pass",
+          "--largest-first"
+        ],
+        "kernel_version": null,
+        "status": "built + tested, not pushed",
+        "slot": "2026-09-27",
+        "predicts": "scheduling only: the expensive tail gets its second pass; expect pass B to cover more of the 120 tasks than v12 did, score unchanged"
+      }
+    ],
+    "tests": "34 agi2 tests green (test_two_pass.py, test_public_arms.py)",
+    "not_queued": {
+      "model_class_27B_35B_int4": "days of plumbing (upload ~23GB as a Kaggle Model/Dataset + a harness that forces an answer); starts after the queued arms",
+      "arc_agi_3_duck_harness": "the largest absolute upside (0.27 vs board max 18.81) and a multi-day port"
+    }
   }
 }
