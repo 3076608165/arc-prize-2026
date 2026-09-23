@@ -991,6 +991,35 @@ also moved for the first time since August, 76.94 → 83.06, and the median did 
 (28.06): the top of the board is still buying points that rank density cannot
 reach.
 
+### The daily reroll was a policy error, and the pool is where the leverage is (2026-09-23)
+
+Twelve days of daily slots produced eleven byte-identical resubmits of one pinned
+notebook, on the reasoning that every *local* lever had been measured dead and an
+unused slot cannot be banked. That reasoning is sound and the conclusion was
+still wrong: a slot spent on a reroll buys a draw (mean 29.90, sd 0.64), while a
+slot spent on a *variant* buys the same draw plus information. The public record
+had moved on while we rerolled — see
+[../docs/intel-2026-09-23.md](../docs/intel-2026-09-23.md): an eight-notebook
+instrumentation campaign on this exact baseline (`johntaylorai/swarm-arc2-*`,
+including a control that tests whether the published numerics or the patched ones
+are worth 33.89), a two-pass pooled configuration with a monotone selection
+invariant (`dalezhong/arc-agi-2-nvarc-plus-ckpt`), and a verified-induction leg
+whose full source we had already cached locally and never ran.
+
+Three things follow, all recorded with their predeclared readings:
+
+- **Second, decorrelated pass, pooled, with attempt_1 kept monotone**
+  (`agi2/repro_nvarc.py --two-pass`, kernel version 12). The variance between
+  byte-identical reruns is a decorrelated redraw; pass B spends it inside a
+  single submission instead of across days. Pass B is queued behind pass A, so if
+  pass A runs long the notebook degrades to exactly today's behaviour.
+- **The everyday lever we already have and never used: a variant per slot.**
+  Twelve rerolls could have been twelve arms at the same cost.
+- **Anytime scheduling is not this family's problem, by our own measurement.**
+  The public claim is 20-41% of test tasks never attempted; our 1 h full-eval
+  audit finished 24 tasks at a 554 s mean with 4 workers, which leaves ~2.5x of
+  capacity inside the 11.83 h wall for a second pass, not a shortfall.
+
 ## What this gives the writeup
 
 - **Theory**: a stated hypothesis (the ARC-AGI-2 bottleneck is exact

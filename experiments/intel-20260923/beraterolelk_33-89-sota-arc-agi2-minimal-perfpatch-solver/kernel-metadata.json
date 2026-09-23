@@ -1,0 +1,23 @@
+{
+  "id": "beraterolelk/33-89-sota-arc-agi2-minimal-perfpatch-solver",
+  "id_no": 134505521,
+  "title": "\u26a1 [33.89 SOTA] ARC AGI2 Minimal Perfpatch Solver",
+  "code_file": "33-89-sota-arc-agi2-minimal-perfpatch-solver.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "keywords": [
+    "gpu",
+    "artificial intelligence",
+    "deep learning"
+  ],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": [],
+  "model_sources": [],
+  "docker_image": "gcr.io/kaggle-images/python@sha256:dafd4ce5668bbf1ad422e4c109e0f18c9623c3a7c7f48b0235f13142755c40b9",
+  "machine_shape": "None"
+}

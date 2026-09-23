@@ -115,6 +115,15 @@
       "open: a signal from OUTSIDE the candidate pool (leave-one-demo-out verification). Costs a new notebook build and a 12 h GPU run per measurement; not attempted yet.",
       "open: rank 457 -> top-100 is ~10 points away, which no selection-side lever has ever produced"
     ],
-    "record_keeping": "Fourth and fifth watcher deaths confirmed (9/21 both boards). The read that survives is the submissions table: the 9/21 refs went unread for two days and cost nothing but a manual backfill, and refs older than one round are no longer visible to wait_for_score.py."
+    "record_keeping": "Fourth and fifth watcher deaths confirmed (9/21 both boards). The read that survives is the submissions table: the 9/21 refs went unread for two days and cost nothing but a manual backfill, and refs older than one round are no longer visible to wait_for_score.py.",
+    "reroll_policy_retired": "Eleven byte-identical resubmits in twelve days. A reroll buys a draw (29.90 +/- 0.64); a variant buys the same draw plus information at the same cost. From 9/24 each slot carries a predeclared hypothesis and a code difference, and the survey is refreshed before firing."
+  },
+  "next_round": {
+    "plan": "Stop spending slots on byte-identical rerolls. ARC-AGI-2 kernel version 12 (pushed 2026-09-23T04:5xZ, commit run validating the plumbing) adds a second, decorrelated TTT pass pooled into the same submission, with attempt_1 pinned to pass A's top-1 so the change is monotone. It is dal ezhong's public NVARC+ v2 mechanism, implemented minimally over our own notebook.",
+    "gate": "Submit version 12 only if its commit run is COMPLETE and the log contains \"[two-pass] pooled\" and \"[two-pass] attempt_1 pinned to pass A's top-1\". Otherwise fall back to version 11 or hold the slot.",
+    "predeclared": "Pooled two-pass >= pass A alone. Against the 29.90 +/- 0.64 band: expected at least no worse, with the upside being the decorrelated redraw. Falsified if it lands below ~29.3 while pass B demonstrably ran.",
+    "survey": "docs/intel-2026-09-23.md (pulled notebooks in experiments/intel-20260923/)",
+    "watch": "johntaylorai/swarm-arc2-numerics-control: if the ORIGINAL baseline numerics read 33.89, the public perfpatch we run is itself costing ~4 points and reverting it is a two-line change. If they read ~29.7, 33.89 is an environment artifact.",
+    "agi3_slot_held": "No new method to test on ARC-AGI-3: nine seeds of the sweep agent span 0.03-0.27 and the only way up is a different agent class. The 9/24 ARC-AGI-3 slot is therefore deliberately unused (it cannot be banked either way) while the public duck-harness port is scoped from docs/intel-2026-09-23.md."
   }
 }

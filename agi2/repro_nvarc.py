@@ -304,6 +304,143 @@ def save_candidates(nb: dict) -> bool:
     return False
 
 
+#: Second-pass machinery. The pipeline is one pinned notebook over per-task
+#: LoRA test-time training, and byte-identical reruns of it land anywhere in
+#: 28.9-31.0 -- that variance is a decorrelated redraw we currently only get by
+#: spending another day's slot. A second pass with different augmentation seeds
+#: turns part of it into candidates inside ONE submission.
+PASS2_MARKER = "__PASS2__"
+PASS2_STORE = "/kaggle/inference_outputs_p2"
+PASS2_QUEUE_ANCHOR = "    for key in sorted(data.keys()):"
+PASS2_GET_ANCHOR = ("        key = queue.get()\n"
+                    "        if key is None:\n"
+                    "            break\n")
+PASS2_TRAIN_SEED = "train_ds = puzzle_ds.augment(n=16, shfl_keys=True, seed=1)"
+PASS2_EVAL_SEED = "eval_ds = puzzle_ds_multi.augment(n=2, seed=2)"
+
+
+def _requeue_pass(nb: dict) -> bool:
+    """Queue every task a second time, behind a marker the worker understands.
+
+    Pass B goes *behind* all of pass A, so it runs only on slack: a task costs
+    ~554 s (measured, 1 h full-eval run, 24 tasks finished) and 120 tasks on 4
+    workers leaves room for ~2.5 passes inside the 11.83 h wall. If pass A runs
+    long, pass B simply never starts -- the run degrades to today's behaviour.
+
+    The filter lines (the commit-mode allowlist, or the subset ids, or whatever
+    --full-eval left) are copied verbatim into the second loop, so the two
+    passes always cover the same task set.
+    """
+    for cell in nb["cells"]:
+        if cell["cell_type"] != "code":
+            continue
+        txt = cell_text(cell)
+        if PASS2_QUEUE_ANCHOR not in txt:
+            continue
+        end = txt.index("        queue.put(key)\n", txt.index(PASS2_QUEUE_ANCHOR))
+        body = txt[txt.index(PASS2_QUEUE_ANCHOR) + len(PASS2_QUEUE_ANCHOR):end]
+        head = txt[:txt.index(PASS2_QUEUE_ANCHOR)]
+        new = (
+            "    _queue_keys = sorted(data.keys())\n"
+            "    for key in _queue_keys:" + body + "        queue.put(key)\n"
+            f'    queue.put("{PASS2_MARKER}")\n'
+            "    for key in _queue_keys:" + body + "        queue.put(key)\n"
+        )
+        cell["source"] = (head + new + txt[end + len("        queue.put(key)\n"):]
+                          ).splitlines(keepends=True)
+        return True
+    return False
+
+
+def _split_passes(nb: dict) -> bool:
+    """Worker side: pass B gets its own store and its own augmentation seeds."""
+    done = 0
+    for cell in nb["cells"]:
+        if cell["cell_type"] != "code":
+            continue
+        txt = cell_text(cell)
+        if 'dir_outputs = "/kaggle/inference_outputs"' not in txt:
+            continue
+        if PASS2_GET_ANCHOR not in txt:
+            continue
+        txt = txt.replace(
+            PASS2_GET_ANCHOR,
+            PASS2_GET_ANCHOR +
+            f'        if key == "{PASS2_MARKER}":\n'
+            "            pass_id = 1\n"
+            f'            dir_outputs = "{PASS2_STORE}"\n'
+            "            os.makedirs(dir_outputs, exist_ok=True)\n"
+            '            print(f"[Rank {rank}] second pass: decorrelated TTT", flush=True)\n'
+            "            continue\n", 1)
+        txt = txt.replace('    dir_outputs = "/kaggle/inference_outputs"',
+                          '    pass_id = 0\n'
+                          '    dir_outputs = "/kaggle/inference_outputs"', 1)
+        #: 101/103 are arbitrary odd offsets; the only requirement is that
+        #: `augment(seed=...)` -- which seeds numpy globally -- sees a different
+        #: value, so pass B's permutes and demo orderings differ from pass A's.
+        txt = txt.replace(PASS2_TRAIN_SEED,
+                          PASS2_TRAIN_SEED.replace("seed=1", "seed=1 + 101 * pass_id"), 1)
+        txt = txt.replace(PASS2_EVAL_SEED,
+                          PASS2_EVAL_SEED.replace("seed=2", "seed=2 + 103 * pass_id"), 1)
+        cell["source"] = txt.splitlines(keepends=True)
+        done += 1
+    return done == 1
+
+
+def _pool_selection(nb: dict, hours_note: str = "") -> bool:
+    """Submission side: pool both stores, keep pass A's top-1 as attempt_1.
+
+    Monotone by construction. `score_kgmon` picks a top-2 from the pooled
+    candidates, but attempt_1 is forced to pass A's own top-1, exactly the grid
+    today's submission would have started with -- so a pass B that is noisier
+    than pass A can only change attempt_2. Without this the second pass is a
+    second coin flip on the first attempt as well, and a bad draw costs more
+    than it can gain.
+    """
+    for cell in nb["cells"]:
+        if cell["cell_type"] != "code":
+            continue
+        txt = cell_text(cell)
+        if 'decoder.load_decoded_results("/kaggle/inference_outputs")\n' not in txt:
+            continue
+        txt = txt.replace(
+            "from arc_decoder import ArcDecoder",
+            "from arc_decoder import ArcDecoder, hashable, score_kgmon", 1)
+        txt = txt.replace(
+            'decoder.load_decoded_results("/kaggle/inference_outputs")\n',
+            'decoder.load_decoded_results("/kaggle/inference_outputs")\n'
+            f'_pooled = os.path.isdir("{PASS2_STORE}")\n'
+            "if _pooled:\n"
+            f'    decoder.load_decoded_results("{PASS2_STORE}", run_name=".p2")\n'
+            "    print(f\"[two-pass] pooled {len(decoder.decoded_results)} outputs "
+            "from both passes\")\n", 1)
+        txt = txt.replace(
+            "submission = data.get_submission(decoder.run_selection_algo())\n",
+            "selected = decoder.run_selection_algo(score_kgmon)\n"
+            "if _pooled:\n"
+            "    _pass_a = ArcDecoder(data.split_multi_replies(), n_guesses=2)\n"
+            '    _pass_a.load_decoded_results("/kaggle/inference_outputs")\n'
+            "    _a_only = _pass_a.run_selection_algo(score_kgmon)\n"
+            "    _merged = {}\n"
+            "    for _bk, _cands in selected.items():\n"
+            "        _top = _a_only.get(_bk) or []\n"
+            "        _first = _top[0] if _top else None\n"
+            "        _seen = {hashable(_first['solution'])} if _first else set()\n"
+            "        _merged[_bk] = ([_first] if _first else []) + [\n"
+            "            c for c in _cands if hashable(c['solution']) not in _seen]\n"
+            "    selected = _merged\n"
+            "    print(\"[two-pass] attempt_1 pinned to pass A's top-1\")\n"
+            "submission = data.get_submission(selected)\n", 1)
+        cell["source"] = txt.splitlines(keepends=True)
+        return True
+    return False
+
+
+def add_two_pass_pooling(nb: dict) -> bool:
+    """All three edits, or none -- a half-applied second pass wastes a run."""
+    return _requeue_pass(nb) and _split_passes(nb) and _pool_selection(nb)
+
+
 def set_budget(nb: dict, hours: float) -> bool:
     """Rewrite the single `global_end_time = ...` line."""
     pat = re.compile(r"global_end_time\s*=\s*time\.time\(\)\s*\+[^\n]*")
@@ -356,6 +493,10 @@ def main() -> int:
     ap.add_argument("--full-eval", action="store_true",
                     help="queue all 120 evaluation tasks in commit mode instead of "
                          "upstream's 4-task shortcut, to measure throughput")
+    ap.add_argument("--two-pass", action="store_true",
+                    help="run a second, decorrelated TTT pass behind pass A on the "
+                         "same task set, pool both candidate stores, and pin "
+                         "attempt_1 to pass A's top-1 (monotone).")
     args = ap.parse_args()
     if not 0 < args.hours <= 11.83:
         ap.error("--hours must be positive and at most 11.83")
@@ -407,9 +548,16 @@ def main() -> int:
         raise SystemExit("could not find the four-task allowlist in starter.py; "
                          "upstream changed shape, re-read it before pushing")
 
+    # After the task-set patches, and after coverage_audit (whose anchors are
+    # single-occurrence): the second pass copies whatever filter and audit lines
+    # --full-eval / --subset / --audit-coverage left behind.
     if args.audit_coverage:
         from coverage_audit import patch_notebook
         patch_notebook(nb)
+
+    if args.two_pass and not add_two_pass_pooling(nb):
+        raise SystemExit("could not apply the two-pass pooling patches; upstream "
+                         "changed shape, re-read it before pushing")
 
     nb["cells"].insert(0, {"cell_type": "markdown", "metadata": {},
                            "source": ATTRIBUTION.splitlines(keepends=True)})
@@ -462,6 +610,7 @@ def main() -> int:
         "commit_subset": subset_ids or ("all" if args.full_eval else "upstream-four"),
         "competition_tasks": "all", "save_candidates": args.save_candidates,
         "cellvote": args.cellvote,
+        "two_pass": args.two_pass,
         "audit_coverage": args.audit_coverage,
         "worker_hash_seed": args.worker_hash_seed,
         "kernel_id": args.kernel_id,

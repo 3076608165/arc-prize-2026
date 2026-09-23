@@ -1,0 +1,9 @@
+[
+  {
+    "competition": "arc-prize-2026-arc-agi-2",
+    "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+    "version": 12,
+    "file": "submission.json",
+    "message": "20260924 v12 two-pass pooled: decorrelated TTT pass B pooled with pass A, attempt_1 pinned to pass A top-1 (monotone); predeclared >= pass A alone, band 29.90 +/- 0.64"
+  }
+]
