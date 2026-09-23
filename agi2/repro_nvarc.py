@@ -441,6 +441,40 @@ def add_two_pass_pooling(nb: dict) -> bool:
     return _requeue_pass(nb) and _split_passes(nb) and _pool_selection(nb)
 
 
+LARGEST_FIRST_ANCHOR = "    _queue_keys = sorted(data.keys())\n"
+
+#: Cost proxy for queue ordering: total input cells, computed in the starter
+#: process where the whole task set is already in memory.
+LARGEST_FIRST_KEYS = """    # Largest puzzles first. The four workers otherwise reach the expensive tail
+    # last, and the tail is exactly what a second pass never gets to. Proxy is
+    # total input cells; madarshbb (discussion 729743) measures this ordering as
+    # a speed win on this same pipeline.
+    _queue_keys = sorted(
+        data.keys(),
+        key=lambda k: -sum(len(g) * len(g[0]) for t in data[k]["test"] for g in (t["input"],)))
+
+
+"""
+
+
+def order_largest_first(nb: dict) -> bool:
+    """Queue the expensive tasks first, so the cheap ones fill the tail.
+
+    Pure scheduling: the candidate pool is unchanged, only which tasks are
+    attempted when. Applied after add_two_pass_pooling, whose key list it
+    replaces.
+    """
+    for cell in nb["cells"]:
+        if cell["cell_type"] != "code":
+            continue
+        txt = "".join(cell["source"])
+        if txt.count(LARGEST_FIRST_ANCHOR) != 1:
+            continue
+        cell["source"] = (txt.replace(LARGEST_FIRST_ANCHOR, LARGEST_FIRST_KEYS)).splitlines(keepends=True)
+        return True
+    return False
+
+
 def set_budget(nb: dict, hours: float) -> bool:
     """Rewrite the single `global_end_time = ...` line."""
     pat = re.compile(r"global_end_time\s*=\s*time\.time\(\)\s*\+[^\n]*")
@@ -497,6 +531,9 @@ def main() -> int:
                     help="run a second, decorrelated TTT pass behind pass A on the "
                          "same task set, pool both candidate stores, and pin "
                          "attempt_1 to pass A's top-1 (monotone).")
+    ap.add_argument("--largest-first", action="store_true",
+                    help="order the shared task queue by descending input size "
+                         "(needs --two-pass); scheduling only, pool unchanged")
     args = ap.parse_args()
     if not 0 < args.hours <= 11.83:
         ap.error("--hours must be positive and at most 11.83")
@@ -559,6 +596,13 @@ def main() -> int:
         raise SystemExit("could not apply the two-pass pooling patches; upstream "
                          "changed shape, re-read it before pushing")
 
+    if args.largest_first:
+        if not args.two_pass:
+            raise SystemExit("--largest-first reorders add_two_pass_pooling's key "
+                             "list; pass --two-pass with it")
+        if not order_largest_first(nb):
+            raise SystemExit("could not reorder the queue; upstream changed shape")
+
     nb["cells"].insert(0, {"cell_type": "markdown", "metadata": {},
                            "source": ATTRIBUTION.splitlines(keepends=True)})
     if args.worker_hash_seed is not None:
@@ -611,6 +655,7 @@ def main() -> int:
         "competition_tasks": "all", "save_candidates": args.save_candidates,
         "cellvote": args.cellvote,
         "two_pass": args.two_pass,
+        "largest_first": args.largest_first,
         "audit_coverage": args.audit_coverage,
         "worker_hash_seed": args.worker_hash_seed,
         "kernel_id": args.kernel_id,

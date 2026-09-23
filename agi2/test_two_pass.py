@@ -13,7 +13,7 @@ import unittest
 from pathlib import Path
 
 from repro_nvarc import (PASS2_MARKER, PASS2_STORE, add_two_pass_pooling,
-                         drop_allowlist, fetch_upstream)
+                         drop_allowlist, fetch_upstream, order_largest_first)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -108,6 +108,30 @@ class TwoPassTests(unittest.TestCase):
     def test_is_all_or_nothing_on_a_notebook_without_the_anchors(self):
         self.assertFalse(add_two_pass_pooling({"cells": [
             {"cell_type": "code", "source": ["print('nothing to patch')\n"]}]}))
+
+
+    def test_largest_first_reorders_the_queue_and_nothing_else(self):
+        """Scheduling only: same key list, expensive first, pool untouched.
+
+        The cost proxy runs in the starter process against the challenge shape
+        ({"test": [{"input": [[...]]}]}), so it is evaluated here on that shape
+        rather than assumed.
+        """
+        nb = upstream_notebook()
+        self.assertTrue(add_two_pass_pooling(nb))
+        self.assertTrue(order_largest_first(nb))
+        starter = cell_with(nb, "Largest puzzles first")
+        self.assertNotIn("sorted(data.keys())", starter)
+        self.assertEqual(starter.count("for key in _queue_keys:"), 2)
+        expr = [ln.strip() for ln in starter.splitlines()
+                if ln.strip().startswith("key=lambda k:")][0][len("key="):-1]
+        fake = {"small": {"test": [{"input": [[0] * 3] * 3}]},
+                "big": {"test": [{"input": [[0] * 30] * 30}]}}
+        # eval is deliberate and test-local: the expression is a literal slice of
+        # our own patch string (no external input), and evaluating it verbatim is
+        # the point -- it is the expression the notebook will run.
+        key = eval(expr, {"data": fake})
+        self.assertEqual(sorted(fake, key=key), ["big", "small"])
 
 
 if __name__ == "__main__":
