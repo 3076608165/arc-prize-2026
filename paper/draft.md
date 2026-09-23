@@ -100,16 +100,16 @@ rules score zero on evaluation, and adding compositional search lifts training b
 57% relative and evaluation by nothing. Rule portfolios are not a route to this
 benchmark. Board precision: five byte-identical resubmits of the original
 notebook spanned 1.67 points (30.14, 29.72, 28.47, 28.47, 28.89) and the drift
-was one-directional; pinning our worker-hash seed did **not** narrow it — eight
+was one-directional; pinning our worker-hash seed did **not** narrow it — nine
 further reruns of that pinned configuration returned 29.31, 30.56, 30.97, 28.89,
-29.31, 30.14, 29.72, 30.28 (mean 29.90, sd 0.71), and the thirteen draws of the
-lineage together give mean 29.61, sd 0.80. The residual is platform-side bf16 and
-wall-clock nondeterminism, so ~2 points is the final floor. On the hidden
-ARC-AGI-3 set the metric is discrete: one extra level cleared in one game is the
-whole distance between 0.03 and 0.27. Eight seeds of one unchanged agent,
+29.31, 30.14, 29.72, 30.28, 30.28 (mean 29.90, sd 0.64), and the fourteen draws
+of the lineage together give mean 29.70, sd 0.76. The residual is platform-side
+bf16 and wall-clock nondeterminism, so ~2 points is the final floor. On the
+hidden ARC-AGI-3 set the metric is discrete: one extra level cleared in one game
+is the whole distance between 0.03 and 0.27. Nine seeds of one unchanged agent,
 differing in nothing but the seed, returned 0.03, 0.21, 0.06, 0.04, 0.26, 0.16,
-0.06 and 0.27 (mean 0.140, sd 0.101) — the best of them now sits on the field
-median rather than under it.
+0.06, 0.27 and 0.20 (mean 0.143, sd 0.091) — the best of them now sits on the
+field median rather than under it.
 
 ## 5. What did not work
 

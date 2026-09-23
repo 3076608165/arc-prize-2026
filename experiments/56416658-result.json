@@ -1,0 +1,8 @@
+{
+  "competition": "arc-prize-2026-arc-agi-2",
+  "observed_utc": "2026-09-23T04:40:00Z",
+  "ref": "56416658",
+  "status": "COMPLETE",
+  "public": "30.28",
+  "backfilled": "the 9/21 watcher polled to PENDING and its log stops there; the score was read from the submissions table on 9/23 (the CLI lists only the two newest rows per competition, so wait_for_score --once cannot see this ref any more)"
+}

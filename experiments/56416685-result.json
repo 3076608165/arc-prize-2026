@@ -1,0 +1,8 @@
+{
+  "competition": "arc-prize-2026-arc-agi-3",
+  "observed_utc": "2026-09-23T04:40:00Z",
+  "ref": "56416685",
+  "status": "COMPLETE",
+  "public": "0.20",
+  "backfilled": "same as 56416658: read from the submissions table on 9/23 after the 9/21 watcher died PENDING"
+}

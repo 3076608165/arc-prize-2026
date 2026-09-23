@@ -1,0 +1,120 @@
+{
+  "date": "2026-09-23",
+  "policy": "Standing campaign policy, unchanged: one slot per board per UTC day, best two submissions across the competition, an unused slot cannot be banked. Both slots fired; the 9/22 slot pair was lost to a day with no session.",
+  "recovery_note": "The 9/21 refs (56416658, 56416685) were still PENDING in the record: both watchers died with their sessions. Their scores were read from the submissions table today (30.28 and 0.20) and written to experiments/<ref>-result.json. wait_for_score.py --once cannot see them any more -- the CLI lists only the two newest rows per competition.",
+  "agi2": {
+    "what": "v11 identical resubmit #10 (kernel version 11, no new run; its session is COMPLETE)",
+    "submission_ref": 56482691,
+    "submitted_utc": "2026-09-23T04:33:51Z",
+    "status": "PENDING",
+    "decision_dependency": "weak-positive, not a measurement. Selection is best-of-draws over the selected pair; this slot pays only if the draw beats 30.56. 1 of 9 draws has done that. Slot cannot be banked, so it is spent.",
+    "predeclared": {
+      "> 30.97": "new best draw; it becomes the leading final submission and the pair is rewritten around it.",
+      "30.56 < x <= 30.97": "replaces the pair's second member; selection becomes 30.97 + x.",
+      "<= 30.56": "no change to the selection; record the draw and move on. Not evidence about the method (n=1, byte-identical code)."
+    },
+    "draw_band_to_date": {
+      "v11_draws": [
+        29.31,
+        30.56,
+        30.97,
+        28.89,
+        29.31,
+        30.14,
+        29.72,
+        30.28,
+        30.28
+      ],
+      "v11_stats": {
+        "n": 9,
+        "mean": 29.94,
+        "sd": 0.64,
+        "min": 28.89,
+        "max": 30.97
+      },
+      "note": "nine byte-identical resubmits of the pinned v11 notebook; the observed max is 30.97 and the empirical bootstrap saturates there, so this slot buys rank density, not a new high."
+    },
+    "watcher": "experiments/score-push-20260923/wait-56482691.log, gated with --not-before 2026-09-23T16:34:00Z (a 12 h run cannot have scored before then)"
+  },
+  "agi3": {
+    "what": "stable agent, seed 9 (an unsampled draw); kernel version 13 pushed 2026-09-23T04:32Z, only ARC_SEED's fallback differs from seed 8's build (agent sha256 8c614118f9ca8147f6b3ee68d2ec743090fb9d395165ff06d9bfcfdd4272eb06)",
+    "submission_ref": 56482697,
+    "submitted_utc": "2026-09-23T04:33:57Z",
+    "status": "PENDING",
+    "decision_dependency": "none for the method; the draw policy is already supported. Selection is over any past submission, so this slot is optionality plus writeup material. Nothing depends on the rank: board top is 18.81.",
+    "predeclared": {
+      "any value": "record it; it replaces 0.26 (seed 4) as the second selected submission only if it beats it. Standing pair 0.27 (seed 7) + 0.26 (seed 4)."
+    },
+    "draws_to_date": {
+      "seed0": 0.03,
+      "seed1": 0.21,
+      "seed2": 0.06,
+      "seed3": 0.04,
+      "seed4": 0.26,
+      "seed5": 0.16,
+      "seed6": 0.06,
+      "seed7": 0.27,
+      "seed8": 0.2,
+      "stats": {
+        "n": 9,
+        "mean": 0.143,
+        "sd": 0.09,
+        "min": 0.03,
+        "max": 0.27
+      }
+    },
+    "watcher": "experiments/score-push-20260923/wait-56482697.log (no --not-before: the kernel has completed in ~1 min every round)"
+  },
+  "previous_round_results": {
+    "agi2_56416658": {
+      "score": 30.28,
+      "draw": 9,
+      "predeclared": "<= 30.56 -> no change to the selection",
+      "verdict": "selection unchanged at 30.97 + 30.56; both watchers died PENDING, scores backfilled from the submissions table"
+    },
+    "agi3_56416685": {
+      "score": 0.2,
+      "seed": 8,
+      "predeclared": "replaces 0.26 only if it beats it",
+      "verdict": "0.20 < 0.26, pair unchanged at 0.27 + 0.26"
+    }
+  },
+  "leaderboard_read_20260923": {
+    "how": "kaggle competitions leaderboard -c <comp> -d, parsed locally; rank is the board's own Rank cell for our team (tie-group last position)",
+    "agi2": {
+      "teams": 2156,
+      "our_score": 30.97,
+      "our_rank": 457,
+      "teams_strictly_ahead": 348,
+      "teams_at_or_above": 469,
+      "field_median": 28.06,
+      "field_max": 83.06,
+      "note": "field grew 2085 -> 2156 teams and the max moved for the first time since August, 76.94 -> 83.06; the median did not move (28.06), so our rank slipped 448 -> 457 without any change on our side"
+    },
+    "agi3": {
+      "teams": 3258,
+      "our_score": 0.27,
+      "our_rank": 1751,
+      "teams_strictly_ahead": 1708,
+      "teams_at_or_above": 1760,
+      "field_median": 0.3,
+      "field_max": 18.81,
+      "note": "field grew 3152 -> 3258 teams; our best draw sits one step behind the field median (0.30) rather than under it"
+    }
+  },
+  "open_work": {
+    "eligibility_gap": "Still no git remote: LICENSE (MIT-0) and NOTICE.md are local only, so nothing is prize-eligible yet. Publishing deliberately deferred to mid-October, before kernelsPublishingDisabledDeadline 2026-10-26 23:59Z.",
+    "entry_gate": "2026-10-26 entry + team merger deadline. Already entered on all three tracks (rules accepted, submissions exist), so the gate is satisfied but must not be broken by renaming kernels or leaving the team.",
+    "reachable_money": "Paper Track ($450,000, deadline 2026-11-09) and the ARC-AGI-2 Grand Prize ($275,000, writeup + all artifacts open sourced, due within 7 days of 2026-11-02). Both are rubric-scored, not rank-scored.",
+    "agi2_levers_exhausted": [
+      "the config gap to the public baseline: void (our v11 IS that notebook byte-for-byte apart from a 12 s budget line, logging and PYTHONHASHSEED)",
+      "dynamic-16/8 decode: dead (27.64 twice against a 29.31/30.56/30.97 band)",
+      "2B ensemble: dead at the oracle (+2 ceiling, no selector above 6/34)",
+      "per-cell voting selection / shape filter / identity demotion / nine rankers: 0, 0, -1",
+      "draws: empirical bootstrap saturates at 30.97 (n=9); the remaining value is rank density",
+      "open: a signal from OUTSIDE the candidate pool (leave-one-demo-out verification). Costs a new notebook build and a 12 h GPU run per measurement; not attempted yet.",
+      "open: rank 457 -> top-100 is ~10 points away, which no selection-side lever has ever produced"
+    ],
+    "record_keeping": "Fourth and fifth watcher deaths confirmed (9/21 both boards). The read that survives is the submissions table: the 9/21 refs went unread for two days and cost nothing but a manual backfill, and refs older than one round are no longer visible to wait_for_score.py."
+  }
+}

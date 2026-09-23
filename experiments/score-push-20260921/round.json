@@ -6,7 +6,7 @@
     "what": "v11 identical resubmit #9 (kernel version 11, no new run; its session is COMPLETE)",
     "submission_ref": 56416658,
     "submitted_utc": "2026-09-21T04:53:09Z",
-    "status": "PENDING",
+    "status": "COMPLETE",
     "decision_dependency": "weak-positive, not a measurement. Selection is best-of-draws over the selected pair; this slot pays only if the draw beats 30.56, the pair's second member. v11 draws: 29.31, 30.56, 30.97, 28.89, 29.31, 30.14, 29.72, 30.28 (1 of 8 beat 30.56). Slot cannot be banked, so it is spent.",
     "predeclared": {
       "> 30.97": "new best draw; it becomes the leading final submission and the pair is rewritten around it.",
@@ -33,13 +33,15 @@
       },
       "note": "eight byte-identical resubmits of the pinned v11 notebook; the observed max is 30.97 and the empirical bootstrap saturates there (no further draw is expected to exceed it, so this slot buys rank density, not a new high)."
     },
-    "watcher": "experiments/score-push-20260921/wait-56416658.log, gated with --not-before 2026-09-21T17:26:00Z (a 12 h run cannot have scored before then)"
+    "watcher": "experiments/score-push-20260921/wait-56416658.log, gated with --not-before 2026-09-21T17:26:00Z (a 12 h run cannot have scored before then)",
+    "public": 30.28,
+    "resolved": "backfilled 2026-09-23 from the submissions table: <= 30.56, so the selection is unchanged at 30.97 + 30.56 (experiments/56416658-result.json)"
   },
   "agi3": {
     "what": "stable agent, seed 8 (an unsampled draw); kernel version 12 pushed 2026-09-21T04:53Z, only ARC_SEED's fallback differs from seed 7's build (agent sha256 9a5301886667c8886e4bf4dfe52e598b18ed1e6ffff3e9dc918cae861d54d9b4)",
     "submission_ref": 56416685,
     "submitted_utc": "2026-09-21T04:54:19Z",
-    "status": "PENDING",
+    "status": "COMPLETE",
     "decision_dependency": "none for the method; the draw policy is already supported. Selection is over any past submission, so this slot is optionality plus writeup material. Nothing depends on the rank: board top is 18.81.",
     "predeclared": {
       "any value": "record it; it replaces 0.26 (seed 4) as the second selected submission only if it beats it. Standing pair 0.27 (seed 7) + 0.26 (seed 4)."
@@ -60,7 +62,9 @@
       "min": 0.03,
       "max": 0.27
     },
-    "watcher": "experiments/score-push-20260921/wait-56416685.log (no --not-before: the kernel completed in ~1 min and the ref was live at 04:54Z)"
+    "watcher": "experiments/score-push-20260921/wait-56416685.log (no --not-before: the kernel completed in ~1 min and the ref was live at 04:54Z)",
+    "public": 0.2,
+    "resolved": "backfilled 2026-09-23 from the submissions table: below 0.26, so the pair is unchanged at 0.27 + 0.26 (experiments/56416685-result.json)"
   },
   "previous_round_results": {
     "agi2_56381517": {

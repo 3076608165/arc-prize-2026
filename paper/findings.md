@@ -944,13 +944,13 @@ version 11, ref 56381540).
 Seed 7 is the first draw in the campaign to move a selected pair, and it moved
 it the way the policy predicted rather than by luck of a new method: 0.27 against
 seed 4's 0.26 and seed 1's 0.21, all three the same agent differing only in the
-seed. The ARC-AGI-2 band is now eight draws of one pinned notebook — 29.31,
-30.56, 30.97, 28.89, 29.31, 30.14, 29.72, 30.28 (mean 29.90, sd 0.71) — with the
-observed maximum still the second draw, and the empirical bootstrap still
-saturating there. The ARC-AGI-3 band is eight seeds: 0.03, 0.21, 0.06, 0.04,
-0.26, 0.16, 0.06, 0.27 (mean 0.140, sd 0.101), which is a distribution with no
-middle: at two decimals the values are "cleared one level in one game" or not,
-and eight draws have now covered 0.03-0.27.
+seed. The ARC-AGI-2 band is now nine draws of one pinned notebook — 29.31,
+30.56, 30.97, 28.89, 29.31, 30.14, 29.72, 30.28, 30.28 (mean 29.90, sd 0.64) —
+with the observed maximum still the second draw, and the empirical bootstrap
+still saturating there. The ARC-AGI-3 band is nine seeds: 0.03, 0.21, 0.06,
+0.04, 0.26, 0.16, 0.06, 0.27, 0.20 (mean 0.143, sd 0.091), which is a
+distribution with no middle: at two decimals the values are "cleared one level
+in one game" or not, and nine draws have now covered 0.03-0.27.
 
 **Third watcher death, same shape.** The 9/20 ARC-AGI-2 watcher logged its
 opening line (`sleeping 719 min: no result can exist before 2026-09-20T17:26:00Z`)
@@ -967,6 +967,29 @@ zero minutes of staleness.
 56416685 — the only difference from seed 7's build is `ARC_SEED`'s fallback).
 Predeclared: draw #9 pays only above 30.56; seed 8 replaces 0.26 only if it beats
 it.
+
+Both 9/21 results arrived after their watchers had died PENDING (the fourth and
+fifth of that shape): v11 draw #9 scored 30.28, below the 30.56 bar, so the
+ARC-AGI-2 pair is unchanged at 30.97 + 30.56; ARC-AGI-3 seed 8 scored 0.20, below
+0.26, so that pair is unchanged at 0.27 + 0.26. Both were backfilled into
+`experiments/<ref>-result.json` from the submissions table on 9/23 — the CLI's
+submissions listing shows only the two newest rows per competition, so
+`wait_for_score.py --once` can no longer see a ref two rounds old; that is the
+cost of deferring the read, and it is nil as long as the table is read by hand.
+
+2026-09-22 fired nothing: no session was open for it, and an unused slot cannot
+be banked, so the campaign is at 10 of a possible 12 slots fired since 9/11.
+2026-09-23 fired both again: ARC-AGI-2 v11 draw #10 (ref 56482691, identical
+resubmit) and ARC-AGI-3 seed 9 (kernel version 13, agent sha256 `8c614118…`, ref
+56482697). Predeclared as always: draw #10 pays only above 30.56; seed 9 replaces
+0.26 only if it beats it.
+
+The 9/23 leaderboard read moved in one direction: both fields grew (ARC-AGI-2
+2085 → 2156 teams, ARC-AGI-3 3152 → 3258) while our two scores sat still, so our
+ranks slipped (448 → 457 of 2156, 1751 of 3258). The ARC-AGI-2 field maximum
+also moved for the first time since August, 76.94 → 83.06, and the median did not
+(28.06): the top of the board is still buying points that rank density cannot
+reach.
 
 ## What this gives the writeup
 
