@@ -1,24 +1,36 @@
 [
   {
-    "id": "v12",
+    "id": "v14",
     "arm": "two-pass pooled selection",
     "competition": "arc-prize-2026-arc-agi-2",
     "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
-    "version": 12,
+    "version": 14,
     "file": "submission.json",
-    "message": "20260924 v12 two-pass pooled: decorrelated TTT pass B pooled with pass A, attempt_1 pinned to pass A top-1 (monotone); predeclared >= pass A alone, band 29.90 +/- 0.64",
+    "message": "20260924 v14 two-pass pooled: decorrelated TTT pass B pooled with pass A, attempt_1 pinned to pass A top-1 (monotone); predeclared >= pass A alone, band 29.90 +/- 0.64",
     "build": "agi2/out/nvarc-p2",
-    "predicts": "monotone, probably null (public evidence: a second decode round did not move LB)"
+    "predicts": "monotone, probably null (public evidence: a second decode round did not move LB)",
+    "note": "identical bytes were pushed as version 12 first; the Kaggle CLI/API cannot fetch a specific version's log, so that run was unverifiable and got re-pushed as 14"
   },
   {
-    "id": "v13",
-    "arm": "Leg C verified induction pre-pass",
+    "id": "v15",
+    "arm": "original numerics (perfpatch reverted)",
     "competition": "arc-prize-2026-arc-agi-2",
     "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
-    "version": 13,
+    "version": null,
     "file": "submission.json",
-    "message": "20260925 v13 legc verified-induction: train-verified DSL program outputs pre-empt attempt_1, base candidate demoted to attempt_2 (cross-family decorrelation); 10.83h base + 1h Leg C",
-    "build": "agi2/out/legc-v13",
-    "predicts": "a second family enters attempt_1 on tasks the TTT pool cannot solve"
+    "message": "20260925 v15 orig-numerics: published baseline arithmetic (full-vocab CPU log_softmax) instead of the perfpatch's ARC-token-restricted GPU logsumexp",
+    "build": "agi2/out/orig-numerics-v14",
+    "predicts": "~33.9 would mean the perfpatch arithmetic costs ~4 points; ~30 means the 33.89 gap is environmental"
+  },
+  {
+    "id": "v16",
+    "arm": "two-pass + largest-puzzles-first queue",
+    "competition": "arc-prize-2026-arc-agi-2",
+    "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+    "version": null,
+    "file": "submission.json",
+    "message": "20260926 v16 two-pass largest-first: same pooled two-pass, queue ordered by descending input size so the expensive tail gets its second pass",
+    "build": "agi2/out/twopass-lf-v15",
+    "predicts": "scheduling only: pass B covers more of the 120 tasks than v14 did"
   }
 ]

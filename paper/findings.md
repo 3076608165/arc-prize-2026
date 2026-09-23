@@ -1020,6 +1020,32 @@ Three things follow, all recorded with their predeclared readings:
   audit finished 24 tasks at a 554 s mean with 4 workers, which leaves ~2.5x of
   capacity inside the 11.83 h wall for a second pass, not a shortfall.
 
+### Leg C, run in our hands: the verified-induction pre-pass verifies nothing (2026-09-23)
+
+The pre-pass was lifted verbatim from the public swarm notebook
+(`agi2/repro_nvarc.py --legc`, kernel version 13) and its commit run measured it
+on the full 120-task evaluation split: **tasks attempted 120, tasks verified 0**,
+`verified & correct 0/0`. It exhausted the task list in 15 minutes of a 1 h budget,
+generating 2-8 candidate DSL programs per task, and in almost every case the best
+program passed **0 of 3-4 train pairs** (one task reached 1/5). Two tasks died on
+CUDA OOM with 4 x 7B workers on 22 GB L4s.
+
+So the arm is not "uncertain, needs a slot": with nothing train-verified there is
+nothing to merge, and the merge is a designed no-op -- while the base pipeline
+would have paid a full hour of its 11.83 h wall for it. It is withdrawn from the
+queue rather than spent. The failure is the *model's*, not the machinery's: the
+sandbox selftest is 9/9 PASS in situ, the coder model resolves to the attached
+Kaggle model, the merge is monotone and provably a no-op here. This is the same
+wall the author's own title ("Failed in AIMO") points at, now with a number on it:
+a 7B coder asked to write train-verified ARC programs passes zero train pairs on
+average, so the second family that `attempt_2` needs is not reachable by prompting
+a small coder at it.
+
+Two things this buys: Leg C is off the list of candidate-side levers (leaving the
+model class as the only one standing), and the plumbing to attach a second model
+family to this pipeline is now debugged and tested, so a future arm can swap in a
+larger coder without rediscovering the wiring.
+
 ## What this gives the writeup
 
 - **Theory**: a stated hypothesis (the ARC-AGI-2 bottleneck is exact
