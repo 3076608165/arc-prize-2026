@@ -14,7 +14,7 @@ from pathlib import Path
 
 import numpy as np
 
-from repro_nvarc import (PASS2_MARKER, PASS2_STORE, add_two_pass_pooling,
+from repro_nvarc import (PASS2_STORE, add_two_pass_pooling,
                          drop_allowlist, fetch_upstream, order_largest_first)
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -55,11 +55,11 @@ def written_files(nb: dict) -> dict:
 
 class TwoPassTests(unittest.TestCase):
     def test_both_passes_cover_the_same_tasks(self):
-        """Pass B copies the filter lines, so a commit-mode subset stays matched.
+        """Both passes carry the same filter, and the pass id rides on the item.
 
-        Without --full-eval the allowlist is still in place; a second loop that
-        forgot it would queue all 120 eval tasks in a run that only mounts the
-        four-task answers, i.e. spend the budget on tasks it cannot score.
+        A `__PASS2__` marker in the queue can only be consumed by one worker, so
+        three of four workers used to re-decode pass B's copies with pass A's
+        seeds. The pass id has to travel with the key.
         """
         nb = patched()
         starter = cell_with(nb, "_queue_keys = sorted")
@@ -68,11 +68,13 @@ class TwoPassTests(unittest.TestCase):
         self.assertEqual(starter.count('queue.put("0934a4d8")'), 0)  # never hardcoded
         allowlist = 'if key not in ["0934a4d8", "36a08778", "981571dc", "aa4ec2a5"]:'
         self.assertEqual(starter.count(allowlist), 2)
-        self.assertEqual(starter.count("        queue.put(key)\n"), 2)
+        self.assertEqual(starter.count("        queue.put((key, 0))\n"), 1)
+        self.assertEqual(starter.count("        queue.put((key, 1))\n"), 1)
+        self.assertNotIn("__PASS2__", starter)
         self.assertLess(starter.index("_queue_keys = sorted"),
                         starter.index("for key in _queue_keys:"))
-        self.assertLess(starter.index(PASS2_MARKER),
-                        starter.index("for key in _queue_keys:", starter.index(PASS2_MARKER)))
+        self.assertLess(starter.index("queue.put((key, 0))"),
+                        starter.index("queue.put((key, 1))"))
 
     def test_after_full_eval_the_second_loop_has_no_filter(self):
         nb = upstream_notebook()
@@ -80,18 +82,27 @@ class TwoPassTests(unittest.TestCase):
         self.assertTrue(add_two_pass_pooling(nb))
         starter = cell_with(nb, "_queue_keys = sorted")
         self.assertEqual(starter.count("for key in _queue_keys:"), 2)
-        self.assertNotIn("continue", starter.split(PASS2_MARKER)[1])
-        self.assertEqual(starter.count("        queue.put(key)\n"), 2)
+        self.assertNotIn("continue", starter.split("queue.put((key, 0))")[1])
+        self.assertEqual(starter.count("        queue.put((key, 1))\n"), 1)
 
-    def test_worker_separates_the_passes(self):
+    def test_worker_routes_each_item_to_its_own_pass(self):
         solver = written_files(patched())["arc_solver.py"]
-        self.assertIn("pass_id = 0", solver)
-        self.assertIn(f'if key == "{PASS2_MARKER}":', solver)
-        self.assertIn(f'dir_outputs = "{PASS2_STORE}"', solver)
-        # both stores get created, and the marker never reaches the task lookup
+        self.assertIn("key, pass_id = item", solver)
+        self.assertIn("dir_outputs = _pass_store(pass_id)", solver)
         self.assertEqual(solver.count("os.makedirs(dir_outputs, exist_ok=True)"), 2)
+        self.assertNotIn("__PASS2__", solver)
         self.assertIn("seed=1 + 101 * pass_id", solver)
         self.assertIn("seed=2 + 103 * pass_id", solver)
+
+    def test_pass_store_sends_pass_b_to_its_own_store(self):
+        """Execute the emitted mapping: pass A's store is the one already read."""
+        solver = written_files(patched())["arc_solver.py"]
+        fn = next(node for node in ast.walk(ast.parse(solver))
+                  if isinstance(node, ast.FunctionDef) and node.name == "_pass_store")
+        ns: dict = {}
+        exec(compile(ast.Module(body=[fn], type_ignores=[]), "<solver>", "exec"), ns)
+        self.assertEqual(ns["_pass_store"](0), "/kaggle/inference_outputs")
+        self.assertEqual(ns["_pass_store"](1), PASS2_STORE)
 
     def test_selection_is_monotone(self):
         nb = patched()

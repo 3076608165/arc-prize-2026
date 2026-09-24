@@ -31,7 +31,8 @@
     "file": "submission.json",
     "message": "20260926 two-pass largest-first: same pooled two-pass, queue ordered by descending input size so the expensive tail gets its second pass",
     "build": "agi2/out/twopass-lf-v15",
-    "predicts": "scheduling only: pass B covers more of the 120 tasks than the plain two-pass arm did"
+    "predicts": "scheduling only: pass B covers more of the 120 tasks than the plain two-pass arm did",
+    "note": "staged build predates the item-pass-id fix (it still carries the __PASS2__ marker), so rebuild it on top of agi2/out/twopass-itemid before it fires -- one knob per slot."
   },
   {
     "id": "twopass-item-passid",
@@ -41,8 +42,8 @@
     "version": null,
     "file": "submission.json",
     "message": "20260927 two-pass item-passid: pass id travels with each queued key so all four workers decode pass B, instead of only the one that draws the __PASS2__ marker",
-    "build": "",
+    "build": "agi2/out/twopass-itemid",
     "predicts": "the same null as the marker version if a second decode round really buys nothing; a gain here means the marker version's partial coverage, not the idea, was what read flat",
-    "note": "NOT BUILT. Needs the queue payload changed to (key, pass_id) in starter.py and the worker's `key = queue.get()` unpacking it, plus a test that four workers see both passes. See paper/findings.md, 2026-09-24 section."
+    "note": "Built and tested 2026-09-24 (9 tests in test_two_pass.py; the emitted worker routes each item through `_pass_store(pass_id)`, no marker anywhere). NOT pushed yet: a push replaces the latest version's log and takes a GPU session, so it waits for a free window."
   }
 ]

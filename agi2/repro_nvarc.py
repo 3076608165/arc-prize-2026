@@ -309,23 +309,28 @@ def save_candidates(nb: dict) -> bool:
 #: 28.9-31.0 -- that variance is a decorrelated redraw we currently only get by
 #: spending another day's slot. A second pass with different augmentation seeds
 #: turns part of it into candidates inside ONE submission.
-PASS2_MARKER = "__PASS2__"
+PASS1_STORE = "/kaggle/inference_outputs"
 PASS2_STORE = "/kaggle/inference_outputs_p2"
 PASS2_QUEUE_ANCHOR = "    for key in sorted(data.keys()):"
 PASS2_GET_ANCHOR = ("        key = queue.get()\n"
                     "        if key is None:\n"
                     "            break\n")
+PASS2_WORKER_ANCHOR = "def worker(rank, queue, end_time):"
 PASS2_TRAIN_SEED = "train_ds = puzzle_ds.augment(n=16, shfl_keys=True, seed=1)"
 PASS2_EVAL_SEED = "eval_ds = puzzle_ds_multi.augment(n=2, seed=2)"
 
 
 def _requeue_pass(nb: dict) -> bool:
-    """Queue every task a second time, behind a marker the worker understands.
+    """Queue every task a second time, each item carrying its own pass id.
 
     Pass B goes *behind* all of pass A, so it runs only on slack: a task costs
     ~554 s (measured, 1 h full-eval run, 24 tasks finished) and 120 tasks on 4
     workers leaves room for ~2.5 passes inside the 11.83 h wall. If pass A runs
     long, pass B simply never starts -- the run degrades to today's behaviour.
+
+    The pass id rides on the item (`queue.put((key, 0/1))`) rather than on a
+    marker in the queue: a marker is consumed by exactly one worker, so the other
+    three never switched store and re-decoded pass B's copies with pass A's seeds.
 
     The filter lines (the commit-mode allowlist, or the subset ids, or whatever
     --full-eval left) are copied verbatim into the second loop, so the two
@@ -342,9 +347,8 @@ def _requeue_pass(nb: dict) -> bool:
         head = txt[:txt.index(PASS2_QUEUE_ANCHOR)]
         new = (
             "    _queue_keys = sorted(data.keys())\n"
-            "    for key in _queue_keys:" + body + "        queue.put(key)\n"
-            f'    queue.put("{PASS2_MARKER}")\n'
-            "    for key in _queue_keys:" + body + "        queue.put(key)\n"
+            "    for key in _queue_keys:" + body + "        queue.put((key, 0))\n"
+            "    for key in _queue_keys:" + body + "        queue.put((key, 1))\n"
         )
         cell["source"] = (head + new + txt[end + len("        queue.put(key)\n"):]
                           ).splitlines(keepends=True)
@@ -353,28 +357,33 @@ def _requeue_pass(nb: dict) -> bool:
 
 
 def _split_passes(nb: dict) -> bool:
-    """Worker side: pass B gets its own store and its own augmentation seeds."""
+    """Worker side: pass B gets its own store and its own augmentation seeds.
+
+    The store follows the item's own pass id, so every worker runs both passes.
+    """
     done = 0
     for cell in nb["cells"]:
         if cell["cell_type"] != "code":
             continue
         txt = cell_text(cell)
-        if 'dir_outputs = "/kaggle/inference_outputs"' not in txt:
+        if f'dir_outputs = "{PASS1_STORE}"' not in txt:
             continue
         if PASS2_GET_ANCHOR not in txt:
             continue
         txt = txt.replace(
             PASS2_GET_ANCHOR,
-            PASS2_GET_ANCHOR +
-            f'        if key == "{PASS2_MARKER}":\n'
-            "            pass_id = 1\n"
-            f'            dir_outputs = "{PASS2_STORE}"\n'
-            "            os.makedirs(dir_outputs, exist_ok=True)\n"
-            '            print(f"[Rank {rank}] second pass: decorrelated TTT", flush=True)\n'
-            "            continue\n", 1)
-        txt = txt.replace('    dir_outputs = "/kaggle/inference_outputs"',
-                          '    pass_id = 0\n'
-                          '    dir_outputs = "/kaggle/inference_outputs"', 1)
+            "        item = queue.get()\n"
+            "        if item is None:\n"
+            "            break\n"
+            "        key, pass_id = item\n"
+            "        dir_outputs = _pass_store(pass_id)\n"
+            "        os.makedirs(dir_outputs, exist_ok=True)\n", 1)
+        txt = txt.replace(
+            PASS2_WORKER_ANCHOR,
+            "def _pass_store(pass_id):\n"
+            '    """Pass B writes its own candidate store, pass A the original."""\n'
+            f'    return "{PASS2_STORE}" if pass_id else "{PASS1_STORE}"\n\n\n'
+            + PASS2_WORKER_ANCHOR, 1)
         #: 101/103 are arbitrary odd offsets; the only requirement is that
         #: `augment(seed=...)` -- which seeds numpy globally -- sees a different
         #: value, so pass B's permutes and demo orderings differ from pass A's.

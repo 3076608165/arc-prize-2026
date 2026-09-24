@@ -1089,7 +1089,11 @@ text was wrong in exactly the way a text assertion cannot see.
   store. The arm therefore spends most of pass B's budget on a redraw and tests
   the pooled design on a subset. Fix before reading a null as evidence: put the
   pass id in the queue item (`queue.put((key, 0/1))`, worker unpacks it) instead
-  of in a marker a single worker consumes.
+  of in a marker a single worker consumes. **Done the same day**: `--two-pass`
+  now emits the payload form and the worker routes through `_pass_store(pass_id)`,
+  which the tests extract and execute; staged as `agi2/out/twopass-itemid` and
+  queued for the next free slot, not pushed (a push replaces the running
+  version's log and takes a GPU session).
 
 ## What this gives the writeup
 
