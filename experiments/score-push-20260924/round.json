@@ -39,8 +39,8 @@
     "paper-track": {"teams": 203, "our_rank": null, "note": "no submission; the writeup is the artifact"}
   },
   "next": {
-    "queued": "orig-numerics (perfpatch reverted) pushed as kernel version 16 at 05:2xZ and recorded in scripts/arm-queue.json, so the 00:05Z 9/25 scheduled fire advances to it. Its commit-mode rehearsal runs to ~17:20Z and should be read before the slot is spent.",
-    "deferred": "'twopass-item-passid' (fix the marker coverage defect) and 'twopass-largest-first' remain behind it.",
+    "queued": "orig-numerics (perfpatch reverted) pushed as kernel version 16 at 05:2xZ and recorded in scripts/arm-queue.json, so the 00:05Z 9/25 scheduled fire advances to it. Its commit-mode rehearsal runs to ~17:20Z and should be read before the slot is spent -- and nothing else may be pushed to this kernel before that read, because a push replaces the latest version's log (that is exactly how v12 was lost).",
+    "ready_and_unpushed": "'twopass-item-passid' is built and tested (agi2/out/twopass-itemid, pass id in the queue item); 'twopass-largest-first' stays behind it and its staged build must be rebuilt on top of it.",
     "verification_debt": "version 16's rehearsal log has not been read; version 15's crash fix is verified only on the 4-task commit-mode preflight, not on the 120-task test-set path."
   }
 }
