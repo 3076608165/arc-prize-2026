@@ -1046,6 +1046,51 @@ model class as the only one standing), and the plumbing to attach a second model
 family to this pipeline is now debugged and tested, so a future arm can swap in a
 larger coder without rediscovering the wiring.
 
+### The second pass died in its first cell: a grid has no truth value (2026-09-24)
+
+Both pushes of the decorrelated second pass (kernel versions 12 and 14, byte
+identical) died 43 minutes into their run, in the cell that pools pass B with
+pass A:
+
+    ValueError: The truth value of an array with more than one element is ambiguous.
+        _seen = {hashable(_first['solution'])} if _first else set()
+
+`score_kgmon` returns lists of *grids*, not lists of sample dicts. `_first` is a
+numpy array, `if _first` asks it for a truth value, and the notebook aborts before
+writing `submission.json` -- so neither version could be submitted. The six tests
+covering that patch did not notice because they asserted the cell's *text*; the
+text was wrong in exactly the way a text assertion cannot see.
+
+- **Fix**: `agi2/repro_nvarc.py` emits the merge as a named function
+  `_pin_pass_a(pooled, a_only)` and compares the pinned grid with `is not None`;
+  `agi2/test_two_pass.py` now *executes* the emitted function against grids
+  instead of grepping it. The old expression reproduces in one line:
+  `np.zeros((2, 2)) or []` -> ValueError.
+- **Reusable fact about the tooling**: a kernel version's log is readable only
+  while that version is the kernel's latest (`kaggle kernels output <ref>`);
+  pushing the next version destroys the previous one's log. That is what made v12
+  "unverifiable" and got it re-pushed as v14 -- which died the same way, one day
+  later, and cost the 9/24 slot its arm.
+- **Cost**: two 12 h pushes and the day the arm was queued for. The fixed build ran
+  its commit-mode rehearsal before the slot was spent.
+- **Predeclared reading, unchanged**: monotone by construction (attempt_1 is pass
+  A's top-1), so a pass B noisier than pass A can only change attempt_2. A score
+  inside 29.90 +/- 0.64 *with pass B having run* falsifies it as a win; a move
+  outside the band is the only evidence that a second decode round on this
+  pipeline buys anything.
+- **Second defect in the same arm, found by reading the emitted worker** (not a
+  measurement, and it survives the crash fix): `pass_id` and `dir_outputs` are
+  worker-local variables set once before the key loop
+  (`agi2/out/nvarc-p2-fix/arc_solver_emitted.py:338`), and only the worker that
+  draws the `__PASS2__` marker flips them. The queue is
+  `[pass-A keys, __PASS2__, pass-B keys]`, so exactly one of the four workers
+  decodes a decorrelated pass B -- call it a quarter of the task set -- while the
+  other three re-decode the pass-B copies with pass A's own seeds into pass A's
+  store. The arm therefore spends most of pass B's budget on a redraw and tests
+  the pooled design on a subset. Fix before reading a null as evidence: put the
+  pass id in the queue item (`queue.put((key, 0/1))`, worker unpacks it) instead
+  of in a marker a single worker consumes.
+
 ## What this gives the writeup
 
 - **Theory**: a stated hypothesis (the ARC-AGI-2 bottleneck is exact
@@ -1057,3 +1102,7 @@ larger coder without rediscovering the wiring.
   a trap worth naming, since the three-game subset we first measured on hid it
   completely. The four environment facts are directly reusable by anyone.
 - **Completeness**: every number above has a command next to it.
+- **Process**: the arm that died did so in a cell whose tests could not fail --
+  source-text assertions over generated code. The check that replaced it executes
+  the emitted function, and the class of bugs the old tests were blind to (type
+  errors in generated cells) now has a place to be caught.

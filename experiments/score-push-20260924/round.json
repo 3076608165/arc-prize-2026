@@ -1,0 +1,46 @@
+{
+  "date": "2026-09-24",
+  "policy": "Standing campaign policy, unchanged: one slot per board per UTC day, best two submissions across the competition, an unused slot cannot be banked. Both slots fired, the first day since 9/23 that both arms came from the queue rather than a reroll.",
+  "backfill": "Two 9/23 refs were still PENDING in the record and are scored now: AGI-2 draw #10 (56482691) = 29.72 (below the 30.56 bar, pair unchanged at 30.97 + 30.56, v11 draws now n=10, band 28.89-30.97) and ARC-AGI-3 seed 9 (56482697) = 0.07 (below 0.26, pair unchanged at 0.27 + 0.26). Written to experiments/56482691-result.json and experiments/56482697-result.json.",
+  "agi2": {
+    "what": "two-pass pooled selection, kernel version 15 -- the crash-fixed build. Versions 12 and 14 were byte-identical pushes of the same arm and both died 43 minutes in (ValueError: truth value of an array; the pooled merge treated candidate *grids* as sample dicts). Neither wrote submission.json, so neither was ever submittable: yesterday's 'unverifiable' run was a crash, not a pending one.",
+    "submission_ref": 56512472,
+    "submitted_utc": "2026-09-24T05:16:37Z",
+    "status": "PENDING",
+    "decision_dependency": "weak. Monotone by construction (attempt_1 is pass A's top-1), so the only observable is attempt_2 and the score cannot lose a task the single-pass build would have scored. A reading inside 29.90 +/- 0.64 with pass B having run falsifies a second decode round as a win; outside the band is the only evidence it buys anything.",
+    "predeclared": {
+      "> 30.97": "new best draw; it leads the selected pair and the pair is rewritten around it.",
+      "30.56 < x <= 30.97": "replaces the pair's second member; selection becomes 30.97 + x.",
+      "<= 30.56": "record the draw, pair unchanged. With pass B having run this is the predeclared null, not evidence about the method (n=1)."
+    },
+    "rehearsal_gate": "The commit-mode run was read BEFORE the slot was spent: status COMPLETE 05:16Z, log contains '[two-pass] pooled 5 outputs from both passes' and '[two-pass] attempt_1 pinned to pass A's top-1', no traceback, submission.json written (23,253 bytes). Its 4-task preflight 'Reload score' reads 3.0 against 2.5 for the same preflight on the base build -- five outputs, so not evidence, recorded because it is the number that exists.",
+    "known_defect": "Reading the emitted worker (agi2/out/nvarc-p2-fix/arc_solver_emitted.py:338): pass_id and dir_outputs are worker-local and only the worker that draws the __PASS2__ marker flips them, so ONE of four workers decodes a decorrelated pass B while the others re-decode pass B's copies with pass A's seeds. Genuine second-pass coverage is therefore a fraction of the task set, and a null today is a null for the partial design. Fixed arm queued as 'twopass-item-passid' (not built).",
+    "build": "agi2/out/nvarc-p2-fix (hours 11.83, --two-pass --audit-coverage --worker-hash-seed 0; one cell differs from the crashed v14 build, verified by cell diff)",
+    "watcher": "none. The scored rerun cannot finish before ~17:16Z, so the score is read from the submissions table in the next session (the two newest rows per competition still cover this ref then)."
+  },
+  "agi3": {
+    "what": "stable agent, seed 10 (an unsampled draw); kernel version 14 pushed 04:32Z, only ARC_SEED's fallback differs from seed 9's build (agent sha256 782757eee779800f92218c58cd03bfda6ed514d60d0f058172bbac3cd8a6bbab)",
+    "submission_ref": 56511716,
+    "submitted_utc": "2026-09-24T04:34:39Z",
+    "status": "PENDING",
+    "decision_dependency": "none for the method; the draw policy is already supported and selection is over any past submission. Board top is 18.81.",
+    "predeclared": {
+      "any value": "record it; it replaces 0.26 (seed 4) as the second selected submission only if it beats it. Standing pair 0.27 (seed 7) + 0.26 (seed 4)."
+    },
+    "draws_to_date": {
+      "n": 10,
+      "range": "0.03-0.27",
+      "note": "draws are a deterministic step function of the seed; local ordering of seeds is retired as a ranking device"
+    }
+  },
+  "standings_2026-09-24": {
+    "arc-agi-2": {"teams": 2171, "our_rank": 460, "selected_pair": [30.97, 30.56]},
+    "arc-agi-3": {"teams": 3281, "our_rank": 1779, "selected_pair": [0.27, 0.26]},
+    "paper-track": {"teams": 203, "our_rank": null, "note": "no submission; the writeup is the artifact"}
+  },
+  "next": {
+    "queued": "orig-numerics (perfpatch reverted) pushed as kernel version 16 at 05:2xZ and recorded in scripts/arm-queue.json, so the 00:05Z 9/25 scheduled fire advances to it. Its commit-mode rehearsal runs to ~17:20Z and should be read before the slot is spent.",
+    "deferred": "'twopass-item-passid' (fix the marker coverage defect) and 'twopass-largest-first' remain behind it.",
+    "verification_debt": "version 16's rehearsal log has not been read; version 15's crash fix is verified only on the 4-task commit-mode preflight, not on the 120-task test-set path."
+  }
+}

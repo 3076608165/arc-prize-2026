@@ -1,0 +1,8 @@
+{
+  "competition": "arc-prize-2026-arc-agi-3",
+  "observed_utc": "2026-09-24T04:50:00Z",
+  "ref": "56482697",
+  "status": "COMPLETE",
+  "public": "0.07",
+  "reading": "stable agent, seed 9. Below 0.26, so the selected pair is unchanged at 0.27 (seed 7) + 0.26 (seed 4). Draws now n=10: 0.03-0.27."
+}

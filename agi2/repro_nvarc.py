@@ -396,6 +396,10 @@ def _pool_selection(nb: dict, hours_note: str = "") -> bool:
     than pass A can only change attempt_2. Without this the second pass is a
     second coin flip on the first attempt as well, and a bad draw costs more
     than it can gain.
+
+    A candidate list holds grids, not sample dicts (`score_kgmon` returns
+    `[solution, ...]`). The merge is emitted as a named function so the tests can
+    execute it: truth-testing a grid is a crash, not a check.
     """
     for cell in nb["cells"]:
         if cell["cell_type"] != "code":
@@ -418,17 +422,22 @@ def _pool_selection(nb: dict, hours_note: str = "") -> bool:
             "submission = data.get_submission(decoder.run_selection_algo())\n",
             "selected = decoder.run_selection_algo(score_kgmon)\n"
             "if _pooled:\n"
+            "    # Grids, not sample dicts: the pinned element must be compared with\n"
+            "    # `is not None`. `if _first` asks a grid for its truth value and\n"
+            "    # raises on any grid with more than one cell.\n"
+            "    def _pin_pass_a(pooled, a_only):\n"
+            "        merged = {}\n"
+            "        for bk, cands in pooled.items():\n"
+            "            top = a_only.get(bk) or []\n"
+            "            first = top[0] if top else None\n"
+            "            seen = {hashable(first)} if first is not None else set()\n"
+            "            merged[bk] = ([first] if first is not None else []) + [\n"
+            "                c for c in cands if hashable(c) not in seen]\n"
+            "        return merged\n"
             "    _pass_a = ArcDecoder(data.split_multi_replies(), n_guesses=2)\n"
             '    _pass_a.load_decoded_results("/kaggle/inference_outputs")\n'
             "    _a_only = _pass_a.run_selection_algo(score_kgmon)\n"
-            "    _merged = {}\n"
-            "    for _bk, _cands in selected.items():\n"
-            "        _top = _a_only.get(_bk) or []\n"
-            "        _first = _top[0] if _top else None\n"
-            "        _seen = {hashable(_first['solution'])} if _first else set()\n"
-            "        _merged[_bk] = ([_first] if _first else []) + [\n"
-            "            c for c in _cands if hashable(c['solution']) not in _seen]\n"
-            "    selected = _merged\n"
+            "    selected = _pin_pass_a(selected, _a_only)\n"
             "    print(\"[two-pass] attempt_1 pinned to pass A's top-1\")\n"
             "submission = data.get_submission(selected)\n", 1)
         cell["source"] = txt.splitlines(keepends=True)

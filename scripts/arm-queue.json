@@ -1,36 +1,48 @@
 [
   {
-    "id": "v14",
-    "arm": "two-pass pooled selection",
+    "id": "twopass-fix",
+    "arm": "two-pass pooled selection (merge fixed)",
     "competition": "arc-prize-2026-arc-agi-2",
     "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
-    "version": 14,
+    "version": 15,
     "file": "submission.json",
-    "message": "20260924 v14 two-pass pooled: decorrelated TTT pass B pooled with pass A, attempt_1 pinned to pass A top-1 (monotone); predeclared >= pass A alone, band 29.90 +/- 0.64",
-    "build": "agi2/out/nvarc-p2",
+    "message": "20260924 two-pass pooled (fixed merge): pass A/B candidate lists are grids, not sample dicts; versions 12 and 14 died 43 min in on `if _first` without writing submission.json; attempt_1 pinned to pass A top-1 (monotone); predeclared >= pass A alone, band 29.90 +/- 0.64",
+    "build": "agi2/out/nvarc-p2-fix",
     "predicts": "monotone, probably null (public evidence: a second decode round did not move LB)",
-    "note": "identical bytes were pushed as version 12 first; the Kaggle CLI/API cannot fetch a specific version's log, so that run was unverifiable and got re-pushed as 14"
+    "note": "run as version 15 after the crash fix; the commit-mode rehearsal was read before the slot was spent"
   },
   {
-    "id": "v15",
+    "id": "orig-numerics",
     "arm": "original numerics (perfpatch reverted)",
     "competition": "arc-prize-2026-arc-agi-2",
     "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
-    "version": null,
+    "version": 16,
     "file": "submission.json",
-    "message": "20260925 v15 orig-numerics: published baseline arithmetic (full-vocab CPU log_softmax) instead of the perfpatch's ARC-token-restricted GPU logsumexp",
-    "build": "agi2/out/orig-numerics-v14",
+    "message": "20260925 orig-numerics: published baseline arithmetic (full-vocab CPU log_softmax) instead of the perfpatch's ARC-token-restricted GPU logsumexp",
+    "build": "agi2/out/orig-numerics-v16",
     "predicts": "~33.9 would mean the perfpatch arithmetic costs ~4 points; ~30 means the 33.89 gap is environmental"
   },
   {
-    "id": "v16",
+    "id": "twopass-largest-first",
     "arm": "two-pass + largest-puzzles-first queue",
     "competition": "arc-prize-2026-arc-agi-2",
     "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
     "version": null,
     "file": "submission.json",
-    "message": "20260926 v16 two-pass largest-first: same pooled two-pass, queue ordered by descending input size so the expensive tail gets its second pass",
+    "message": "20260926 two-pass largest-first: same pooled two-pass, queue ordered by descending input size so the expensive tail gets its second pass",
     "build": "agi2/out/twopass-lf-v15",
-    "predicts": "scheduling only: pass B covers more of the 120 tasks than v14 did"
+    "predicts": "scheduling only: pass B covers more of the 120 tasks than the plain two-pass arm did"
+  },
+  {
+    "id": "twopass-item-passid",
+    "arm": "two-pass with the pass id carried in the queue item",
+    "competition": "arc-prize-2026-arc-agi-2",
+    "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+    "version": null,
+    "file": "submission.json",
+    "message": "20260927 two-pass item-passid: pass id travels with each queued key so all four workers decode pass B, instead of only the one that draws the __PASS2__ marker",
+    "build": "",
+    "predicts": "the same null as the marker version if a second decode round really buys nothing; a gain here means the marker version's partial coverage, not the idea, was what read flat",
+    "note": "NOT BUILT. Needs the queue payload changed to (key, pass_id) in starter.py and the worker's `key = queue.get()` unpacking it, plus a test that four workers see both passes. See paper/findings.md, 2026-09-24 section."
   }
 ]

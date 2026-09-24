@@ -12,6 +12,8 @@ import re
 import unittest
 from pathlib import Path
 
+import numpy as np
+
 from repro_nvarc import (PASS2_MARKER, PASS2_STORE, add_two_pass_pooling,
                          drop_allowlist, fetch_upstream, order_largest_first)
 
@@ -96,9 +98,37 @@ class TwoPassTests(unittest.TestCase):
         selection = cell_with(nb, "data.get_submission(selected)")
         self.assertIn(f'os.path.isdir("{PASS2_STORE}")', selection)
         self.assertIn("attempt_1 pinned to pass A's top-1", selection)
-        # attempt_1 comes from pass A, the rest of the list from the pool
-        self.assertIn("_merged[_bk] = ([_first] if _first else []) + [", selection)
-        self.assertIn("hashable(c['solution']) not in _seen", selection)
+        self.assertIn("def _pin_pass_a(pooled, a_only)", selection)
+        self.assertIn("hashable(c) not in seen", selection)
+        self.assertIn("selected = _pin_pass_a(selected, _a_only)", selection)
+
+    def test_pinned_merge_runs_and_keeps_pass_a_first(self):
+        """Execute the emitted merge on grids -- the shape it really receives.
+
+        `score_kgmon` returns lists of *grids*, not sample dicts. The first
+        version of this cell wrote `if _first`, which asks a grid for its truth
+        value: a grid with more than one cell makes that a ValueError, and the
+        push died there 43 minutes into its first cell. Source-text assertions
+        cannot see that, so this one runs the emitted function.
+        """
+        selection = cell_with(patched(), "def _pin_pass_a(pooled, a_only)")
+        fn = next(node for node in ast.walk(ast.parse(selection))
+                  if isinstance(node, ast.FunctionDef) and node.name == "_pin_pass_a")
+        ns: dict = {"hashable": lambda g: tuple(map(tuple, g))}
+        exec(compile(ast.Module(body=[fn], type_ignores=[]), "<cell>", "exec"), ns)
+        pin = ns["_pin_pass_a"]
+        a, b, c = np.zeros((2, 2)), np.ones((2, 2)), np.full((2, 2), 7)
+        # pass B's ranking promotes b over a; attempt_1 stays pass A's top-1.
+        merged = pin({"k": [b, a]}, {"k": [a]})
+        self.assertEqual(len(merged["k"]), 2)
+        self.assertTrue(np.array_equal(merged["k"][0], a))
+        self.assertTrue(np.array_equal(merged["k"][1], b))
+        # A task pass A never reached keeps pass B's own ranking, unpinned.
+        untouched = pin({"k": [c]}, {})
+        self.assertEqual([g.tolist() for g in untouched["k"]], [c.tolist()])
+        # And the single-cell grid that a `len`-based check would wave through.
+        tiny = pin({"k": [np.zeros((1, 1))]}, {"k": [np.zeros((1, 1))]})
+        self.assertEqual(len(tiny["k"]), 1)
 
     def test_patched_files_compile(self):
         for name, src in written_files(patched()).items():
