@@ -9,6 +9,14 @@ the key, so a repeat run re-reads the submission list, finds it, and does nothin
 (`fire_draws.py` decides acceptance by reading the list back, never by the CLI's
 text).
 
+"Already fired" is therefore read from the SERVER, not from this script's own log.
+An arm fired by a hand-run round (`scripts/fire-draws-<date>.json`, logged under
+`experiments/score-push-<date>/fire.jsonl`) leaves the local log untouched, so a
+log-only queue sees its head as un-fired, re-selects it, and spends the invocation
+re-reading a submission that already exists -- one whole UTC day lost per stale
+head. The submission list is the authority on what has been fired.
+
+
 Catch-up is deliberately one arm per invocation: firing a missed arm and the
 current one on the same day is impossible (one slot), so the queue advances by
 exactly one and the rest wait for their own days.
@@ -26,6 +34,8 @@ import sys
 import tempfile
 import time
 from pathlib import Path
+
+from fire_draws import submissions   # sits beside us; always run as a script
 
 ROOT = Path(__file__).resolve().parents[1]
 QUEUE = ROOT / "scripts" / "arm-queue.json"
@@ -49,6 +59,21 @@ def fired_messages(log_path: Path) -> set[str]:
 def select(queue: list[dict], fired: set[str]) -> dict | None:
     """First queued arm whose message has not been accepted by the server yet."""
     return next((arm for arm in queue if arm["message"] not in fired), None)
+
+
+def board_messages(competitions: set[str], rows=submissions) -> set[str]:
+    """Every submission description already on the server for these boards.
+
+    The local log only knows about arms this repo's own scripts fired. A round
+    fired by hand (or by another agent) is invisible to it, so a log-only queue
+    re-selects its stale head, no-ops, and loses the day -- which is exactly what
+    happened on 2026-09-25. `rows` is injectable so the merge is testable without
+    the network.
+    """
+    out: set[str] = set()
+    for competition in sorted(competitions):
+        out |= {r["description"] for r in rows(competition) if r.get("description")}
+    return out
 
 
 def arm_targets(arm: dict) -> list[dict]:
@@ -86,11 +111,26 @@ def main() -> int:
             ]), encoding="utf-8")
             assert fired_messages(log) == {"a", "b"}
             assert select(q, fired_messages(log))["message"] == "c"
+        # An arm fired by a hand-run round exists only on the SERVER. A log-only
+        # queue re-selects that stale head and spends the day re-reading it.
+        rows = lambda competition: [{"description": "a"}, {"description": "b"}]
+        assert board_messages({"arc-a"}, rows=rows) == {"a", "b"}
+        assert board_messages({"arc-a", "arc-b"}, rows=rows) == {"a", "b"}   # one read
+        assert board_messages({"arc-a"}, rows=lambda c: [{}, {"description": ""}]) == set()
+        assert select(q, board_messages({"arc-a"}, rows=rows))["message"] == "c"
         print("self-test ok: the queue advances in order and never re-fires")
         return 0
 
     queue = json.loads(args.queue.read_text(encoding="utf-8"))
     fired = fired_messages(args.log)
+    try:
+        fired |= board_messages({arm["competition"] for arm in queue})
+    except RuntimeError as exc:
+        # Deliberately NOT a fallback to the log-only set: that silent no-op is the
+        # day-losing bug this read exists to remove. Fail loudly, exit nonzero, let
+        # the caller's retry bring it back.
+        print(json.dumps({"event": "board_read_failed", "error": str(exc)}))
+        return 2
     arm = select(queue, fired)
     if arm is None:
         print(json.dumps({"event": "queue_empty", "queued": len(queue),

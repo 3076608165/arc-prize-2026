@@ -1,0 +1,14 @@
+{
+  "competition": "arc-prize-2026-arc-agi-2",
+  "observed_utc": "2026-09-25T01:25:00Z",
+  "ref": "56512472",
+  "status": "COMPLETE",
+  "public": "30.56",
+  "arm": "two-pass pooled selection (merge fixed), kernel v15, build agi2/out/nvarc-p2-fix",
+  "reading": "Predeclared null. 30.56 lands exactly on the second member of the standing pair, so the selected pair is unchanged at 30.97 (draw) + 30.56. Pass B ran in this submission, so this is a real reading for the design as fired, not a missing arm. Caveat recorded in the 9/24 round: only the worker that drew the __PASS2__ marker decoded a genuinely decorrelated pass B, so the arm measured partial second-pass coverage -- the item-pass-id build (agi2/out/twopass-itemid) is the version that measures the idea properly.",
+  "state_after": {
+    "selected_pair": [30.97, 30.56],
+    "draws_n": 10,
+    "band": [28.89, 30.97]
+  }
+}

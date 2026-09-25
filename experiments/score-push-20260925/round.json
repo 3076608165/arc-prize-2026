@@ -1,0 +1,48 @@
+{
+  "date": "2026-09-25",
+  "policy": "Standing campaign policy, unchanged: one slot per board per UTC day, best two submissions across the competition count, an unused slot cannot be banked. Both slots fired, and both are experiments rather than rerolls.",
+  "backfill": "Two 9/24 refs were still PENDING in yesterday's record and are scored now. AGI-2 56512472 (two-pass pooled, kernel v15) = 30.56, which lands exactly on the second member of the standing pair: the arm's predeclared null. Pass B ran in that submission, so the null is a reading for the design as fired -- with the caveat recorded yesterday that only the worker which drew the __PASS2__ marker decoded a genuinely decorrelated pass B. AGI-3 56511716 (seed 10) = 0.07, below 0.26, pair unchanged. Written to experiments/56512472-result.json and experiments/56511716-result.json.",
+  "agi2": {
+    "what": "original numerics, perfpatch reverted -- kernel version 16, build agi2/out/orig-numerics-v16 (--orig-numerics, upstream four, hours 11.83). The perfpatch's ARC-token-restricted GPU logsumexp is replaced by the published baseline's full-vocabulary CPU log_softmax.",
+    "submission_ref": 56536580,
+    "submitted_utc": "2026-09-25T01:23:43Z",
+    "status": "PENDING",
+    "decision_dependency": "high, and it is the one public question in this family nobody has published a reading for: the upstream notebook (mikelou1/arc-agi2-lb33-89-minimal-perfpatch) claims 33.89 while every rebuild of it, ours included, draws 27.6-31.0. Either the patched arithmetic costs those ~4 points, or the title is an unreproduced platform-epoch claim. The score decides which, and the losing branch closes a line of work permanently.",
+    "predeclared": {
+      ">= 32.00": "the arithmetic is the lever. The next arm is rebuilt with the orig-numerics path (agi2/out/twopass-itemid plus --orig-numerics), and the perfpatch's speed advantage stops being free.",
+      "30.57 - 31.99": "record it and let it replace 30.56 as the pair's second member if it stands, but no attribution: the board's resolution floor is ~2 points (five byte-identical resubmits spread 1.7), so this band cannot separate numerics from the platform.",
+      "<= 30.56": "pair unchanged at 30.97 + 30.56, and the numerics revert is not the 33.89 gap -- the title stays classified as environmental for us. This is the predeclared null."
+    },
+    "rehearsal_gate": "Read BEFORE the slot was spent, from the newest kernel version's log: status COMPLETE, 4/4 commit-mode tasks finished, 0 errors, 0 deadline truncations, every output has candidates, submission.json written (23,253 bytes), run time ~28 min. Its 4-task preflight 'Reload score' reads 2.5, against 3.0 for the two-pass build and 2.5 for the base build, i.e. the reverted path behaves like the base. Identity checked by hash: the emitted arc_solver.py / arc_decoder.py / starter.py in the downloaded output are byte-identical to the cells in agi2/out/orig-numerics-v16/submission.ipynb. Decoding really changed: task 36a08778's answer in the 4-task rehearsal submission.json differs from the two-pass build's rehearsal answer, while the other three tasks are identical.",
+    "caveat": "The perfpatch is also a SPEED patch, so a low score cannot by itself distinguish 'different beam' from 'fewer tasks attempted'. The arm carries --audit-coverage and the scored rerun writes coverage_summary.json, but that artifact is NOT retrievable any more: pushing the next arm as version 17 made version 16 no longer the newest, and `kaggle kernels output` only ever returns the newest version's run. If the score comes in low, the coverage question has to be re-created by an arm that carries both --orig-numerics and --audit-coverage, since coverage is a property of the code path rather than of the draw.",
+    "watcher": "none. The scored rerun cannot finish before ~13:30Z, so the score is read from the submissions table in the next session -- the two newest rows per competition still cover this ref then."
+  },
+  "agi3": {
+    "what": "stable agent, seed 11 (an unsampled draw); kernel version 15 pushed 01:24Z. One line differs from seed 10's agent: the ARC_SEED fallback in __init__. Agent sha256 1d9aecb67e68b9acb484dd50b50145f1a887e71cc0f437443a7e833232fdd1c2, kernel COMPLETE 4 minutes after the push.",
+    "submission_ref": 56536596,
+    "submitted_utc": "2026-09-25T01:24:55Z",
+    "status": "PENDING",
+    "decision_dependency": "none for the method. The draw policy is already supported by the data (ten draws, one above 0.26), and a new seed competes only for the second slot of the standing pair. Held as a lottery ticket because the slot cannot be banked and no better variant exists yet; the real lever on this board is porting the harness class that scores in the tens, which is not built.",
+    "predeclared": {
+      "any value": "record it. It replaces 0.26 (seed 4) as the second selected submission only if it beats 0.26. Standing pair 0.27 (seed 7) + 0.26 (seed 4)."
+    },
+    "draws_to_date": {
+      "n": 11,
+      "read": "0.03 / 0.21 / 0.06 / 0.04 / 0.26 / 0.16 / 0.06 / 0.27 / 0.20 / 0.07",
+      "note": "one draw in ten above 0.26 -- the honest prior for seed 11 beating the pair is about 1 in 10, which is what makes this a ticket rather than a variant"
+    }
+  },
+  "unattended_fire": "The 9/24 00:05Z cron instant dispatched 25.2 hours late (2026-09-25 11:18 local, catch-up after the machine was asleep or off) and spent itself on a no-op: fire_next_arm.py selected the queue's stale head (twopass-fix, kernel v15) because 'already fired' was read only from experiments/fire-arms.jsonl, and yesterday's round was fired by hand through scripts/fire-draws-20260924.json and logged under experiments/score-push-20260924/ instead. The next_run_at was already 2026-09-26 10:05 local, so today's only automatic attempt had been consumed and the AGI-2 slot would have been lost with no further tick. Root cause fixed the same session: fire_next_arm.py now merges in the SERVER's submission list (board_messages, injectable for the self-test) so an arm fired by any route is skipped, and it exits 2 loudly instead of falling back to the log-only set if that read fails. The self-test covers the merge.",
+  "standings_2026-09-25": {
+    "read_utc": "2026-09-25T01:30:00Z",
+    "arc-agi-2": {"teams": 2183, "our_rank": 462, "selected_pair": [30.97, 30.56], "prev": {"teams": 2171, "our_rank": 460}},
+    "arc-agi-3": {"teams": 3302, "our_rank": 1795, "selected_pair": [0.27, 0.26], "prev": {"teams": 3281, "our_rank": 1779}},
+    "paper-track": {"teams": 203, "our_rank": null, "note": "no submission; the writeup is the artifact"}
+  },
+  "next": {
+    "queued": "twopass-item-passid as kernel version 17, pushed 2026-09-25 01:26Z with its 9 tests green, and moved to the head of scripts/arm-queue.json with the version number written in. It fires for 2026-09-26 and its rehearsal must be read before the slot is spent (that rule is what cost a day on 9/24).",
+    "contingent": "If the AGI-2 reading is >= 32, the queued arm is REPLACED rather than fired: rebuild agi2/out/twopass-itemid with --orig-numerics so the arithmetic finding is carried forward, and fire that. One knob per slot.",
+    "ready_and_after": "'twopass-largest-first' stays behind it and its staged build still carries the __PASS2__ marker, so it must be rebuilt on top of agi2/out/twopass-itemid before it fires.",
+    "verification_debt": "Version 16's scored-rerun coverage_summary.json is no longer readable through the kernels API (version 17 is the newest). Version 17's own rehearsal log is RUNNING at the time this record was written and has not been read yet."
+  }
+}

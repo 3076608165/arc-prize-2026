@@ -1,26 +1,15 @@
 [
   {
-    "id": "twopass-fix",
-    "arm": "two-pass pooled selection (merge fixed)",
+    "id": "twopass-item-passid",
+    "arm": "two-pass with the pass id carried in the queue item",
     "competition": "arc-prize-2026-arc-agi-2",
     "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
-    "version": 15,
+    "version": 17,
     "file": "submission.json",
-    "message": "20260924 two-pass pooled (fixed merge): pass A/B candidate lists are grids, not sample dicts; versions 12 and 14 died 43 min in on `if _first` without writing submission.json; attempt_1 pinned to pass A top-1 (monotone); predeclared >= pass A alone, band 29.90 +/- 0.64",
-    "build": "agi2/out/nvarc-p2-fix",
-    "predicts": "monotone, probably null (public evidence: a second decode round did not move LB)",
-    "note": "run as version 15 after the crash fix; the commit-mode rehearsal was read before the slot was spent"
-  },
-  {
-    "id": "orig-numerics",
-    "arm": "original numerics (perfpatch reverted)",
-    "competition": "arc-prize-2026-arc-agi-2",
-    "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
-    "version": 16,
-    "file": "submission.json",
-    "message": "20260925 orig-numerics: published baseline arithmetic (full-vocab CPU log_softmax) instead of the perfpatch's ARC-token-restricted GPU logsumexp",
-    "build": "agi2/out/orig-numerics-v16",
-    "predicts": "~33.9 would mean the perfpatch arithmetic costs ~4 points; ~30 means the 33.89 gap is environmental"
+    "message": "20260926 two-pass item-passid: pass id travels with each queued key so all four workers decode pass B, instead of only the one that draws the __PASS2__ marker",
+    "build": "agi2/out/twopass-itemid",
+    "predicts": "the same null as the marker version if a second decode round really buys nothing; a gain here means the marker version's partial coverage, not the idea, was what read flat",
+    "note": "Built and tested 2026-09-24 (9 tests in agi2/test_two_pass.py, all green; the emitted worker routes each item through `_pass_store(pass_id)`, no marker anywhere). Pushed 2026-09-25 01:26Z as kernel version 17 and fires FIRST, because the 9/25 two-pass arm read its predeclared null (30.56) with only partial pass-B coverage -- this is the build that measures the idea. Read the newest version's rehearsal log before the slot is spent."
   },
   {
     "id": "twopass-largest-first",
@@ -29,21 +18,33 @@
     "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
     "version": null,
     "file": "submission.json",
-    "message": "20260926 two-pass largest-first: same pooled two-pass, queue ordered by descending input size so the expensive tail gets its second pass",
+    "message": "20260927 two-pass largest-first: same pooled two-pass, queue ordered by descending input size so the expensive tail gets its second pass",
     "build": "agi2/out/twopass-lf-v15",
     "predicts": "scheduling only: pass B covers more of the 120 tasks than the plain two-pass arm did",
-    "note": "staged build predates the item-pass-id fix (it still carries the __PASS2__ marker), so rebuild it on top of agi2/out/twopass-itemid before it fires -- one knob per slot."
+    "note": "Staged build predates the item-pass-id fix (it still carries the __PASS2__ marker), so rebuild it on top of agi2/out/twopass-itemid -- one knob per slot -- and write the version it receives here before it fires."
   },
   {
-    "id": "twopass-item-passid",
-    "arm": "two-pass with the pass id carried in the queue item",
+    "id": "twopass-fix",
+    "arm": "two-pass pooled selection (merge fixed) -- FIRED 2026-09-24 as kernel v15",
     "competition": "arc-prize-2026-arc-agi-2",
     "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
-    "version": null,
+    "version": 15,
     "file": "submission.json",
-    "message": "20260927 two-pass item-passid: pass id travels with each queued key so all four workers decode pass B, instead of only the one that draws the __PASS2__ marker",
-    "build": "agi2/out/twopass-itemid",
-    "predicts": "the same null as the marker version if a second decode round really buys nothing; a gain here means the marker version's partial coverage, not the idea, was what read flat",
-    "note": "Built and tested 2026-09-24 (9 tests in test_two_pass.py; the emitted worker routes each item through `_pass_store(pass_id)`, no marker anywhere). NOT pushed yet: a push replaces the latest version's log and takes a GPU session, so it waits for a free window."
+    "message": "20260924 two-pass pooled (fixed merge): pass A/B candidate lists are grids, not sample dicts; versions 12 and 14 died 43 min in on `if _first` without writing submission.json; attempt_1 pinned to pass A top-1 (monotone); predeclared >= pass A alone, band 29.90 +/- 0.64",
+    "build": "agi2/out/nvarc-p2-fix",
+    "predicts": "monotone, probably null (public evidence: a second decode round did not move LB)",
+    "note": "Read 30.56 = the predeclared null (ref 56512472). Kept here as the record of what fired; the server read in fire_next_arm.py skips it."
+  },
+  {
+    "id": "orig-numerics",
+    "arm": "original numerics (perfpatch reverted) -- FIRED 2026-09-25 as kernel v16",
+    "competition": "arc-prize-2026-arc-agi-2",
+    "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+    "version": 16,
+    "file": "submission.json",
+    "message": "20260925 orig-numerics: published baseline arithmetic (full-vocab CPU log_softmax) instead of the perfpatch's ARC-token-restricted GPU logsumexp",
+    "build": "agi2/out/orig-numerics-v16",
+    "predicts": "~33.9 would mean the perfpatch arithmetic costs ~4 points; ~30 means the 33.89 gap is environmental",
+    "note": "Fired 2026-09-25 01:23Z (ref 56536580) after its rehearsal was read: COMPLETE, 4/4 tasks finished, 0 errors, submission.json written, and task 36a08778 decoded differently from the two-pass build (so the numerics revert really changes decoding). CONTINGENCY to decide in the session that reads the score: a reading >= 32 makes the arithmetic the lever, so the next arm must carry --orig-numerics (rebuild agi2/out/twopass-itemid with the orig-numerics path); a reading near 30 leaves this queue order as it stands."
   }
 ]

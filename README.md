@@ -4,18 +4,20 @@ Working repo for all three 2026 ARC competitions. One local harness for
 ARC-AGI-2, the official starter wired up for ARC-AGI-3, and a writeup skeleton
 for the Paper Track that both feed.
 
-## Where we actually stand (2026-09-23)
+## Where we actually stand (2026-09-25)
 
 | competition | our score | rank | field median | field max |
 |---|---|---|---|---|
-| ARC-AGI-2 | **30.97** | 457 / 2156 | 28.06 | 83.06 |
-| ARC-AGI-3 | 0.27 | 1751 / 3258 | 0.30 | 18.81 |
+| ARC-AGI-2 | **30.97** | 462 / 2184 | 28.13 | 83.06 |
+| ARC-AGI-3 | 0.27 | 1795 / 3306 | 0.30 | 19.40 |
 
 Both scores are the best single submission so far (finals take the best two),
 read back from the leaderboard files with `kaggle competitions leaderboard -c
 <comp> -d`; the rank is the board's own, which is the last position of a tie
 group. Both fields grew faster than we scored, so both ranks slipped even though
-nothing changed on our side. ARC-AGI-3's 0.27 is a lucky draw from a
+nothing changed on our side (457 / 2156 and 1751 / 3258 on 9/23; ARC-AGI-3's
+field maximum also moved for the first time in a week, 18.81 -> 19.40).
+ARC-AGI-3's 0.27 is a lucky draw from a
 deterministic step function, not a capability estimate — see
 [paper/findings.md](paper/findings.md).
 

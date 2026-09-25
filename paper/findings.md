@@ -1095,6 +1095,53 @@ text was wrong in exactly the way a text assertion cannot see.
   queued for the next free slot, not pushed (a push replaces the running
   version's log and takes a GPU session).
 
+## The numerics control fires, and the unattended fire spends itself on a stale head (2026-09-25)
+
+- **The two-pass arm read its predeclared null.** Kernel v15 (ref 56512472) scored
+  **30.56** — exactly the second member of the standing pair, so the pair is unchanged
+  at 30.97 + 30.56 and the second decode round bought nothing observable. Two caveats
+  keep this from being a verdict on the idea: the arm as fired gave a decorrelated pass
+  B to only one of four workers (above), and the board's ~2-point floor sits on top of
+  any reading this size. `--two-pass` with the pass id in the queue item is built,
+  tested (9 tests, all green) and pushed as kernel **v17** for the next slot, so the
+  design does get measured properly rather than inferred from the partial run.
+- **ARC-AGI-3 seed 10 (ref 56511716) read 0.07.** Below 0.26: pair unchanged. Ten seeds
+  now span 0.03-0.27 with exactly one draw above 0.26, which is the honest prior for
+  seed 11 and the reason that board's slot is a ticket rather than a variant.
+- **The numerics control is the arm this campaign should have run weeks ago.** Every
+  rebuild of the upstream notebook, ours included, draws 27.6-31.0 while its title
+  claims 33.89; nobody has published a reading on whether the perfpatch's
+  ARC-token-restricted GPU logsumexp is what costs the difference. Fired as kernel v16
+  (ref 56536580), predeclared at >= 32 for "the arithmetic is the lever". Its
+  commit-mode rehearsal was read *before* the slot was spent: 4/4 tasks finished, 0
+  errors, `submission.json` written, the 4-task preflight back at the base build's 2.5
+  (the two-pass build reads 3.0), and the emitted files byte-identical to the intended
+  build's cells. The revert is real: task `36a08778` decodes to a different grid than
+  the two-pass build does. Caveat carried into the arm: the perfpatch is also a *speed*
+  patch, so a low score cannot separate "different beam" from "fewer tasks attempted".
+- **A fire that would have lost the day, and why.** The unattended job's 9/24 instant
+  dispatched 25.2 hours late (the machine had been asleep) and spent itself re-reading
+  a submission that already existed: `fire_next_arm.py` knew what it had fired only
+  from its own log, and the 9/24 round had been fired by hand through
+  `scripts/fire-draws-20260924.json`. Because a catch-up dispatch advances
+  `next_run_at` past the instant it was late for, that no-op consumed the day's *only*
+  automatic attempt, and nothing else was due until the next UTC day. Fixed at the root
+  in the same session: the queue now merges in the server's submission list (injectable
+  for the test, and a failed read exits loudly instead of falling back to the log). The
+  general lesson for a queue that is the campaign's safety net: **"fired" is server
+  state; a local log is a cache of it, and a stale cache costs a slot rather than a
+  tick.**
+- **Pushing the next arm costs the previous arm's artifacts, not just its log.** v17
+  made v16 no longer the kernel's newest version, so v16's scored rerun can no longer
+  be inspected for its `coverage_summary.json` — the artifact that would separate "the
+  reverted numerics decode differently" from "the reverted numerics simply attempted
+  fewer tasks". The score itself survives in the submissions table; the diagnostic does
+  not. Read an arm's diagnostics before staging the next one.
+- **Standings (read 2026-09-25).** ARC-AGI-2 2184 rows, max 83.06, median 28.13, our
+  30.97 at rank 462 (was 457/2156 on 9/23). ARC-AGI-3 3306 rows, max 19.40 (was 18.81),
+  median 0.30, our 0.27 at rank 1795 (was 1751/3258). Both ranks slipped for the same
+  reason as before: the fields grow and our scores do not.
+
 ## What this gives the writeup
 
 - **Theory**: a stated hypothesis (the ARC-AGI-2 bottleneck is exact

@@ -1,0 +1,9 @@
+[
+  {
+    "competition": "arc-prize-2026-arc-agi-3",
+    "kernel": "uts3125025522741/arc-agi-3-sweep-agent",
+    "version": 15,
+    "file": "submission.parquet",
+    "message": "20260925 stable seed11 (unsampled draw): seeds 0-10 read 0.03/0.21/0.06/0.04/0.26/0.16/0.06/0.27/0.20/0.07; local ordering retired, this is a lottery ticket"
+  }
+]

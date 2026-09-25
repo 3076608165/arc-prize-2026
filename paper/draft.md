@@ -147,7 +147,8 @@ worth hundreds of ranks.
 | 30.50-31.00 | **241** | 33.00-33.50 | 17 |
 | 31.00-32.00 | 209 | 33.50-34.00 | 3 |
 
-30.97 sits at rank 448 of 2085. The ~2-point instrument floor is therefore the
+30.97 sits at rank 462 of 2184 (read 2026-09-25; the density table above is the
+9/19 snapshot). The ~2-point instrument floor is therefore the
 binding constraint on this track rather than a methodological footnote: inside
 our band, and for any team in it, single-slot comparisons are uninformative in
 exactly the region where the leaderboard is densest.

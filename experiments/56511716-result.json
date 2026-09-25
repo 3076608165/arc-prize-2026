@@ -1,0 +1,8 @@
+{
+  "competition": "arc-prize-2026-arc-agi-3",
+  "observed_utc": "2026-09-25T01:25:00Z",
+  "ref": "56511716",
+  "status": "COMPLETE",
+  "public": "0.07",
+  "reading": "stable agent, seed 10 (kernel v14). Below 0.26, so the selected pair is unchanged at 0.27 (seed 7) + 0.26 (seed 4). Draws now n=11 read: 0.03/0.21/0.06/0.04/0.26/0.16/0.06/0.27/0.20/0.07 -- exactly one draw above 0.26 in ten, which is why a further seed is a lottery ticket rather than a lever."
+}
