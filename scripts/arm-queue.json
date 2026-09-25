@@ -9,7 +9,7 @@
     "message": "20260926 two-pass item-passid: pass id travels with each queued key so all four workers decode pass B, instead of only the one that draws the __PASS2__ marker",
     "build": "agi2/out/twopass-itemid",
     "predicts": "the same null as the marker version if a second decode round really buys nothing; a gain here means the marker version's partial coverage, not the idea, was what read flat",
-    "note": "Built and tested 2026-09-24 (9 tests in agi2/test_two_pass.py, all green; the emitted worker routes each item through `_pass_store(pass_id)`, no marker anywhere). Pushed 2026-09-25 01:26Z as kernel version 17 and fires FIRST, because the 9/25 two-pass arm read its predeclared null (30.56) with only partial pass-B coverage -- this is the build that measures the idea. Read the newest version's rehearsal log before the slot is spent."
+    "note": "Built and tested 2026-09-24 (9 tests in agi2/test_two_pass.py, all green; the emitted worker routes each item through `_pass_store(pass_id)`, no marker anywhere). Pushed 2026-09-25 01:26Z as kernel version 17 and fires FIRST, because the 9/25 two-pass arm read its predeclared null (30.56) with only partial pass-B coverage -- this is the build that measures the idea. Rehearsal read 2026-09-25 02:10Z: COMPLETE, no traceback, error 0, 5/5 outputs have candidates, submission.json written, emitted files byte-identical to the build, 42.7 min vs 28.5 for the marker build. Preflight 2.5 against 3.0 for the marker version -- recorded, not a score. Gate closed; submittable."
   },
   {
     "id": "twopass-largest-first",

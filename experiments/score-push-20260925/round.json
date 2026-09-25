@@ -40,9 +40,9 @@
     "paper-track": {"teams": 203, "our_rank": null, "note": "no submission; the writeup is the artifact"}
   },
   "next": {
-    "queued": "twopass-item-passid as kernel version 17, pushed 2026-09-25 01:26Z with its 9 tests green, and moved to the head of scripts/arm-queue.json with the version number written in. It fires for 2026-09-26 and its rehearsal must be read before the slot is spent (that rule is what cost a day on 9/24).",
+    "queued": "twopass-item-passid as kernel version 17, pushed 2026-09-25 01:26Z with its 9 tests green, and moved to the head of scripts/arm-queue.json with the version number written in. Its rehearsal was then waited out and read (COMPLETE 02:09:34Z, no traceback, error 0, 5/5 outputs have candidates, submission.json written, emitted files byte-identical to the build, run 42.7 min against 28.5 for the marker build) -- see experiments/score-push-20260925/arm-itemid-rehearsal.md. Its 4-task preflight reads 2.5 against 3.0 for the marker version: recorded as a preflight, not a score, and it points the opposite way from the arm's hypothesis.",
     "contingent": "If the AGI-2 reading is >= 32, the queued arm is REPLACED rather than fired: rebuild agi2/out/twopass-itemid with --orig-numerics so the arithmetic finding is carried forward, and fire that. One knob per slot.",
     "ready_and_after": "'twopass-largest-first' stays behind it and its staged build still carries the __PASS2__ marker, so it must be rebuilt on top of agi2/out/twopass-itemid before it fires.",
-    "verification_debt": "Version 16's scored-rerun coverage_summary.json is no longer readable through the kernels API (version 17 is the newest). Version 17's own rehearsal log is RUNNING at the time this record was written and has not been read yet."
+    "verification_debt": "Version 16's scored-rerun coverage_summary.json is no longer readable through the kernels API (version 17 is the newest), so if the numerics control reads low the coverage question has to be re-created by an arm carrying both --orig-numerics and --audit-coverage. Version 17's rehearsal is now read and green (arm-itemid-rehearsal.md), so the 2026-09-26 fire is unblocked."
   }
 }
