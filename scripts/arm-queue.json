@@ -16,12 +16,12 @@
     "arm": "two-pass + largest-puzzles-first queue",
     "competition": "arc-prize-2026-arc-agi-2",
     "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
-    "version": null,
+    "version": 18,
     "file": "submission.json",
     "message": "20260927 two-pass largest-first: same pooled two-pass, queue ordered by descending input size so the expensive tail gets its second pass",
-    "build": "agi2/out/twopass-lf-v15",
+    "build": "agi2/out/twopass-lf-v18",
     "predicts": "scheduling only: pass B covers more of the 120 tasks than the plain two-pass arm did",
-    "note": "Staged build predates the item-pass-id fix (it still carries the __PASS2__ marker), so rebuild it on top of agi2/out/twopass-itemid -- one knob per slot -- and write the version it receives here before it fires."
+    "note": "Rebuilt 2026-09-26 on top of agi2/out/twopass-itemid with the same flags (--two-pass --largest-first --audit-coverage --worker-hash-seed 0 --hours 11.83) so the only difference from v17 is the queue-order key (verified: one differing code cell). Pushed 2026-09-26 09:20Z as kernel version 18; its commit-mode rehearsal was still KernelWorkerStatus.QUEUED 90 min later. Fired anyway with the caveat recorded in experiments/score-push-20260926/arm-v18-rehearsal.md: an unverified pure-scheduling reorder has the same worst case as not firing (a lost slot) and the same upside as v17. Clear this arm if the rehearsal reads red before the fire."
   },
   {
     "id": "twopass-fix",
