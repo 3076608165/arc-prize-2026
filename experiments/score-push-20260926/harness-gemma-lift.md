@@ -65,3 +65,22 @@ other arm here: the environment gate is cheap, the behaviour gate is the slot.
 Either way the slot buys more than another seed would: a seed can only re-draw a
 distribution already measured at 2/13, while this is the first reading from a
 different distribution.
+
+## How it gets fired (both boards, one slot each per UTC day)
+
+`scripts/fire_next_arm.py` advances the queue by exactly ONE arm per invocation —
+correct for one board, insufficient now that two boards each have a daily slot. So
+the same idempotent invocation is scheduled twice, 20 minutes apart, and the queue
+order does the allocation:
+
+| when (local) | route | fires |
+|---|---|---|
+| 10:05 daily | Hermes cron `arc-fire-next-arm` + Windows task `ARC fire next arm` | queue head: `twopass-largest-first` (AGI-2, kernel v18) |
+| 10:25 daily | Hermes cron `arc-fire-next-arm-b` + Windows task `ARC fire next arm B` | next un-fired arm: `harness-gemma` (AGI-3, kernel v18) |
+
+Both routes read the submission list to decide what is already fired, so the second
+invocation skips whatever the first landed, and a day when the first fails degrades to
+"the harness waits for tomorrow" rather than to a double spend. Verified 2026-09-26:
+both tasks registered with next runs 9/27 10:05 and 10:25, and the dry run under the
+cron runner's own interpreter selects `twopass-largest-first` v18.
+

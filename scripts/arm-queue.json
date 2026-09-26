@@ -46,5 +46,17 @@
     "build": "agi2/out/orig-numerics-v16",
     "predicts": "~33.9 would mean the perfpatch arithmetic costs ~4 points; ~30 means the 33.89 gap is environmental",
     "note": "Fired 2026-09-25 01:23Z (ref 56536580) after its rehearsal was read: COMPLETE, 4/4 tasks finished, 0 errors, submission.json written, and task 36a08778 decoded differently from the two-pass build (so the numerics revert really changes decoding). CONTINGENCY to decide in the session that reads the score: a reading >= 32 makes the arithmetic the lever, so the next arm must carry --orig-numerics (rebuild agi2/out/twopass-itemid with the orig-numerics path); a reading near 30 leaves this queue order as it stands."
+  },
+  {
+    "id": "harness-gemma",
+    "arm": "lifted gemma-reflection LLM harness (agent class) -- the first non-seed arm on this board",
+    "competition": "arc-prize-2026-arc-agi-3",
+    "kernel": "uts3125025522741/arc-agi-3-sweep-agent",
+    "version": 18,
+    "file": "submission.parquet",
+    "message": "20260927 lifted gemma-reflection harness (agent class): offline vLLM + gemma-4-31b-it driving the official agents harness; predeclared >0.27 new pair member, 0.10-0.27 under-tuned class, <=0.10 not the lever",
+    "build": "agi3/out/harness-gemma",
+    "predicts": "a different distribution from the seed lottery (2 of 13 draws above 0.26): if the class works at all it lands above the pair's second member",
+    "note": "Lifted from bernicerobinson/arc-agi-3-m2-gemma-reflection (source notebook sha256 dee15082..., agent sha256 da1f1a4a...) by agi3/lift_harness.py; our only diffs are the kernel identity and the wheels-path resolution (the source hardcoded the author's mount layout, which killed v17 at cell 3 with ModuleNotFoundError: vllm). Environment gate read GREEN on kernel v18: resolver found /kaggle/input/vllm-0230-offline/.../wheels, vllm 0.23.0 and arc_agi imported, the official agents harness copied with our my_agent.py at 70K, __init__.py registered 'myagent', submission.parquet written, 0 tracebacks. The agent loop itself only runs in the competition rerun, so the first scored slot is the first measurement of the agent -- do not read a low score as 'the class failed' if the rerun's own log shows the harness never reached the games."
   }
 ]
