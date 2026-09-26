@@ -1,0 +1,49 @@
+{
+  "date": "2026-09-26",
+  "policy": "Standing campaign policy, unchanged: one slot per board per UTC day, best two submissions across the competition count, an unused slot cannot be banked. Both boards' 9/26 slots are used, and each carries a variant/draw with a predeclared reading rather than a rerun of pinned bytes.",
+  "backfill": "Both refs the 9/25 record left PENDING are scored: AGI-2 56536580 (orig-numerics, kernel v16) = 28.89 = its predeclared null, and AGI-3 56536596 (seed 11) = 0.08, below 0.26. Written to experiments/56536580-result.json and experiments/56536596-result.json. Consequence: the perfpatch's arithmetic is NOT the ~4-point gap to the upstream title (33.89), so that line of work is closed permanently; the selected pairs are unchanged (AGI-2 30.97 + 30.56, AGI-3 0.27 + 0.26).",
+  "agi2": {
+    "what": "two-pass item-passid -- kernel version 17, build agi2/out/twopass-itemid. The version where the pass id travels with each queued item, so all four workers decode pass B into its own store and the pooled selection sees the second pass as designed (v15's marker version gave a genuinely decorrelated pass B to only one worker).",
+    "submission_ref": 56570650,
+    "submitted_utc": "2026-09-26T05:52:11Z",
+    "status": "PENDING",
+    "fired_by": "the Windows scheduled task 'ARC fire next arm' (last run 2026-09-26 15:51:58 local, result 0) -- a StartWhenAvailable catch-up: it is scheduled for 10:05 local and the machine was not awake then. The AGI-2 slot was therefore already spent before this session started; nothing was re-fired here.",
+    "decision_dependency": "high, and it is the last unmeasured lever in the decode stage: v15 read its predeclared null (30.56) with partial pass-B coverage, so either the second decode round is simply not a lever on this family (matching the public finding that a second decoding round with different seeds did not move the board) or the marker version's partial coverage was what read flat. This is the arm that separates the two.",
+    "predeclared": {
+      ">= 32.00": "a gain beyond the ~2-point board resolution floor: the second pass IS a lever when fully applied, and the next arm is built on it (itemid + something orthogonal, one knob).",
+      "30.57 - 31.99": "inside the resolution floor: may replace 30.56 as the pair's second member if it stands, but no attribution to the arm.",
+      "<= 30.56": "the predeclared null. The second decode round is retired as a lever on this family, and the queued largest-first arm's only remaining claim is scheduling, not score."
+    },
+    "rehearsal_gate": "Read BEFORE the slot was spent (2026-09-25, experiments/score-push-20260925/arm-itemid-rehearsal.md): COMPLETE, no traceback, error 0, 5/5 outputs have candidates, submission.json written (23,253 bytes), emitted files byte-identical to the build, 2,561 s vs 1,707 s for the marker build. Preflight 'Reload score' 2.5 against 3.0 for the marker version -- recorded as a preflight and pointing against the arm's hypothesis.",
+    "standing_pair": [30.97, 30.56],
+    "band": [28.89, 30.97]
+  },
+  "agi3": {
+    "what": "stable agent, seed 12 (an unsampled draw); kernel version 16 pushed 2026-09-26 09:17Z, COMPLETE within ~1 min. One line differs from seed 11's agent: the ARC_SEED fallback in __init__; agent sha256 (build record) acb667833462dadedff2e92779418b7df96c8bfb2798062221b3bfa14324e6fa.",
+    "submission_ref": 56575477,
+    "submitted_utc": "2026-09-26T09:19:41Z",
+    "status": "PENDING",
+    "decision_dependency": "none for the method, and that is recorded rather than dressed up. Board draws are now n=12 with two above 0.26 (0.26, 0.27) and both already in the pair, so this is a ticket at roughly the observed 2-in-12 rate, not a lever. It is fired because the slot cannot be banked and no validated variant exists: the context-memory arm (agi3/context_agent.py) was smoke-tested only, produced byte-identical traces to its control and carries no performance claim, so firing it would be an unmeasured guess dressed as a variant. The real lever on this board is the harness class that scores in the tens, which is still not built.",
+    "predeclared": {
+      "any value": "record it. It replaces 0.26 (seed 4) as the second selected submission only if it beats 0.26. Standing pair 0.27 (seed 7) + 0.26 (seed 4)."
+    },
+    "draws_to_date": {
+      "n": 13,
+      "read": "0.03 / 0.21 / 0.06 / 0.04 / 0.26 / 0.16 / 0.06 / 0.27 / 0.20 / 0.07 / 0.07 / 0.08 / pending(seed12)"
+    }
+  },
+  "unattended_fire": "The Hermes cron job 'arc-fire-next-arm' fired at 2026-09-26 19:09 local and FAILED with exit 2: {\"event\": \"board_read_failed\", \"error\": \"...python-3.14.7+...python.exe: No module named kaggle\"}. Root cause: today's `hermes update` changed the interpreter Hermes gives no_agent cron scripts to its managed store python (3.14.7), while the shim fire_arc_arm.py passed sys.executable on to the project script, which shells out to `sys.executable -m kaggle`. Fixed at the shim (the one place that bridges the two): it now probes a small candidate list and runs the project script under the first interpreter that can import kaggle (HERMES_ARC_PYTHON overrides). Verified by running the shim under the store python exactly as the runner does: it reached the board and selected the queue's next arm instead of failing. The Windows task fired the day's AGI-2 slot independently (the venv python is hardcoded there), so no slot was lost today; both routes are idempotent and keyed on the submission message.",
+  "next": {
+    "queued": "'twopass-largest-first' rebuilt on top of the item-pass-id fix and pushed as kernel version 18 (agi2/out/twopass-lf-v18, --two-pass --largest-first --audit-coverage --worker-hash-seed 0 --hours 11.83). One-knob check: against v17's build the notebooks differ in exactly one code cell, and only in the queue-order key. It fires FIRST for 2026-09-27.",
+    "version_written": "scripts/arm-queue.json carries version 18 for this arm (a null version makes fire_draws gate on the bare kernel ref, i.e. whatever arm happens to be running -- the exact way a slot gets spent on the wrong bytes).",
+    "rehearsal": "pending at the time this record was written: version 18 was pushed 2026-09-26 09:20Z and the commit-mode rehearsal was QUEUED. Read it before the fire (the 9/24 rule); the reading is appended here and in experiments/score-push-20260926/arm-v18-rehearsal.md.",
+    "contingent_closed": "The 9/25 contingency 'if the AGI-2 reading is >= 32, rebuild itemid with --orig-numerics' is CLOSED by 56536580's null (28.89): the arithmetic is not the lever, so no numerics rebuild is queued.",
+    "verification_debt": "Version 17's scored rerun may write coverage diagnostics that become unreadable as soon as another version is pushed -- v18 has now been pushed, so if 56570650 reads low the pass-B coverage question has to be re-created by an arm rather than read from that run's output. This is the same debt the 9/25 record carried for version 16."
+  },
+  "standings_2026-09-26": {
+    "read_utc": "2026-09-26T09:20:00Z",
+    "arc-agi-2": {"teams": 2201, "our_rank": 467, "selected_pair": [30.97, 30.56], "prev": {"teams": 2183, "our_rank": 462}},
+    "arc-agi-3": {"teams": 3335, "our_rank": 1823, "selected_pair": [0.27, 0.26], "prev": {"teams": 3302, "our_rank": 1795}},
+    "paper-track": {"teams": 205, "note": "no submission; the writeup is the artifact"}
+  }
+}

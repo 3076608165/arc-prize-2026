@@ -1,0 +1,14 @@
+{
+  "competition": "arc-prize-2026-arc-agi-2",
+  "observed_utc": "2026-09-26T09:20:00Z",
+  "ref": "56536580",
+  "status": "COMPLETE",
+  "public": "28.89",
+  "arm": "original numerics, perfpatch reverted (--orig-numerics), kernel version 16, build agi2/out/orig-numerics-v16",
+  "reading": "Predeclared null: 28.89 is at the bottom of the standing band (28.89-30.97) and below 30.56, so the selected pair is unchanged at 30.97 (draw) + 30.56. The two-line revert does NOT recover the ~4 points between the upstream notebook's claimed 33.89 and every rebuild of it (ours draw 27.6-31.0). The arithmetic is retired as the explanation; the 33.89 title stays classified as an unreproduced platform-epoch claim for us. Caveat carried from the 9/25 record stands: the perfpatch is also a speed patch, so 'different beam' and 'fewer tasks attempted' are not separated -- but separation no longer changes a decision, because the losing branch is closed either way. Coverage re-creation note: version 16's coverage_summary.json is no longer readable (v17 was the newest version at read time).",
+  "state_after": {
+    "selected_pair": [30.97, 30.56],
+    "band": [28.89, 30.97],
+    "closed": "the numerics question (--orig-numerics) -- the 33.89 gap is not the perfpatch's arithmetic"
+  }
+}
