@@ -42,6 +42,7 @@
     "contingent_closed": "The 9/25 contingency 'if the AGI-2 reading is >= 32, rebuild itemid with --orig-numerics' is CLOSED by 56536580's null (28.89): the arithmetic is not the lever, so no numerics rebuild is queued.",
     "verification_debt": "Version 17's scored rerun may write coverage diagnostics that become unreadable as soon as another version is pushed -- v18 has now been pushed, so if 56570650 reads low the pass-B coverage question has to be re-created by an arm rather than read from that run's output. This is the same debt the 9/25 record carried for version 16."
   },
+  "agi3_next": "The next AGI-3 slot carries the first non-seed arm this campaign has had: a lifted LLM-in-the-loop harness (bernicerobinson/arc-agi-3-m2-gemma-reflection, offline, gemma-4-31b-it + vllm wheels + deps kernel, agent extracted to agi3/harness_gemma_my_agent.py and built by agi3/lift_harness.py). Pushed 2026-09-26 as kernel v17 of our AGI-3 kernel; the commit-mode smoke is running. Reading and fallback: experiments/score-push-20260926/harness-gemma-lift.md. If the smoke is red, the slot falls back to a seed draw (n=14) rather than spending it on a broken environment.",
   "standings_2026-09-26": {
     "read_utc": "2026-09-26T09:20:00Z",
     "arc-agi-2": {"teams": 2201, "our_rank": 467, "selected_pair": [30.97, 30.56], "prev": {"teams": 2183, "our_rank": 462}},

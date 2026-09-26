@@ -1,0 +1,27 @@
+{
+  "id": "uninhibitedscholar/arc3-taaf-anim-seeded-replica-0926",
+  "id_no": 135935800,
+  "title": "arc3-taaf-anim-seeded-replica-0926",
+  "code_file": "arc3-taaf-anim-seeded-replica-0926.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "gpu"
+  ],
+  "dataset_sources": [
+    "driessmit1/arc3-vllm-h100-wheelhouse-v3",
+    "jakobbrggen/taaf-kaggle-source-anim-20260807-anim",
+    "driessmit1/vrfai-qwen3-6-27b-fp8-hf-snapshot"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [
+    "arc-prize-2026-arc-agi-3"
+  ],
+  "model_sources": [],
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:37c64f7dd9c54116ecd1bcc88817c5469b88387388fade02bfa8bf3fc647d461",
+  "machine_shape": "NvidiaRtxPro6000"
+}

@@ -1,0 +1,29 @@
+{
+  "id": "bernicerobinson/arc-agi-3-m2-gemma-reflection",
+  "id_no": 135535458,
+  "title": "arc-agi-3-m2-gemma-reflection",
+  "code_file": "arc-agi-3-m2-gemma-reflection.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "gpu"
+  ],
+  "dataset_sources": [
+    "ko0kip/vllm-0230-offline"
+  ],
+  "kernel_sources": [
+    "philipvonderlind/vllm-deps"
+  ],
+  "competition_sources": [
+    "arc-prize-2026-arc-agi-3"
+  ],
+  "model_sources": [
+    "google/gemma-4/Transformers/gemma-4-31b-it/1"
+  ],
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:37c64f7dd9c54116ecd1bcc88817c5469b88387388fade02bfa8bf3fc647d461",
+  "machine_shape": "NvidiaRtxPro6000"
+}
