@@ -22,14 +22,16 @@
     "what": "stable agent, seed 12 (an unsampled draw); kernel version 16 pushed 2026-09-26 09:17Z, COMPLETE within ~1 min. One line differs from seed 11's agent: the ARC_SEED fallback in __init__; agent sha256 (build record) acb667833462dadedff2e92779418b7df96c8bfb2798062221b3bfa14324e6fa.",
     "submission_ref": 56575477,
     "submitted_utc": "2026-09-26T09:19:41Z",
-    "status": "PENDING",
+    "status": "COMPLETE",
+    "public": "0.06",
+    "reading_as_landed": "0.06, below 0.26 -- the predeclared branch, no change to the pair. Recorded in experiments/56575477-result.json.",
     "decision_dependency": "none for the method, and that is recorded rather than dressed up. Board draws are now n=12 with two above 0.26 (0.26, 0.27) and both already in the pair, so this is a ticket at roughly the observed 2-in-12 rate, not a lever. It is fired because the slot cannot be banked and no validated variant exists: the context-memory arm (agi3/context_agent.py) was smoke-tested only, produced byte-identical traces to its control and carries no performance claim, so firing it would be an unmeasured guess dressed as a variant. The real lever on this board is the harness class that scores in the tens, which is still not built.",
     "predeclared": {
       "any value": "record it. It replaces 0.26 (seed 4) as the second selected submission only if it beats 0.26. Standing pair 0.27 (seed 7) + 0.26 (seed 4)."
     },
     "draws_to_date": {
       "n": 13,
-      "read": "0.03 / 0.21 / 0.06 / 0.04 / 0.26 / 0.16 / 0.06 / 0.27 / 0.20 / 0.07 / 0.07 / 0.08 / pending(seed12)"
+      "read": "0.03 / 0.21 / 0.06 / 0.04 / 0.26 / 0.16 / 0.06 / 0.27 / 0.20 / 0.07 / 0.07 / 0.08 / 0.06"
     }
   },
   "unattended_fire": "The Hermes cron job 'arc-fire-next-arm' fired at 2026-09-26 19:09 local and FAILED with exit 2: {\"event\": \"board_read_failed\", \"error\": \"...python-3.14.7+...python.exe: No module named kaggle\"}. Root cause: today's `hermes update` changed the interpreter Hermes gives no_agent cron scripts to its managed store python (3.14.7), while the shim fire_arc_arm.py passed sys.executable on to the project script, which shells out to `sys.executable -m kaggle`. Fixed at the shim (the one place that bridges the two): it now probes a small candidate list and runs the project script under the first interpreter that can import kaggle (HERMES_ARC_PYTHON overrides). Verified by running the shim under the store python exactly as the runner does: it reached the board and selected the queue's next arm instead of failing. The Windows task fired the day's AGI-2 slot independently (the venv python is hardcoded there), so no slot was lost today; both routes are idempotent and keyed on the submission message.",

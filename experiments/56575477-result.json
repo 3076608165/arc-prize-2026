@@ -1,0 +1,10 @@
+{
+  "competition": "arc-prize-2026-arc-agi-3",
+  "observed_utc": "2026-09-26T11:55:09Z",
+  "ref": "56575477",
+  "status": "COMPLETE",
+  "public": "0.06",
+  "arm": "stable agent, seed 12 (kernel v16); agent sha256 (build record) acb667833462dadedff2e92779418b7df96c8bfb2798062221b3bfa14324e6fa",
+  "reading": "Below 0.26, so the selected pair is unchanged at 0.27 (seed 7) + 0.26 (seed 4). Board draws now n=13 read: 0.03/0.21/0.06/0.04/0.26/0.16/0.06/0.27/0.20/0.07/0.07/0.08/0.06 -- two draws above 0.26 in thirteen, both already in the pair, so this was the ticket it was declared to be and the seed lottery stays a non-lever until the agent class changes. Time to score 2h36m (09:19:41Z -> 11:55:09Z): the kernel run itself is ~1 min, the rest is the evaluator's queue.",
+  "state_after": {"selected_pair": [0.27, 0.26], "band": [0.03, 0.27], "draws_n": 13}
+}
