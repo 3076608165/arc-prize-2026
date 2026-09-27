@@ -1,0 +1,60 @@
+{
+  "date": "2026-09-27",
+  "policy": "Standing campaign policy, unchanged: one slot per board per UTC day, best two submissions across the competition count, an unused slot cannot be banked. Both boards' slots are spent, and neither is a rerun of pinned bytes: AGI-2 carries the largest-first scheduling arm, AGI-3 the first non-seed arm this campaign has ever fired.",
+  "backfill": "56570650 (AGI-2 two-pass item-passid, kernel v17) scored 30.14 = its PREDECLARED NULL, written to experiments/56570650-result.json. Consequence exercised rather than restated: the decorrelated second decode round is retired as a lever on this family, so today's largest-first arm carries a scheduling claim only. The AGI-3 seed-12 read (56575477 = 0.06) was already written to experiments/56575477-result.json yesterday.",
+  "agi2": {
+    "what": "two-pass + largest-puzzles-first queue -- kernel version 18, build agi2/out/twopass-lf-v18 (--two-pass --largest-first --audit-coverage --worker-hash-seed 0 --hours 11.83). Same pooled two-pass as v17, one differing cell: the queue is ordered by descending input size so pass B reaches the expensive tail the plain two-pass arm never got to.",
+    "submission_ref": 56597262,
+    "submitted_utc": "2026-09-27T04:08:12Z",
+    "status": "PENDING",
+    "fired_by": "the Hermes cron job 'arc-fire-next-arm' as a catch-up dispatch (scheduled 10:05 local, dispatched 14:08:04 local, 14584.8 s late, kind=catch_up). Nothing was re-fired by hand.",
+    "decision_dependency": "low now, and that changed today: with v17's null in hand the arm's only claim is scheduling (does pass B reach more of the 240 hidden tasks), not score. It fires because the slot cannot be banked and its rehearsal was green.",
+    "predeclared": {
+      ">= 32.00": "a gain past the ~2-point board resolution floor would say pass B's coverage -- not its idea -- was what read flat in v15/v17, and would reopen the second-pass line that today's null closed.",
+      "30.57 - 31.99": "inside the floor: may replace 30.56 as the pair's second member if it stands, no attribution to the arm.",
+      "<= 30.56": "the expected null. Scheduling is retired too and the decode stage is measured dead end to end (all knobs, not just the pass)."
+    },
+    "rehearsal_gate": "Read before the slot was spent: experiments/score-push-20260926/arm-v18-rehearsal.md -- COMPLETE, 0 tracebacks, error 0, 5/5 outputs with candidates, submission.json written (23,253 B), 42.3 min wall, every emitted file rstrip-identical to the build, and the largest-first key present in the run's own starter.py (so the one knob really shipped rather than a rebuild of v17).",
+    "verification_debt": "v18 is currently the kernel's newest version, so THIS is the last moment its scored rerun's coverage_summary.json is readable through `kaggle kernels output`. Read it before pushing any version 19 -- the 9/25 and 9/26 records both carried this same debt and both lost the artifact.",
+    "standing_pair": [30.97, 30.56],
+    "band": [28.89, 30.97]
+  },
+  "agi3": {
+    "what": "the lifted gemma-reflection harness -- kernel version 18 of uts3125025522741/arc-agi-3-sweep-agent, build agi3/out/harness-gemma. The first non-seed arm on this board: offline vLLM 0.23.0 + google/gemma-4-31b-it driving the competition's own agents harness, agent cell lifted verbatim from bernicerobinson/arc-agi-3-m2-gemma-reflection.",
+    "submission_ref": 56597321,
+    "submitted_utc": "2026-09-27T04:10:44Z",
+    "status": "PENDING",
+    "fired_by": "this session, by hand, because the automated burst raced (below) and left the board's slot unfired.",
+    "decision_dependency": "high, and it is the first reading from a different distribution rather than the 14th draw of one already measured at 2-in-13. The board's top score is 27.29 (Tufa Labs, read today), which is what the agent class looks like when it works; ours is a sweep policy at 0.27.",
+    "predeclared": {
+      "> 0.27": "the class works. New pair member, and this board's method changes: the next arms are its knobs, one per slot.",
+      "0.10 - 0.27": "alive but under-tuned -- above the seed median (0.07), below the pair. Next arms are prompt/model-size/eviction knobs.",
+      "<= 0.10": "indistinguishable from the seed lottery. Investigate the deadline/eviction path first: the run's own per-step LLM traces are what separate 'the class failed' from 'the harness never reached the games', and a low score must not be read as the former without them."
+    },
+    "rehearsal_gate": "Environment only, and it is all a commit run can prove: kernel v18 GREEN (wheels dataset resolved at run time, vllm 0.23.0 + arc_agi imported, official agents harness copied with my_agent.py registered as 'myagent', submission.parquet written, 0 tracebacks). The agent loop itself runs only in the competition rerun.",
+    "draws_to_date": {
+      "n": 13,
+      "read": "0.03 / 0.21 / 0.06 / 0.04 / 0.26 / 0.16 / 0.06 / 0.27 / 0.20 / 0.07 / 0.07 / 0.08 / 0.06",
+      "note": "the seed lottery is retired as a method (2 of 13 draws above 0.26), not because it cannot win but because it cannot inform"
+    }
+  },
+  "unattended_fire": {
+    "what_happened": "The two-board scheme (a second daily invocation at 10:25 so the queue's next arm reaches the other board) failed on its first day. The machine was asleep at 10:05 and 10:25 local, so BOTH routes were dispatched in the same catch-up burst at 14:08:04 local, both read the submission list before either write landed, and both selected the same queue head (the AGI-2 arm). The platform refused the second CreateCodeSubmission with a 400, the readback found the row anyway and logged 'submitted', and the invocation was consumed: AGI-2's slot was spent, AGI-3's was left unfired and would have been lost for the UTC day.",
+    "root_cause": "Selection was deduplicated only by 'is this arm's message already on the board' -- which is a read-then-write across processes, so two invocations that start together both see the head as unfired. The 20 minutes between the routes is what was supposed to separate them, and a catch-up burst is exactly the case where it does not exist.",
+    "fix": "Two guards in scripts/fire_next_arm.py, both needed: (1) an OS-level exclusive lock (msvcrt on Windows, fcntl elsewhere, released by the kernel if the holder dies, so no stale-lock timeout) held across read-decide-fire, so the second invocation reads a board that already contains the first one's submission; (2) board_state() now also returns the boards that already have a submission DATED today (UTC), and select() skips their arms outright -- so however many routes fire, each board spends exactly its one slot and the queue advances to the other board instead of re-selecting a spent one.",
+    "verified": "self-test: selection, log-vs-board dedup, the spend guard, and a real second PROCESS holding the lock (a same-process check would pass even if locking did nothing) -- all pass. End to end: two invocations started in the same instant now both report queue_empty with spent_today = both boards (the old code selected the AGI-2 head twice); and an invocation started under a lock holder waited 18.1 s and then proceeded, i.e. it serialized instead of racing.",
+    "cost": "none today beyond the 400 that was already refused: no duplicate row exists on either board (AGI-2's newest row is 56597262, one row). The AGI-3 slot was recovered by hand in this session."
+  },
+  "standings_2026-09-27": {
+    "read_utc": "2026-09-27T04:14:11Z",
+    "arc-agi-2": {"teams": 2211, "max": 83.06, "median": 28.19, "our_rank": 469, "selected_pair": [30.97, 30.56], "prev": {"teams": 2201, "our_rank": 467}},
+    "arc-agi-3": {"teams": 3365, "max": 27.29, "median": 0.31, "our_rank": 1852, "selected_pair": [0.27, 0.26], "prev": {"teams": 3335, "our_rank": 1823, "max": 19.40}},
+    "paper-track": {"teams": 205, "note": "no submission; the writeup is the artifact"},
+    "raw": "experiments/lb-20260927/*.zip (leaderboard CSVs as downloaded; the parsed numbers above are what gets committed)"
+  },
+  "next": {
+    "queue_state": "EMPTY of un-fired arms. All five queued messages now exist on the boards, so the next invocation in either route reports queue_empty and spends nothing -- an unfired slot on a day it stays empty is lost, not banked.",
+    "agi2_next": "The decode stage is now measured dead end to end (v18 is its last unmeasured knob, and today's null removed even its score claim), which leaves the model class as the only lever standing in this family -- the same conclusion paper/findings.md reached on 2026-09-23 ('Leg C is off the list of candidate-side levers, leaving the model class as the only one standing'). That arm is a build, not a queue edit: find or reproduce a bigger-model variant of the NVARC lineage, lift it through the same pattern as agi3/lift_harness.py, and rehearse it before its slot. Anything cheaper (another reroll, another augment count) has already been measured null or refuted in this repo.",
+    "agi3_next": "Read the harness's score AND its log before pushing anything: pushing a new AGI-3 kernel version makes v18 no longer the newest, and `kaggle kernels output` only ever returns the newest version's run -- which would destroy the per-step LLM traces that are the only way to tell a failed class from a harness that never reached the games. Until that read, the next AGI-3 arm is undecided by construction, and a seed draw cannot be built without a push."
+  }
+}

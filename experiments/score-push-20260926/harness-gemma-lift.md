@@ -84,3 +84,12 @@ invocation skips whatever the first landed, and a day when the first fails degra
 both tasks registered with next runs 9/27 10:05 and 10:25, and the dry run under the
 cron runner's own interpreter selects `twopass-largest-first` v18.
 
+**Corrected 2026-09-27, on the first day it ran.** The mechanism above is a
+read-then-write across two processes and the twenty minutes are what separated them;
+when the machine is asleep at both instants the two routes are dispatched in the same
+catch-up burst, both read the board before either write lands, and both select the
+same arm — which is what happened (AGI-2's slot spent twice, AGI-3's left unfired).
+`fire_next_arm.py` now holds an exclusive lock across read-decide-fire and skips any
+arm whose board already has a submission dated today. Table above is the intent; see
+`../experiments/score-push-20260927/round.json` for what the routes actually do now.
+

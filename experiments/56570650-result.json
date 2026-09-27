@@ -1,0 +1,14 @@
+{
+  "competition": "arc-prize-2026-arc-agi-2",
+  "observed_utc": "2026-09-27T04:20:00Z",
+  "ref": "56570650",
+  "status": "COMPLETE",
+  "public": "30.14",
+  "arm": "two-pass item-passid -- kernel version 17, build agi2/out/twopass-itemid; the version where the pass id travels with each queued item, so all four workers decode a genuinely decorrelated pass B (v15's marker version gave it to one worker out of four)",
+  "reading": "30.14 is inside the observed rewrite band (27.6-31.0) and below the pair's second member (30.56), so this is the arm's PREDECLARED NULL: the second decode round is not a lever on this family, even when pass B is fully decorrelated across all four workers. The marker version's partial coverage was worth ~0.4 of a point in the wrong direction, i.e. nothing measurable, so the null is not an artifact of the coverage defect the item-pass-id fix removed. Consequence, predeclared on 2026-09-26 and now exercised: the second-pass line is CLOSED -- no further --two-pass rebuild is queued, and the largest-first arm that is firing the same day (v18, ref 56597262) carries a scheduling claim only, not a score claim.",
+  "state_after": {
+    "selected_pair": [30.97, 30.56],
+    "band": [28.89, 30.97],
+    "two_pass_line": "closed; candidate-side knobs now measured dead: augment16/8 dynamic, view-consistency early stop, Leg C verified induction, 2B ensemble, orig-numerics arithmetic, decorrelated second pass"
+  }
+}

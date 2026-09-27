@@ -1142,6 +1142,61 @@ text was wrong in exactly the way a text assertion cannot see.
   median 0.30, our 0.27 at rank 1795 (was 1751/3258). Both ranks slipped for the same
   reason as before: the fields grow and our scores do not.
 
+## The second pass is retired, and the first non-seed arm on the other board (2026-09-26 → 2026-09-27)
+
+- **The decorrelated second pass read its predeclared null: 30.14.** Kernel v17
+  (ref 56570650) is the version where the pass id travels in the queue item, so all
+  four workers decode a genuinely decorrelated pass B — the defect the 9/24 fix
+  removed. 30.14 sits below the pair's second member (30.56), so the marker
+  version's partial coverage was not what read flat in v15, and the second decode
+  round is retired as a lever on this family. `experiments/56570650-result.json`.
+  The decode stage is now measured dead end to end: augment 16/8 dynamic,
+  view-consistency early stop, Leg C verified induction, the 2B ensemble, the
+  orig-numerics arithmetic (28.89), and the second pass. What is left standing is
+  the model class.
+- **The first non-seed arm on ARC-AGI-3 fired.** Kernel v18 of
+  `uts3125022741/arc-agi-3-sweep-agent` (ref 56597321) is a lifted public harness —
+  offline vLLM 0.23.0 + `gemma-4-31b-it` driving the competition's own agents
+  harness, extracted verbatim from `bernicerobinson/arc-agi-3-m2-gemma-reflection`
+  by `agi3/lift_harness.py`. Fourteen board draws of our own agent span 0.03-0.27
+  (2 of 13 above the pair's second member) while this board's maximum is 27.29, so
+  the point of the arm is not the score it might buy but that it reads from a
+  *different distribution* — the same argument as lifting a public notebook on
+  ARC-AGI-2, applied to the board where nothing of ours was ever a lever.
+- **The two-route fire raced on its first day, and the fix is two guards in one
+  function.** The second daily invocation exists so the queue's next arm reaches
+  the other board; with the machine asleep at both instants, the two routes were
+  dispatched in the same catch-up burst, both read the submission list before
+  either write landed, both selected the same head, and the AGI-3 slot was left
+  unfired for the UTC day. Selection was deduplicated only by "is this arm's
+  message already on the board", which is a read-then-write across processes and
+  cannot see a concurrent writer. `fire_next_arm.py` now takes an OS-level
+  exclusive lock across read-decide-fire (`msvcrt`/`fcntl`, released by the kernel
+  if the holder dies, so there is no stale-lock timeout to maintain) and skips any
+  arm whose board already has a submission **dated today**. The second guard is the
+  one that generalizes: four routes exist (two cron jobs, two Windows tasks) and
+  the spend check makes the count irrelevant, whereas the lock only makes them
+  orderly. Verified by starting two invocations in the same instant (both now
+  report the boards spent instead of both selecting the head), by a lock holder a
+  third invocation waits behind, and by a real second process in the self-test —
+  a same-process check would pass even if locking did nothing.
+- **A push destroys the previous version's log, and this is where that bites
+  next.** `kaggle kernels output` returns only the newest version's run, so the
+  arm that was fired is the only arm whose diagnostics are readable *while it is
+  still newest*. Today that makes the harness's per-step LLM traces — the only
+  evidence that separates "the class failed" from "the harness never reached the
+  games" — expire the moment a new AGI-3 version is pushed, and it makes v18's
+  `coverage_summary.json` expire the same way on the ARC-AGI-2 side. Read the
+  artifact before staging the next arm; the standing rule "read an arm's
+  diagnostics before staging the next one" was written after v16 lost them, and
+  this round is the first time it has decided what must *not* be done.
+- **Standings (read 2026-09-27T04:14Z).** ARC-AGI-2: 2211 teams, max 83.06,
+  median 28.19, our 30.97 at rank 469 (467 on 9/26). ARC-AGI-3: 3365 teams, max
+  **27.29** (was 19.40 two days ago), median 0.31, our 0.27 at rank 1852 (1823).
+  The ARC-AGI-3 field maximum moved 19.40 → 27.29 in two days while ours stayed a
+  draw: that board's leaders are running agent classes that score in the tens, and
+  the gap is a family gap, exactly as ARC-AGI-2's was.
+
 ## What this gives the writeup
 
 - **Theory**: a stated hypothesis (the ARC-AGI-2 bottleneck is exact

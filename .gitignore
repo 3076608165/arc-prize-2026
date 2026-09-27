@@ -15,3 +15,5 @@ agi3/out/
 # leaderboard dumps (re-downloadable; the parsed read is what gets committed)
 experiments/**/*.zip
 experiments/arm-*-targets.json
+# the fire lock (per-machine, holds no state)
+scripts/.fire-next-arm.lock
