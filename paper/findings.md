@@ -1197,6 +1197,47 @@ text was wrong in exactly the way a text assertion cannot see.
   draw: that board's leaders are running agent classes that score in the tens, and
   the gap is a family gap, exactly as ARC-AGI-2's was.
 
+### The selection axis is closed, at n=141 and for free (2026-09-27)
+
+- `agi2/out/v7/inference_outputs` (1,723 files, 144 outputs, 141 with ground truth)
+  is the full public-eval candidate store, and `agi2/select_offline.py` scores any
+  selector against it in seconds at zero quota: upstream `score_full_probmul_3`
+  **42/141 = 29.8%** — the board says 30.97, so the local read is the honest proxy —
+  `score_kgmon` 41, `score_cellvote` 36, and the ORACLE (truth anywhere in the pool)
+  **51/141 = 36.2%**.
+- Four re-rankings were invented and measured before anything was built, all against
+  that store:
+  - **attempt_2 respread** — "the second slot is being spent on a redraw, make it a
+    different hypothesis" (this was the idea that looked strongest: `evaluate.py`
+    counts an output solved if *either* attempt matches, so the second slot needs no
+    selector). Every threshold loses: 42 → 39/40/39/36 as the required disagreement
+    rises. The premise is wrong in a measurable way: where the top two are
+    near-identical (47/141), that is the case where attempt_1 was already right, and
+    displacing attempt_2 destroys the 7/41 rescues it provides.
+  - **per-view aggregation** (`score_aug` is an 8-element list per candidate, and its
+    raw values span three orders of magnitude within one candidate — `[0.05, 21.07,
+    27.11, 5.08, 17.86]` — so upstream's `sum(3 - s)` is decided by whichever view
+    emits the biggest numbers). Ranking each view and aggregating by mean rank,
+    median rank, or z-score gives 41/141, 42/141, 41/141: statistically identical to
+    the product it replaces. The aggregation statistic is not the bottleneck.
+  - **view vote** — majority over the 8 views' argmins: 34/141 (−8). And the ceiling
+    for *any* view-selection mechanism, i.e. an oracle that picks the right view per
+    output, is 44/141 (+2). "Trust the right view" is not a mechanism with room.
+  - **demo-driven veto** (`agi2/probe_democheck.py`: colour closure, shape, and
+    symmetry inheritance — a transform that fixes every demo pair and the test input
+    should fix the answer): 0 gained, 1 lost, on 13/141 outputs reordered.
+- So the +9 pool-oracle gap is **not** a scoring artifact. Every one of the 8
+  augmentation views ranks the truth in its own top fifth (normalised rank 0.19-0.27
+  per view, against 0.5 for random), which means the model sees the answer and
+  cannot tell it apart from the wrong candidates by plausibility. Closing that gap
+  requires a verifier that can *rule a candidate out*, and the cheap rule-based ones
+  above do not.
+- **Method note.** The same store read at n=34 (a partial pull, `agi2/out/v8`) said
+  `score_cellvote` was +1 over upstream. At n=141 it is −6. Every earlier "attack on
+  selection" in this repo was run at that scale, so the one of them that looked like
+  a win was noise. Measure selectors on the whole store or not at all; it costs
+  nothing either way.
+
 ## What this gives the writeup
 
 - **Theory**: a stated hypothesis (the ARC-AGI-2 bottleneck is exact

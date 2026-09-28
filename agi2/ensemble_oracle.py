@@ -87,6 +87,22 @@ def main() -> int:
     print(f"  selector, {B[0]} alone       {len(sel_b):>3}/{n}")
     print(f"  selector, merged pool     {len(sel_m):>3}/{n}")
     print(f"  cross-agree first         {len(sel_x):>3}/{n}   <- the ensemble mechanism")
+
+    # Every selector above answers "which ONE grid do I submit". The competition
+    # does not ask that: arclib/evaluate.py counts an output correct if EITHER
+    # attempt matches, so attempt_2 is free real estate and no selector is
+    # involved. The measurable question is therefore not "can a selector reach
+    # the oracle" (it cannot) but "is a DIFFERENT MODEL's top-1 a better use of
+    # the second slot than this model's own top-2" -- i.e. are the two models'
+    # errors less correlated than one model's first and second guess.
+    swap = {b for b in shared
+            if any(np.array_equal(x, truth[b]) for x in (
+                [np.asarray(y) for y in da.score_full_probmul_3(sa[b])[:1]]
+                + [np.asarray(y) for y in db.score_full_probmul_3(sb[b])[:1]]))}
+    print(f"\n  attempts = {A[0]} top1+top2 (today) {len(sel_a):>3}/{n}")
+    print(f"  attempts = {A[0]} top1, {B[0]} top1     {len(swap):>3}/{n}   <- the second slot, spent on the other model")
+    print(f"  gained {sorted(swap - sel_a)}")
+    print(f"  lost   {sorted(sel_a - swap)}")
     return 0
 
 

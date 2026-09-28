@@ -58,5 +58,17 @@
     "build": "agi3/out/harness-gemma",
     "predicts": "a different distribution from the seed lottery (2 of 13 draws above 0.26): if the class works at all it lands above the pair's second member",
     "note": "Lifted from bernicerobinson/arc-agi-3-m2-gemma-reflection (source notebook sha256 dee15082..., agent sha256 da1f1a4a...) by agi3/lift_harness.py; our only diffs are the kernel identity and the wheels-path resolution (the source hardcoded the author's mount layout, which killed v17 at cell 3 with ModuleNotFoundError: vllm). Environment gate read GREEN on kernel v18: resolver found /kaggle/input/vllm-0230-offline/.../wheels, vllm 0.23.0 and arc_agi imported, the official agents harness copied with our my_agent.py at 70K, __init__.py registered 'myagent', submission.parquet written, 0 tracebacks. The agent loop itself only runs in the competition rerun, so the first scored slot is the first measurement of the agent -- do not read a low score as 'the class failed' if the rerun's own log shows the harness never reached the games."
+  },
+  {
+    "id": "augment20",
+    "arm": "test-time-training view count 16 -> 20, on the pinned best configuration",
+    "competition": "arc-prize-2026-arc-agi-2",
+    "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+    "version": 19,
+    "file": "submission.json",
+    "message": "20260928 augment20: test-time-training views 16->20 (one knob, upstream build otherwise untouched); predeclared >=32.00 the views knob is a lever, 30.5-31.9 inside the rerun band, <=30.14 the TTT-intensity axis is closed",
+    "build": "agi2/out/augment20",
+    "predicts": "more TTT views = a better candidate pool. The selection ceiling measured 2026-09-27 (42/141 submitted vs 51/141 pool oracle, five re-rankings all null) means the only way to move this board is to widen the pool, which is what the views knob does.",
+    "note": "Built 2026-09-27: `python agi2/repro_nvarc.py --augment 20 --audit-coverage --worker-hash-seed 0 --hours 11.83 --out agi2/out/augment20`, i.e. the upstream build with ONE differing knob -- no --two-pass, because the two-pass family read 30.56/30.14 against the pinned build's 30.97 and the pass-id null closed that line. Deliberately 20 and not 24: the wall audit leaves roughly 28% of the 11.83 h unspent and 16 views is the dominant per-task cost, so +50% views (24) risks pushing the tail past the deadline, while +25% (20) fits the measured headroom. The signed prior is augment 8 (27.64, kernel v10) being worse than 16 -- the only knob in this family with a measured direction. Rehearsal: read the newest kernel version's log before the slot is spent (COMPLETE, no traceback, submission.json written, emitted files identical to the build except the one augment line)."
   }
 ]
