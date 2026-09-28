@@ -1,0 +1,16 @@
+{
+  "competition": "arc-prize-2026-arc-agi-3",
+  "observed_utc": "2026-09-28T05:29:00Z",
+  "ref": "56597321",
+  "status": "COMPLETE",
+  "public": "0.67",
+  "arm": "lifted gemma-reflection harness (agent class) -- kernel v18 of uts3125025522741/arc-agi-3-sweep-agent, build agi3/out/harness-gemma: offline vLLM 0.23.0 + google/gemma-4-31b-it driving the competition's own agents harness, agent cell lifted verbatim from bernicerobinson/arc-agi-3-m2-gemma-reflection",
+  "reading": "0.67, against the predeclared '> 0.27 = the class works' branch. This is the campaign's first NON-SEED arm on this board and it returns 2.5x the best of 13 seed draws (0.03-0.27, two above 0.26). The selected pair becomes 0.67 (this ref) + 0.27 (seed 7, 56223681), replacing 0.26. Interpretation, stated narrowly: one run of a public LLM-in-the-loop harness beats every draw of our own sweep policy, which is what 'the seed lottery was never the method' predicted -- the ranking is now dominated by the agent class rather than by the policy or the draw. It is NOT a capability estimate of the harness (one run, no repetition) and it says nothing yet about which harness knob matters.",
+  "state_after": {
+    "selected_pair": [0.67, 0.27],
+    "band": [0.03, 0.67],
+    "draws_n": 13,
+    "what_changed": "The board's daily slot is no longer a ticket: it carries the second member's worth of information only if the arm is a harness knob, so every remaining AGI-3 slot goes to the harness family, one knob per slot."
+  },
+  "next_evidence_to_read": "The rerun's own log and per-step LLM traces are readable only while kernel v18 is the newest version (`kaggle kernels output` returns the newest run). Read them BEFORE pushing any AGI-3 version: they are what separates 'the class works but is under-tuned' from 'the harness reached only some games', and they name the knob (deadline/eviction, prompt, model size)."
+}

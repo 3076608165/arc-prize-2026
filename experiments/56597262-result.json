@@ -1,0 +1,14 @@
+{
+  "competition": "arc-prize-2026-arc-agi-2",
+  "observed_utc": "2026-09-28T05:29:00Z",
+  "ref": "56597262",
+  "status": "COMPLETE",
+  "public": "29.31",
+  "arm": "two-pass + largest-puzzles-first queue -- kernel v18, build agi2/out/twopass-lf-v18",
+  "reading": "29.31, below the pair's second member (30.56), so this is the predeclared null: ordering the shared queue by descending input size did not put pass B anywhere that paid. Combined with 56570650's 30.14 (the pass-id fix, i.e. the second decode round fully applied) and v15's 30.56, the two-pass family now reads 30.56 / 30.14 / 29.31 against the pinned build's 30.97 -- the second decode round is retired both as an idea and as a scheduling trick. The decode stage of this pipeline is therefore closed end to end, which is independent confirmation of the same session's offline finding that the submission sits AT its selection ceiling (42/141 submitted vs 51/141 pool oracle; five re-rankings, all null).",
+  "state_after": {
+    "selected_pair": [30.97, 30.56],
+    "band": [29.31, 30.97],
+    "board_resolution": "Byte-identical reruns spread 1.4% (30.14/29.72), so 29.31 vs 30.56 is NOT a measurable difference -- the null here is 'no gain', not 'harm'. That is exactly why the arm was declared a scheduling claim rather than a score claim."
+  }
+}
