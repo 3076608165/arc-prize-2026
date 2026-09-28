@@ -1,0 +1,9 @@
+[
+  {
+    "competition": "arc-prize-2026-arc-agi-3",
+    "kernel": "uts3125025522741/arc-agi-3-sweep-agent",
+    "version": 18,
+    "file": "submission.parquet",
+    "message": "20260928 harness-gemma redraw 2: the same lifted harness (kernel v18) resubmitted as an independent draw -- the pair's second member is 0.27 (a seed draw), so a second harness run has real upside, and its spread is the class variance this campaign has never measured; predeclared >=0.27 it takes the second member, and two runs give the first variance estimate for the class"
+  }
+]
