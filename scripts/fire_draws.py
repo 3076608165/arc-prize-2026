@@ -17,6 +17,7 @@ import argparse
 import csv
 import io
 import json
+import os
 import subprocess
 import sys
 import time
@@ -26,10 +27,42 @@ ROOT = Path(__file__).resolve().parents[1]
 READBACK_TRIES = 3
 READBACK_WAIT = 10
 
+# A system proxy can outlive the tunnel that owns it. Measured 2026-09-29: the
+# Windows registry still pointed at 127.0.0.1:7890 while nothing listened there,
+# so every CLI call died with ProxyError although api.kaggle.com was reachable
+# directly. The unattended route reads the board BEFORE firing, so that failure
+# exits nonzero without spending the slot -- it silently loses a day. Bypassing
+# the proxy on a proxy-shaped failure cannot make a working proxy stop working;
+# it only decides where a broken one sends us.
+PROXY_FAILURE_MARKERS = (
+    "ProxyError",
+    "Unable to connect to proxy",
+    "Failed to establish a new connection",
+    "WinError 10061",          # connection refused, e.g. the dead local port
+)
 
-def kaggle(*args: str) -> str:
-    result = subprocess.run([sys.executable, "-X", "utf8", "-m", "kaggle", *args],
-                            capture_output=True, text=True, encoding="utf-8")
+
+def proxy_failed(message: str) -> bool:
+    return any(marker in message for marker in PROXY_FAILURE_MARKERS)
+
+
+def bypassed(env: dict | None = None) -> dict:
+    """The environment a retry gets: no proxy, per requests' own NO_PROXY rule."""
+    merged = dict(os.environ if env is None else env)
+    merged["NO_PROXY"] = "*"
+    merged["no_proxy"] = "*"
+    return merged
+
+
+def _kaggle_run(args: tuple, env: dict | None = None):
+    return subprocess.run([sys.executable, "-X", "utf8", "-m", "kaggle", *args],
+                          capture_output=True, text=True, encoding="utf-8", env=env)
+
+
+def kaggle(*args: str, run=_kaggle_run) -> str:
+    result = run(args)
+    if result.returncode and proxy_failed(f"{result.stderr}\n{result.stdout}"):
+        result = run(args, bypassed())
     if result.returncode:
         raise RuntimeError(result.stderr.strip() or result.stdout.strip())
     return result.stdout.strip()
@@ -134,7 +167,42 @@ def main() -> int:
         assert verdict(raised=False, in_list=True) == "submitted"
         assert kernel_ref("owner/nb", 12) == "owner/nb/12"   # the arm's own version
         assert kernel_ref("owner/nb", None) == "owner/nb"
-        print("self-test ok: the list decides, the text never does")
+        # A dead tunnel must not cost a day: a proxy-shaped failure is retried
+        # once with the proxy bypassed, everything else is raised untouched and
+        # retried zero times. Both halves matter -- swallowing a real error would
+        # turn "the CLI is broken" into "the arm never fired".
+        class Completed:                 # stands in for subprocess.CompletedProcess
+            def __init__(self, rc: int, err: str = ""):
+                self.returncode, self.stdout, self.stderr = rc, "", err
+
+        envs = []
+
+        def dead_proxy(args, env=None):
+            envs.append(env)
+            if len(envs) == 1:
+                return Completed(1, "requests.exceptions.ProxyError: Unable to "
+                                    "connect to proxy ... WinError 10061")
+            return Completed(0)
+
+        assert kaggle("competitions", "list", run=dead_proxy) == ""
+        assert len(envs) == 2 and envs[0] is None and envs[1]["NO_PROXY"] == "*"
+
+        attempts = []
+
+        def really_broken(args, env=None):
+            attempts.append(env)
+            return Completed(1, "ModuleNotFoundError: No module named 'kaggle'")
+
+        try:
+            kaggle("competitions", "list", run=really_broken)
+        except RuntimeError:
+            pass
+        else:
+            raise AssertionError("a non-proxy failure must raise, not be swallowed")
+        assert len(attempts) == 1, "a non-proxy failure must not be retried"
+        assert proxy_failed("ProxyError") and not proxy_failed("400 Client Error")
+        print("self-test ok: the list decides, the text never does, and a dead "
+              "proxy is bypassed rather than losing the slot")
         return 0
     if args.targets is None:
         parser.error("--targets is required")

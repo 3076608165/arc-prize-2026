@@ -1,0 +1,26 @@
+{
+  "date": "2026-09-29",
+  "policy": "Standing campaign policy, unchanged: one slot per board per UTC day, the best two submissions across the competition count, an unused slot cannot be banked.",
+  "backfill": "Two readings landed. (1) AGI-2 56656221 (augment20, kernel v19) = 27.64 -- below the predeclared lower bound (<= 30.14), so the TTT-intensity axis is closed; written to experiments/56656221-result.json. (2) AGI-3 56630186 (harness-gemma redraw 2, kernel v18, byte-identical to the arm that read 0.67) = 0.00 -- the class's first variance measurement, spanning the whole range; written to experiments/56630186-result.json. Both refs were fired by the unattended path on earlier days and had no round record until now, so this file also serves as the round record for 2026-09-28's AGI-3 slot.",
+  "agi2": {
+    "what": "No fire: the board's slot for 2026-09-29 was already spent at 00:06Z by the 10:05 local route (ref 56656221, kernel v19 augment20). The next AGI-2 fire is therefore the queue's head when that route next runs on a fresh UTC day.",
+    "armed": "v11-redraw-11 -- an identical resubmit of kernel v11 (the pinned build, ten draws spanning 28.89-30.97, mean 29.88, 2 of 10 at or above the pair's second member 30.56). Chosen because every structural axis this campaign has tried now reads at or below that band: two-pass 30.56 / 30.14 / 29.31, orig-numerics 28.89, augment20 27.64. With 'the best two count' verified in docs/competition-constraints.md, a redraw carries no downside, so the slot buys a best-of-draws sample. Predeclared: >= 30.97 the pair's first member improves, 30.57-30.96 the second member improves, <= 30.56 no change."
+  },
+  "agi3": {
+    "what": "harness-gemma redraw 3 -- ref 56679712, submitted 2026-09-29T15:05:08Z, kernel v18 submission.parquet, the THIRD identical draw of the same bytes (0.67 on 2026-09-27, 0.00 on 2026-09-28). PENDING at close of round.",
+    "fired_by": "the queue route in this session (scripts/fire_next_arm.py, which selected the arm itself after the queue was armed) -- i.e. the same path the unattended cron uses, exercised on purpose: the board read showed AGI-2 spent today and AGI-3 free, the read was repeated by the record in experiments/fire-arms.jsonl.",
+    "why_a_redraw_and_not_a_knob": "0.67 and 0.00 for identical bytes leaves the class's repeatability unresolved, and the scored rerun's traces are not retrievable (kernels output returns the commit-mode run), so the cheap discriminating experiment is a third draw, which also cannot damage the pair (best two count). A knob arm needs evidence about WHICH failure mode to de-risk (deadline vs reflection budget vs vLLM concurrency); the third draw is what produces it.",
+    "predeclared": {
+      ">= 0.27": "the class is noisy but real, and the pair's second member upgrades from the seed's 0.27.",
+      "0.01 - 0.26": "wide spread with no upside; the harness stays a lottery, not a lever.",
+      "0.00": "the 0.67 was the outlier: the next AGI-3 arm must be a knob that de-risks the zero draw, not another redraw."
+    },
+    "armed": "harness-gemma-redraw4 -- a fourth identical draw queued behind redraw 3 so the AGI-3 slot cannot go unspent if the machine is off for a day (the queue skips any board whose slot is already spent, so this cannot double-spend). To be replaced by a knob arm in the session that reads redraw 3, if that read says the zero draw is the modal case."
+  },
+  "environment_fault_fixed": {
+    "symptom": "Every Kaggle CLI call failed with ProxyError against 127.0.0.1:7890 -- the Windows registry system proxy still pointed at FlClash's mixed port while the tunnel that listens there was not running (nothing was listening on 7890; the FlClash UI showed its start button, not its stop button, and its synthetic-click path did not respond to a scripted click, so the tunnel was left as the user had it). Direct calls to api.kaggle.com worked.",
+    "fix": "scripts/fire_draws.py now retries an invocation whose failure looks like a proxy failure with the proxy bypassed (NO_PROXY='*', which requests honours ahead of the registry setting), so a dead tunnel can no longer cost a slot. Self-test extended with the marker and retry cases. The proxy itself was not edited -- the user restarts their tunnel with one click in FlClash; the campaign no longer depends on it either way.",
+    "why_it_matters": "This is exactly the failure that loses a day silently: the unattended route reads the board first, and a ProxyError there exits nonzero without firing."
+  },
+  "commits": "see the same day's git log; the round record, both result files, the queue arms and the proxy fallback landed together."
+}

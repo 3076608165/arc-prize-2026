@@ -1,0 +1,16 @@
+{
+  "competition": "arc-prize-2026-arc-agi-3",
+  "observed_utc": "2026-09-30T01:15:00Z",
+  "ref": "56630186",
+  "status": "COMPLETE",
+  "public": "0.00",
+  "arm": "harness-gemma redraw 2 -- kernel v18 of uts3125025522741/arc-agi-3-sweep-agent, byte-identical to the arm that scored 0.67 the day before (offline vLLM + gemma-4-31b-it driving the competition's own agents harness)",
+  "reading": "0.00 against the predeclared '>= 0.27 it takes the second member' branch. Read together with 56597321's 0.67 this is the class's FIRST variance measurement and it spans the whole range: the same bytes read 0.67 and then 0.00. What survives: the seeds never exceeded 0.27 in thirteen draws, so a harness run can still reach twice the best seed draw -- the agent class is not refuted. What does not survive: the single-run attribution. 'The ranking is dominated by the agent class' was written on one draw; two draws say the class also produces zeros, so 0.67 is not yet a capability estimate and the pair's second member stays the seed's 0.27. The 0.00 is NOT attributable between 'the harness played and solved nothing' and 'the rerun failed early' -- the scored rerun's per-step traces are not retrievable through the CLI (see the 2026-09-28 correction), so the discriminating experiment has to be another identical draw rather than a log read. Fired as ref 56679712 on the same day (redraw 3) to answer exactly that.",
+  "state_after": {
+    "selected_pair": [0.67, 0.27],
+    "band": [0.0, 0.67],
+    "harness_draws_n": 2,
+    "what_changed": "AGI-3's daily slot is no longer 'a harness knob per slot' by assumption: the harness has to survive a repeatability test before knob-tuning can be interpreted. Two identical draws 0.67 / 0.00 are the measurement that forced this."
+  },
+  "next_evidence_to_read": "56679712 (harness-gemma redraw 3, fired 2026-09-29 15:05Z). Predeclared: >= 0.27 = the class is noisy-but-real and the pair's second member upgrades; 0.01-0.26 = wide spread with no upside; 0.00 twice in three = the 0.67 was the outlier and the next AGI-3 arm must be a knob that de-risks the zero-draw failure mode (first-action deadline 14 min, reflection interval 10 steps, VLLM_MAX_NUM_SEQS 20 are the visible handles) rather than another redraw."
+}

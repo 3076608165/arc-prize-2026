@@ -1,0 +1,15 @@
+{
+  "competition": "arc-prize-2026-arc-agi-2",
+  "observed_utc": "2026-09-30T01:15:00Z",
+  "ref": "56656221",
+  "status": "COMPLETE",
+  "public": "27.64",
+  "arm": "augment20 -- kernel v19, build agi2/out/augment20: the upstream build with ONE differing knob, test-time-training views 16 -> 20 (--augment 20 --audit-coverage --worker-hash-seed 0 --hours 11.83)",
+  "reading": "27.64, below the pair's second member (30.56) and below the predeclared lower bound (<= 30.14 = 'the TTT-intensity axis is closed'), so this is the null that closes that axis: more test-time-training views did not buy anything on top of the pinned build. It is worse than the pinned build's own ten-draw band (28.89-30.97), which is consistent with the 8-view diagnostic that read 27.64 locally -- the knob's sign was never positive on this board, only 'the one knob with a signed prior' by that earlier evidence. The number is also identical to the two augment8 readings (9/10 and 9/14, both 27.64), i.e. the board's rerun spread (1.4%, ~0.43 per unit) is wider than anything this axis moves. Recorded consequence: with decode (30.56/30.14/29.31), arithmetic (28.89) and TTT intensity (27.64) all at or below the pinned build's band, no structural axis this campaign has tried beats drawing the pinned build; the daily AGI-2 slot is therefore a best-of-draws sample until a new class (model weights with the same 16-token vocab) becomes available.",
+  "state_after": {
+    "selected_pair": [30.97, 30.56],
+    "band": [27.64, 30.97],
+    "board_resolution": "Byte-identical reruns spread 1.4% (30.14/29.72), so 27.64 against 30.56 is a real gap, not noise."
+  },
+  "next_evidence_to_read": "experiments/arm-v11-redraw-11 (queued): an identical resubmit of kernel v11, the only build on this board that ever reached 30.97, with ten draws spanning 28.89-30.97 (2 of 10 at or above the pair's second member). Predeclared >= 30.97 the pair's first member improves, 30.57-30.96 the second member improves, <= 30.56 no change."
+}
