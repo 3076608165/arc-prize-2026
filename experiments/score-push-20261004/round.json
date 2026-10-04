@@ -95,7 +95,26 @@
       "0.28 - 5": "the harness ran but scored below the family's known band -- investigate the serving stack before trusting it",
       "<= 0.27": "no pair change; before concluding anything, establish from the run that the harness reached the games at all"
     },
-    "decision_dependency": "this is the only arm on this board whose outcome can change the campaign's direction: it either retires the seed lottery and the gemma harness (pair replaced by a ~27-scoring entry) or it tells us the lift did not reproduce, which is a different class of negative than the draws."
+    "decision_dependency": "this is the only arm on this board whose outcome can change the campaign's direction: it either retires the seed lottery and the gemma harness (pair replaced by a ~27-scoring entry) or it tells us the lift did not reproduce, which is a different class of negative than the draws.",
+    "fired": {
+      "ref": "56820929",
+      "kernel": "uts3125025522741/arc-agi-3-duck-sota-open-source-lift",
+      "version": 1,
+      "file": "submission.parquet",
+      "submitted_utc": "2026-10-04T10:09:03Z",
+      "status": "PENDING (synchronous rerun, ~9 h + queue)"
+    },
+    "commit_smoke_read": {
+      "when": "kernel COMPLETE 2026-10-04T10:07:58Z after ~3h16m in the GPU queue; smoke body 10:03:20 -> 10:07:30 (4m 09s)",
+      "green_because": [
+        "the SGLang Pennyroyal server booted and the Qwen3.8-Flash-Next W4A16 checkpoint served 133,521 tokens at 535 tok/s",
+        "the official arc_agi runtime imported and the benchmark built all 25 demo games from the bundled environment files",
+        "the duck solver played real games and wrote submission.parquet (2648 B) plus per-game request logs, transcripts, movies and diagnostics.html",
+        "0 tracebacks in the run"
+      ],
+      "not_a_score": "the demo games are the PUBLIC 25 and the rerun is scored against the private set, so 0.46 here is a cross-arm readiness signal, not a board prediction (measured worse than useless as a ranker on this board).",
+      "signal_worth_recording": "on a 240 s/game, 1-pass budget the agent already cleared levels in 2 of 25 games (tu93 1.0/9 levels, vc33 2.0/7) for a mean of 0.46 -- i.e. a 4-minute smoke on the public demo set already matches the whole 13-draw seed lottery's best single board entry (0.27) and approaches its 0.67. The rerun gives each game 532 min instead of 240 s."
+    }
   },
   "environment_facts": {
     "kernel_slug": "A kernel's id must equal the slug Kaggle derives from its title. Pushing id uts3125025522741/arc-agi-3-duck-sota with title 'ARC AGI 3 duck sota (open-source lift)' printed a warning and created uts3125025522741/arc-agi-3-duck-sota-open-source-lift; the id in kernel-metadata.json was corrected to that slug so the next push makes a version, not a second kernel.",
@@ -107,9 +126,9 @@
     "fire": "experiments/score-push-20261004/fire.jsonl"
   },
   "open_work": [
-    "read both scores (AGI-2 ~12 h + queue; AGI-3 unknown, gated on the commit smoke completing)",
-    "if the AGI-3 lift lands: rebuild the pair, and prefer iterating ON the duck code (serving config, game budget) over returning to the seed lottery",
-    "arm-queue.json still heads with v11-redraw-11 and harness-gemma-redraw4, both now superseded; re-arm before the unattended route next runs",
-    "update skill reference references/arc-prize-2026.md with the open-source lift, its attachability, the commit-mode smoke pattern and the slug pitfall"
+    "read the AGI-3 rerun score (arrives ~9 h after 10:09Z, i.e. after ~19:00Z on 2026-10-04) and the AGI-2 rerun score (~12 h + queue): neither needs a session, but nothing else can be decided until they land",
+    "if the lift lands in its family's band (~27.8): the pair is rebuilt around it and the next arms are knobs ON the duck code (serving config, per-game budget, concurrency), never another seed roll",
+    "if it lands low: read the smoke evidence above first -- the harness provably reached the games, so a low score is an agent-quality result, not an environment failure",
+    "the arm queue is re-armed (duck-sota-redraw1, v11-redraw-12) so the 10-05 cron invocations have something to advance"
   ]
 }
