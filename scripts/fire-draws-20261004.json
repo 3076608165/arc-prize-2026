@@ -1,0 +1,16 @@
+[
+  {
+    "competition": "arc-prize-2026-arc-agi-2",
+    "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+    "version": 11,
+    "file": "submission.json",
+    "message": "20261004 agi2 open-source-best: the pinned build of the best public ARC-AGI-2 artifact (mikelou1/arc-agi2-lb33-89-minimal-perfpatch, the highest-voted public notebook on the board at 126 votes), re-verified today by screening the attached model sources of every 2026 public ARC-AGI-2 notebook -- all of them attach the same sorokin/qwen3_4b_grids15_sft139 4B checkpoint this build already runs, and the offline-runnable repos (NVARC, transductARC) are the same or weaker family, so there is no stronger open-source AGI-2 solution to lift; predeclared >= 30.97 the pair's first member improves, 30.57-30.96 the second member improves, <= 30.56 no change"
+  },
+  {
+    "competition": "arc-prize-2026-arc-agi-3",
+    "kernel": "uts3125025522741/arc-agi-3-duck-sota-open-source-lift",
+    "version": 1,
+    "file": "submission.parquet",
+    "message": "20261004 duck-sota (open-source lift): the top-voted public ARC-AGI-3 solution (dfranzen/arc-agi-3-milestone-2-solution, 351 votes -- Tufa Labs duck harness + Qwen3.8-Flash-Next, fully offline), copied verbatim except for a bounded commit-mode smoke; the community reads this family at ~27.80 LB against our standing pair's 0.67 + 0.27"
+  }
+]

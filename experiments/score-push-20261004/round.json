@@ -1,0 +1,96 @@
+{
+  "date": "2026-10-04",
+  "policy": "Standing campaign policy: one slot per board per UTC day, the best two submissions across the competition count, an unused slot cannot be banked. Retired today on the ARC-AGI-3 board: the seed lottery and the harness redraws, in favour of the strongest OPEN-SOURCE solution on the board, per the user's instruction to submit the best open-source approach.",
+  "state_at_read": {
+    "read_utc": "2026-10-04T06:30Z",
+    "agi2": "rank 509/2396, numToday 0, numAllowedNow 1 -- last fire was 2026-09-30 (56695479, v11 draw #11, 28.47)",
+    "agi3": "rank 1724/3652, numToday 0, numAllowedNow 1 -- last fire was 2026-09-30 (56695484, harness redraw 4, 0.48)",
+    "days_lost": "2026-09-30 was the last round; 10-01, 10-02 and 10-03 had no session, so three UTC days of slots are gone on both boards and cannot be banked.",
+    "standing_pairs": {
+      "agi2": [30.97, 30.56],
+      "agi3": [0.67, 0.27]
+    }
+  },
+  "agi2": {
+    "what": "No lift available: the best open-source AGI-2 solution IS the build this campaign already submits. Re-screened today, not assumed.",
+    "evidence": {
+      "date_sorted": "the 60 newest public ARC-AGI-2 notebooks (kaggle kernels list --competition arc-prize-2026-arc-agi-2 --sort-by dateCreated) contain nothing above the 33.89 family",
+      "vote_sorted": "the highest-voted public ARC-AGI-2 notebook is mikelou1/arc-agi2-lb33-89-minimal-perfpatch (126 votes) -- the notebook our pinned build forks; nothing above it",
+      "artifacts": "every 2026 public ARC-AGI-2 notebook checked (mikelou1, beraterolelk, nitish5236goel, medvax, yukailiu, finalsunflower, junaid512) attaches the SAME 4B checkpoint sorokin/qwen3_4b_grids15_sft139 plus sorokin/pip-install-unsloth-flash-patch, all on NvidiaL4. No public AGI-2 notebook attaches a bigger or different model class.",
+      "offline_runnable_repos": "gh search repos ARC-AGI-2 (2026-10-04): the high-scoring repos are API/hosted systems (poetiq-ai/poetiq-arc-agi-solver 95%+, dastin359/athanor 95.7% public eval, confluence-labs/arc-agi-2, epang080516/arc_agi) and are not runnable under the offline / notebook-only gate; 1ytic/NVARC and kschweig/transductARC are the same or weaker family than the build we run"
+    },
+    "fired": {
+      "ref": "56816321",
+      "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+      "version": 11,
+      "submitted_utc": "2026-10-04T06:35:05Z",
+      "status": "PENDING (synchronous rerun)",
+      "decision_dependency": "nothing structural -- the pair can only improve or stay. The check that mattered this round was the LIFT hunt, and it returned a measured negative.",
+      "predeclared": {
+        ">= 30.97": "the pair's first member improves",
+        "30.57 - 30.96": "the pair's second member improves",
+        "<= 30.56": "no change (the pair is the best two, so a low draw costs nothing)"
+      },
+      "draw_band_at_fire": {
+        "n": 11,
+        "draws": [29.31, 30.56, 30.97, 28.89, 29.31, 30.14, 29.72, 30.28, 30.28, 29.72, 28.47],
+        "mean": 29.79,
+        "max": 30.97,
+        "p_beat_second_member": "2/11"
+      }
+    }
+  },
+  "agi3": {
+    "what": "FIRST non-incremental arm on this board: the best OPEN-SOURCE solution on the board, lifted.",
+    "source": {
+      "kernel": "dfranzen/arc-agi-3-milestone-2-solution",
+      "votes": 351,
+      "why": "the top-voted public ARC-AGI-3 notebook -- the ARC Prize 2026 Milestone 2 solution, built on Tufa Labs' Duck harness plus Daniel Franzen's patch and Qwen3.8-Flash-Next (Intel W4A16 AutoRound + albucino MTP drafter) served by the Pennyroyal SGLang fork. skarin/arc-agi-3-27-80-lb-100-trajectory-audit is the same code plus an audit section and titles the family at 27.80 LB; our standing pair is 0.67 + 0.27.",
+      "source_notebook_sha256": "88a379f17c3a4ba8c98715fc23155346ccd6eb289bdafebadfc61a3178f9d9bd",
+      "offline": true,
+      "attachments_verified_public": [
+        "dataset dfranzen/pennyroyal-v253 (6.6 GB wheelhouse, 3121 downloads)",
+        "dataset dfranzen/taaf-kaggle-source-bundle-copy",
+        "model dfranzen/intel-qwen3.8-flash-next-w4a16-autoround (id 765336)",
+        "model dfranzen/albucino-qwen3-8-flash-next-drafter (id 765062)"
+      ]
+    },
+    "our_kernel": "uts3125025522741/arc-agi-3-duck-sota-open-source-lift",
+    "version": 1,
+    "build": "agi3/out/duck-sota",
+    "lift_script": "agi3/lift_duck_sota.py",
+    "diffs_from_upstream": [
+      "ONE cell (the customization hook, index 16). The non-submission branch -- the commit run, whose only job is to leave a submission.parquet so the version becomes submittable -- is bounded to n_passes 1, concurrency 25 and 240 s/game, and its 32400 s budget assertion is downgraded to a warning. Upstream runs a 4-pass sweep over all 25 demo games there (~9 h of GPU) that buys nothing, because the score comes from the competition rerun, which takes the TRUE_SUBMISSION branch and is byte-identical to upstream."
+    ],
+    "verified_before_push": [
+      "exactly one cell differs from the pulled upstream notebook (23 cells both sides, index 16)",
+      "the TRUE_SUBMISSION branch is intact in the patched cell (concurrency 120, 532*60 s, n_passes 1)",
+      "every code cell still ast-parses (magic cells excluded)"
+    ],
+    "open_gates": [
+      "the commit-mode smoke must reach COMPLETE and write submission.parquet before the slot can be spent; it is queued behind the board's GPU backlog, which the forum reports as multi-hour",
+      "the scored rerun is the first real measurement. Read it against the predeclared branches below, and check the rerun's own log for whether it reached the games -- kernels output returns the COMMIT run, not the rerun, so a low score whose explanation lives in the rerun is unreadable and must not be written up as 'the class failed'"
+    ],
+    "predeclared": {
+      ">= 20": "the open-source lift works and the board is transformed; the pair is rebuilt around it",
+      "5 - 20": "class alive but under-tuned on our mount/GPU; the next arm is a knob on THIS code, not another family",
+      "0.28 - 5": "the harness ran but scored below the family's known band -- investigate the serving stack before trusting it",
+      "<= 0.27": "no pair change; before concluding anything, establish from the run that the harness reached the games at all"
+    },
+    "decision_dependency": "this is the only arm on this board whose outcome can change the campaign's direction: it either retires the seed lottery and the gemma harness (pair replaced by a ~27-scoring entry) or it tells us the lift did not reproduce, which is a different class of negative than the draws."
+  },
+  "environment_facts": {
+    "kernel_slug": "A kernel's id must equal the slug Kaggle derives from its title. Pushing id uts3125025522741/arc-agi-3-duck-sota with title 'ARC AGI 3 duck sota (open-source lift)' printed a warning and created uts3125025522741/arc-agi-3-duck-sota-open-source-lift; the id in kernel-metadata.json was corrected to that slug so the next push makes a version, not a second kernel.",
+    "kernels_status_ref": "kernels status wants the created slug, not the metadata id -- the metadata id answers 'Permission kernels.get was denied', which reads like a wrong slug rather than a mismatched one."
+  },
+  "watchers": {
+    "agi3_kernel_status": "agi3/out/duck-sota/status.log (60 s poll)",
+    "fire": "experiments/score-push-20261004/fire.jsonl"
+  },
+  "open_work": [
+    "read both scores (AGI-2 ~12 h + queue; AGI-3 unknown, gated on the commit smoke completing)",
+    "if the AGI-3 lift lands: rebuild the pair, and prefer iterating ON the duck code (serving config, game budget) over returning to the seed lottery",
+    "arm-queue.json still heads with v11-redraw-11 and harness-gemma-redraw4, both now superseded; re-arm before the unattended route next runs",
+    "update skill reference references/arc-prize-2026.md with the open-source lift, its attachability, the commit-mode smoke pattern and the slug pitfall"
+  ]
+}
