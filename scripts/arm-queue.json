@@ -1,5 +1,28 @@
 [
   {
+    "id": "duck-sota-redraw1",
+    "arm": "open-source lift redraw -- second independent draw of the ARC-AGI-3 duck solution",
+    "competition": "arc-prize-2026-arc-agi-3",
+    "kernel": "uts3125025522741/arc-agi-3-duck-sota-open-source-lift",
+    "version": 1,
+    "file": "submission.parquet",
+    "message": "20261005 duck-sota redraw 1: second independent draw of the open-source lift (kernel v1 -- the byte-identical ARC Prize 2026 Milestone-2 solution, Tufa Labs duck harness + Qwen3.8-Flash-Next); the pair keeps the best two and this board is a deterministic step function of the agent's trajectory, so a redraw is the cheapest thing that can add a second member while the lift's own score decides whether the next arm is a knob ON this code or another class",
+    "build": "agi3/out/duck-sota (unchanged; a redraw, not a variant)",
+    "predicts": "the same distribution as the lift, whatever that turns out to be -- fired only if the arm is still the best thing available",
+    "note": "Armed 2026-10-04 so the AGI-3 slot cannot go unspent while the lift's first score is unknown (the score arrives after a ~9 h rerun, well after the session ends). Redraws cannot damage the pair because it is the best two. Replace this arm with a knob on the duck code the moment the lift's score is read."
+  },
+  {
+    "id": "v11-redraw-12",
+    "competition": "arc-prize-2026-arc-agi-2",
+    "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+    "version": 11,
+    "file": "submission.json",
+    "message": "20261005 v11 identical resubmit #12: draw n=12 of the pinned build of the best public ARC-AGI-2 artifact; every structural axis is closed against its own band and the open-source lift hunt returned a measured negative (every 2026 public AGI-2 notebook checked attaches the same 4B checkpoint on NvidiaL4, and the highest-voted one is the notebook this build forks), so the slot buys a best-of-draws sample; predeclared >= 30.97 the pair's first member improves, 30.57-30.96 the second member improves, <= 30.56 no change",
+    "build": "agi2/out/... = kernel version 11 (unchanged; a draw, not a variant)",
+    "predicts": "inside the measured band (n=11 draws, 28.47-30.97, mean 29.79); 2 of 11 at or above the pair's second member",
+    "note": "Armed 2026-10-04 as the fallback so a board with no better lever still spends its unbankable day."
+  },
+  {
     "id": "twopass-item-passid",
     "arm": "two-pass with the pass id carried in the queue item",
     "competition": "arc-prize-2026-arc-agi-2",

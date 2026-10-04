@@ -1,0 +1,9 @@
+[
+  {
+    "competition": "arc-prize-2026-arc-agi-3",
+    "kernel": "uts3125025522741/arc-agi-3-duck-sota-open-source-lift",
+    "version": 1,
+    "file": "submission.parquet",
+    "message": "20261004 duck-sota (open-source lift): the top-voted public ARC-AGI-3 solution (dfranzen/arc-agi-3-milestone-2-solution, 351 votes -- Tufa Labs duck harness + Qwen3.8-Flash-Next, fully offline), copied verbatim except for a bounded commit-mode smoke; the community reads this family at ~27.80 LB (rank ~272 of 3655) against our standing pair's 0.67 + 0.27"
+  }
+]

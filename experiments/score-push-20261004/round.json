@@ -5,10 +5,16 @@
     "read_utc": "2026-10-04T06:30Z",
     "agi2": "rank 509/2396, numToday 0, numAllowedNow 1 -- last fire was 2026-09-30 (56695479, v11 draw #11, 28.47)",
     "agi3": "rank 1724/3652, numToday 0, numAllowedNow 1 -- last fire was 2026-09-30 (56695484, harness redraw 4, 0.48)",
-    "days_lost": "2026-09-30 was the last round; 10-01, 10-02 and 10-03 had no session, so three UTC days of slots are gone on both boards and cannot be banked.",
+    "days_lost": "ROOT CAUSE FOUND: not a broken route. The Hermes cron jobs arc-fire-next-arm (10:05 local) and arc-fire-next-arm-b (10:25 local) ran every day and completed in 5-20 s, but from 2026-10-01 on they had NOTHING TO FIRE: every arm in scripts/arm-queue.json (v17, v18, v15, v16, harness-gemma, augment20, v11-redraw-11, redraw3, redraw4) had its message already present in the submissions list, so select() returned None and the route exited 0 -- a graceful no-op that reads exactly like a healthy run in the execution log (status completed, delivery suppressed). 2026-09-30 was therefore the last fired round and 10-01..10-03 are three lost, unbankable UTC days on both boards. Fix applied this round: two fresh arms re-armed at the head of the queue (duck-sota-redraw1 for AGI-3, v11-redraw-12 for AGI-2), so the route has something to advance on 10-05.",
     "standing_pairs": {
-      "agi2": [30.97, 30.56],
-      "agi3": [0.67, 0.27]
+      "agi2": [
+        30.97,
+        30.56
+      ],
+      "agi3": [
+        0.67,
+        0.27
+      ]
     }
   },
   "agi2": {
@@ -33,7 +39,19 @@
       },
       "draw_band_at_fire": {
         "n": 11,
-        "draws": [29.31, 30.56, 30.97, 28.89, 29.31, 30.14, 29.72, 30.28, 30.28, 29.72, 28.47],
+        "draws": [
+          29.31,
+          30.56,
+          30.97,
+          28.89,
+          29.31,
+          30.14,
+          29.72,
+          30.28,
+          30.28,
+          29.72,
+          28.47
+        ],
         "mean": 29.79,
         "max": 30.97,
         "p_beat_second_member": "2/11"
@@ -81,7 +99,8 @@
   },
   "environment_facts": {
     "kernel_slug": "A kernel's id must equal the slug Kaggle derives from its title. Pushing id uts3125025522741/arc-agi-3-duck-sota with title 'ARC AGI 3 duck sota (open-source lift)' printed a warning and created uts3125025522741/arc-agi-3-duck-sota-open-source-lift; the id in kernel-metadata.json was corrected to that slug so the next push makes a version, not a second kernel.",
-    "kernels_status_ref": "kernels status wants the created slug, not the metadata id -- the metadata id answers 'Permission kernels.get was denied', which reads like a wrong slug rather than a mismatched one."
+    "kernels_status_ref": "kernels status wants the created slug, not the metadata id -- the metadata id answers 'Permission kernels.get was denied', which reads like a wrong slug rather than a mismatched one.",
+    "cron_no_op_is_silent": "A drained arm queue makes the unattended route a successful no-op, not a failure: it exits 0 in 5-20 s and the cron ledger records status=completed. Nothing in the execution record distinguishes it from a round that fired. Only the submissions table shows the gap (last fire 2026-09-30 while the jobs ran daily)."
   },
   "watchers": {
     "agi3_kernel_status": "agi3/out/duck-sota/status.log (60 s poll)",
