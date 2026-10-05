@@ -1,5 +1,28 @@
 [
   {
+    "id": "duck-sota-batch32",
+    "arm": "serving batch 10 -> 32 on the open-source lift (the only lever the scored rerun's config leaves unspent)",
+    "competition": "arc-prize-2026-arc-agi-3",
+    "kernel": "uts3125025522741/arc-agi-3-duck-sota-open-source-lift",
+    "version": 2,
+    "file": "submission.parquet",
+    "message": "20261006 duck-sota batch32: the open-source lift with the SGLang server decode batch raised 10 -> 32 (MAXREQ and CUDAGRAPH_MAXBS together; MAMBA_CACHE stays 60), because the build that scored 28.12 drives bm.solver.concurrency = 120 over ~110 private games while the server admits 10 requests at a time -- the commit smoke measured 556 tok/s aggregate and 13 of 25 public games served ZERO actions in their 240 s budget; predeclared >= 28.12 the batch is a real lever and the pair's first member improves, 5.00-28.11 the lift is live but the batch is not the binding constraint (next knob: the model, not the serving config), < 5 investigate the serving stack before trusting the reading",
+    "build": "agi3/out/duck-sota-v2 (kernel v2; exactly one cell differs from v1 -- the launcher CFG dict)",
+    "predicts": "more actions per game inside the same per-game wall clock; the smoke already measures it for free (aggregate tok/s and games-served on the public 25), and the scored rerun is the board test",
+    "note": "Armed 2026-10-05. Pushed as kernel v2 the same session; the commit smoke must reach COMPLETE and write submission.parquet before the slot can be spent, which the fire path waits for."
+  },
+  {
+    "id": "v11-redraw-13",
+    "competition": "arc-prize-2026-arc-agi-2",
+    "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+    "version": 11,
+    "file": "submission.json",
+    "message": "20261006 v11 identical resubmit #13: draw n=13 of the pinned build (best two of 30.97 + 30.56 stand; every structural axis is closed against its own band and the open-source hunt returned a second measured negative -- the newest public ARC-AGI-2 notebooks still attach the same 4B sorokin/qwen3_4b_grids15_sft139 checkpoint, and the board's 77-84 cluster has no public artifact); predeclared >= 30.97 the pair's first member improves, 30.57-30.96 the second member improves, <= 30.56 no change",
+    "build": "agi2/... = kernel version 11 (unchanged; a draw, not a variant)",
+    "predicts": "inside the measured 12-draw band (28.06-30.97, mean 29.6); 2 of 12 at or above the pair's second member",
+    "note": "Armed 2026-10-05 as the FALLBACK: the AGI-2 ladder currently has no un-fired variant, and an unspent slot cannot be banked. The next real AGI-2 arm is a checkpoint swap inside the same tokenizer family (pranshubahadur/xcalibur-aa2-sft-500, a fine-tune of the same grids15_sft139 base) -- it needs the effective model path located in the arc_solver/starter build and the ARC_VOCAB token ids compared before it is worth a GPU run."
+  },
+  {
     "id": "duck-sota-redraw1",
     "arm": "open-source lift redraw -- second independent draw of the ARC-AGI-3 duck solution",
     "competition": "arc-prize-2026-arc-agi-3",

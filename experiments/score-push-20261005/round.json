@@ -1,0 +1,119 @@
+{
+  "date": "2026-10-05",
+  "policy": "Standing campaign policy: one slot per board per UTC day, the best two submissions across the competition count, an unused slot cannot be banked. Both slots were spent before this session started (the two scheduled routes caught up in one burst at 05:08Z and the per-board guard allocated them correctly). This round therefore READS the two results that landed overnight and stages the next arm; it fires nothing.",
+  "state_at_read": {
+    "read_utc": "2026-10-05T05:10Z",
+    "gates": {
+      "arc_agi_2": "maxDailySubmissions 1 | numScoredSubmissions 2 | maxGpuRuntimeMinutes 720 | deadline 2026-11-02T23:59Z | kernelsPublishingDisabledDeadline 2026-10-26T23:59Z | syncReruns true | requiresIdentityVerification true | truncation 2dp | requiredSubmissionFilename submission.json",
+      "arc_agi_3": "maxDailySubmissions 1 | numScoredSubmissions 2 | maxGpuRuntimeMinutes 540 | deadline 2026-11-02T23:59Z | kernelsPublishingDisabledDeadline 2026-10-26T23:59Z | syncReruns true | requiresIdentityVerification true | truncation 2dp | requiredSubmissionFilename submission.parquet",
+      "paper_track": "deadline 2026-11-09T23:59Z | 225 teams",
+      "read_this_round": "kernelsPublishingDisabledDeadline is 2026-10-26T23:59Z -- 21 days out. Prize eligibility needs the notebook AND the solution repo public before it; the repo still has no remote (git remote -v is empty), and publishing was deliberately deferred to shed no intel early. The deferred-publish decision now has a hard backstop date and it is not far."
+    },
+    "agi2": "rank 517/2445, pair 30.97 + 30.56, numToday 0 at read. Last fires: 2026-10-04 (56816321) and, this morning, 56843050.",
+    "agi3": "rank 318/3728 (was 1724/3652 on 2026-10-04), pair 28.12 + 0.67, numToday 0 at read. Last fires: 2026-10-04 (56820929) and, this morning, 56843045."
+  },
+  "results_landed": {
+    "agi2_56816321": {
+      "what": "the 2026-10-04 draw of the pinned v11 build (open-source-best round: the lift hunt was re-run and returned a negative)",
+      "public_score": 28.06,
+      "reading": "inside the draw band; below the pair's second member (30.56), so the pair is unchanged. The predeclared '<= 30.56 no change' branch fired.",
+      "draw_band_now": {
+        "n": 12,
+        "draws": [29.31, 30.56, 30.97, 28.89, 29.31, 30.14, 29.72, 30.28, 30.28, 29.72, 28.47, 28.06],
+        "mean": 29.60,
+        "max": 30.97,
+        "at_or_above_second_member": "2/12"
+      }
+    },
+    "agi3_56820929": {
+      "what": "the open-source lift of dfranzen/arc-agi-3-milestone-2-solution (Tufa Labs duck harness + Qwen3.8-Flash-Next, fully offline), kernel v1",
+      "public_score": 28.12,
+      "predeclared_branch_fired": ">= 20 -- 'the open-source lift works and the board is transformed; the pair is rebuilt around it'",
+      "pair_change": "0.67 + 0.27 -> 28.12 + 0.67 (the best two). Rank 1724/3652 -> 318/3728.",
+      "what_it_retires": "the seed lottery (13 draws spanning 0.03-0.27) and the lifted gemma-reflection harness (0.67/0.00/0.48). Both are now 40x below the entry they were competing with.",
+      "honest_reading": "this is a LIFT, not our own result: the score reproduces the community's own ~27.8 claim for this notebook from a different platform epoch, which is itself the first time this campaign has reproduced anyone's claim. The remaining headroom is visible: the board's top is 55.89 (Tufa Labs, the harness authors) with a mid-cluster at 34-40 (the last dance 39.30, mtg 37.54, gng 36.78, Andrew Reed 36.14), so the public recipe is ~half of the top score."
+    }
+  },
+  "fired_this_round": {
+    "note": "NOT fired by this session. Both routes are Hermes cron (no_agent shims over scripts/fire_next_arm.py); the machine woke and both catch-up invocations dispatched at 05:08:24Z and 05:08:39Z. The lock plus the board-spent guard allocated one slot per board, exactly as designed -- the burst that cost a day on 2026-09-27 no longer can.",
+    "agi3_56843045": {
+      "kernel": "uts3125025522741/arc-agi-3-duck-sota-open-source-lift",
+      "version": 1,
+      "what": "duck-sota redraw 1 -- a second independent draw of the same bytes",
+      "status": "PENDING",
+      "decision_dependency": "with the lift now confirmed at 28.12, this redraw is the cheapest way to add a second member to a pair whose second member is 0.67: anything it scores above 0.67 is pure pair upside, and the campaign's standing pair is the best two.",
+      "was_it_the_right_arm": "it was the right fallback and the wrong first choice, and the reason is structural: it was armed on 2026-10-04 when the lift's score was still unknown, so the queue had no way to know the batch knob below was now available. The knob supersedes it and is staged for 2026-10-06."
+    },
+    "agi2_56843050": {
+      "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+      "version": 11,
+      "what": "v11 identical resubmit #12 (a draw)",
+      "status": "PENDING",
+      "reading": "2 of 12 draws have landed at or above the pair's second member. This is the weakest arm the campaign has and it is staged only because AGI-2 currently has no variant with a signed prior -- see planning.agi2_next."
+    }
+  },
+  "measurement_this_round": {
+    "what": "the commit smoke of kernel v1 (the pulled output, read locally before pushing version 2 -- `kernels output` only ever returns the newest commit run, so this was the last moment it was readable)",
+    "source": "agi3/out/duck-sota/runout (benchmark.json + per-game artifacts)",
+    "conditions": "25 public demo games, concurrency 25, n_passes 1, 240 s per game, 4 min 09 s of GPU wall clock, SGLang Pennyroyal server serving the W4A16 checkpoint",
+    "measured": {
+      "actions": 146,
+      "generated_tokens": 133521,
+      "aggregate_throughput_tok_s": 556.3,
+      "tokens_per_action_mean": 914,
+      "games_that_held_a_decode_slot": "12 of 25",
+      "games_served_zero_actions_in_240s": 13,
+      "levels_cleared": "2 games (tu93 1/9, vc33 2/7) -- mean 0.46"
+    },
+    "why_it_matters": "the scored rerun drives bm.solver.concurrency = 120 over ~110 private games while the launcher configures the server with --max-running-requests 10 (MAMBA_CACHE 60). At most 10 of 110 games can hold a decode slot at any instant, and 13 of 25 public games could not complete a single action inside their entire 240 s budget. Decode on an INT4 hybrid is weight-read-bound, so batch is the one lever this configuration leaves unspent -- and it is measurable for free in the same smoke."
+  },
+  "next_arm": {
+    "id": "duck-sota-batch32",
+    "board": "arc-prize-2026-arc-agi-3",
+    "kernel": "uts3125025522741/arc-agi-3-duck-sota-open-source-lift",
+    "version": 2,
+    "push_state": "pushed QUEUED at 2026-10-05T05:4xZ as version 2",
+    "build": "agi3/out/duck-sota-v2, produced by `python agi3/lift_duck_sota.py --variant batch32`",
+    "the_one_knob": "MAXREQ 10 -> 32 and CUDAGRAPH_MAXBS 10 -> 32 in the launcher CFG dict (the launcher asserts CUDAGRAPH_MAXBS >= MAXREQ, so they move as one knob). MAMBA_CACHE stays 60 > 32, so every decode slot still has a resident Mamba/SSM state slot and the change adds KV pressure only.",
+    "verified_before_push": [
+      "exactly one cell (index 12, the launcher) differs from the v1 build; cells 23 both sides",
+      "inside that cell exactly two lines changed (MAXREQ, CUDAGRAPH_MAXBS); the CFG edit landed in the cell that actually builds the SGLang args",
+      "the TRUE_SUBMISSION branch is intact (concurrency 120, 532*60 s, n_passes 1) and an assert rejects a CFG whose CUDAGRAPH_MAXBS < MAXREQ",
+      "every code cell still ast-parses (the build gate)"
+    ],
+    "predeclared": {
+      ">= 28.12": "the batch was a real lever; the pair's first member improves and the next knob is a bigger batch or the model, not the agent",
+      "5.00 - 28.11": "the lift is live but the serving batch is not the binding constraint -- the knob is closed and the next arm is the model class, not the config",
+      "< 5": "investigate the serving stack before trusting the reading; a config that boots and serves must be distinguished from one that is thrashing KV"
+    },
+    "smoke_prediction": "aggregate tok/s and games-served both rise on the public 25 (batch 32 covers all 25 of them). Falsifier: aggregate tok/s within ~20% of 556 with games-served unchanged.",
+    "honest_caveat": "upstream is a strong team that settled on 10; a batch of 32 may have been measured and rejected (mamba/GEM state pressure, or quality degradation from long-context batching). The smoke is cheap enough that the measurement, not the argument, decides."
+  },
+  "field_recon": {
+    "agi3": {
+      "top": "Tufa Labs 55.89 (2026-10-03), Yi-Chia Chen 48.59, the last dance 39.30, mtg 37.54, gng 36.78, Andrew Reed 36.14, lalalia 35.79, Kamal Kadakara 35.44, Nhan Duc Nguyen 34.74",
+      "public_pool": "collapsed onto the notebook this campaign lifted: dfranzen/arc-agi-3-milestone-2-solution is now at 488 votes (351 on 2026-10-04) with at least four verbatim forks published on 2026-10-04 (anthonyxlyu, svegio, sigeward, juliancamilovilla). Our 28.12 sits at the top of the public claims, below only shiiin9's 31.54 title claim.",
+      "other_attachables": [
+        "foysalemonshanto/lb-9-arc3-duck-v12-with-qwen-3-8-27b -- same harness family with a 27B FP8 repack (foysalemonshanto/qwen3-8-27b-fp8-repacked-v1) on NvidiaRtxPro6000, a genuine model-class arm (different harness bundle: jakobbrggen/taaf-kaggle-source-anim-20260807-anim)",
+        "keithtyser/duck-qwen3-8-flash-next-nvfp4-mtp and scottlegrand/taaf-flashnext-sheetu12b-0922 -- vLLM + NVFP4 serving of the same 8B, i.e. a competing answer to the same throughput question this round's knob asks"
+      ]
+    },
+    "agi2": {
+      "top": "Tufa Labs 83.61, rabbithole 80.56, Yi-Chia Chen 77.22, nvbanana 76.67, _hans 60.42, ALbert RUehlman 55.00, then a cliff to 45.83 / 43.06 / 42.92",
+      "public_pool": "the newest public notebooks (checked 2026-10-05, 2 pages) still attach the SAME 4B checkpoint our build runs -- yukailiu/arc-agi-2-champion-solution = sorokin/qwen3_4b_grids15_sft139 bfloat16, rushkiller/g0-arc2026-submission = a 4B qwen3-5 arc2026 base. Nothing in the public pool explains the 77-84 cluster.",
+      "reading": "the top cluster is a different method with no public artifact, and the 33-40 band is the public recipe's ceiling. Our 30.97 is that recipe's floor, not its ceiling."
+    }
+  },
+  "planning": {
+    "agi2_next": "No un-fired variant exists and the model-swap candidate needs verification first, so the draw is armed as a fallback and the real work is named: pranshubahadur/xcalibur-aa2-sft-500 is titled 'qwen3_4b_grids15_sft139_gpt6-astra', i.e. a fine-tune of the SAME base, so the ARC_VOCAB token ids (which the build hardcodes) should be identical -- the tokenizer contract that killed the 2B ensemble swap idea is not at risk here. Before it earns a GPU run: locate the effective model path inside the built notebook (the model_name at cell 8 is /kaggle/input/models/sorokin/qwen3_4b_grids15_sft139/transformers/bfloat16/1, and the worker path goes through arc_solver.py written earlier in the notebook), add the model to model_sources, compare vocab size and the 12 ARC token ids, then push one version.",
+    "publish_backstop": "kernelsPublishingDisabledDeadline 2026-10-26T23:59Z. The repo still has no remote. Decide the publish date explicitly and write it here, because after that instant neither the notebook nor the repo can be made public and the prize eligibility rule needs both.",
+    "where_the_prize_is": "rank prizes are out of reach on both boards from here (28.12 vs 55.89 is a generation; 30.97 vs 83.61 is two). The reachable pools are the writeup/rubric ones, and this campaign now has the measurements a writeup needs: a reproduced public SOTA (28.12 from 0.67), the draw-band characterisation, the closed axes with their numbers, and a serving-throughput diagnostic that is reusable by anyone."
+  },
+  "open_work": [
+    "read the two PENDING results (AGI-3 redraw 56843045 after ~9 h + queue; AGI-2 draw 56843050 after ~35 min + queue) -- no session needed, the board is authoritative",
+    "read the batch32 commit smoke (kernel v2) when it leaves the queue: aggregate tok/s and games-served against the 556.3 / 12-of-25 baseline. The v2 build must reach COMPLETE and write submission.parquet before the 2026-10-06 slot can be spent; the fire path waits for that, so a failed smoke costs the slot and must be caught before 10-06",
+    "if the smoke is green and the rerun lands >= 28.12: the next arm is a bigger batch or the 27B model class, never another draw",
+    "locate and verify the AGI-2 checkpoint swap (see planning.agi2_next) so AGI-2 stops spending slots on draws",
+    "publish decision before 2026-10-26T23:59Z"
+  ]
+}

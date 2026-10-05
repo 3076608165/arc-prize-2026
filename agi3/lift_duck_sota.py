@@ -37,6 +37,27 @@ REPO = Path(__file__).resolve().parent.parent
 OUT = REPO / "agi3" / "out" / "duck-sota"
 SRC_DIR = OUT / "refs" / "upstream"
 
+# The lift plus, in the second variant, exactly one more knob: the launcher's serving
+# batch. Upstream serves `--max-running-requests 10` while the scored rerun drives
+# `bm.solver.concurrency = 120` over ~110 private games, so at most 10 games hold a
+# decode slot at any instant. The commit smoke measured the consequence on the public
+# 25: 146 actions, 133,521 tokens, 556 tok/s aggregate, and 13 of 25 games served ZERO
+# actions inside their 240 s budget. Decode on an INT4 hybrid is weight-read-bound, so
+# batch is the lever the config is leaving unspent -- and it is measurable for free in
+# the same 4-minute smoke, before the arm is ever scored.
+VARIANTS = {
+    "v1": {"out": "duck-sota", "cfgs": {},
+           "note": "verbatim lift; the only diff is the bounded commit-mode smoke"},
+    "batch32": {
+        "out": "duck-sota-v2",
+        "cfgs": {"MAXREQ": 32, "CUDAGRAPH_MAXBS": 32},
+        "note": ("serving batch 10 -> 32 via MAXREQ + CUDAGRAPH_MAXBS together (the "
+                 "launcher asserts CUDAGRAPH_MAXBS >= MAXREQ, so they move as one "
+                 "knob). MAMBA_CACHE stays 60 > 32, so every decode slot still has a "
+                 "resident Mamba/SSM state slot: the change adds KV pressure only."),
+    },
+}
+
 SOURCE_KERNEL = "dfranzen/arc-agi-3-milestone-2-solution"
 # The slug Kaggle actually created for our copy: the kernel id must equal this or the next
 # push creates a second kernel instead of version 2 (measured 2026-10-04 -- a title whose
@@ -113,7 +134,11 @@ def pull() -> Path:
     return ipynb
 
 
-def build() -> dict:
+def build(variant: str = "v1") -> dict:
+    global OUT, SRC_DIR
+    spec = VARIANTS[variant]
+    OUT = REPO / "agi3" / "out" / spec["out"]
+    SRC_DIR = OUT / "refs" / "upstream"
     src = pull()
     src_sha = sha256(src)
     nb = json.loads(src.read_text(encoding="utf-8"))
@@ -133,6 +158,29 @@ def build() -> dict:
     )
     if MARKER not in "".join(nb["cells"][idx]["source"]):
         raise SystemExit("patch did not land")
+
+    # --- variant knobs: the launcher's CFG dict (cell 12) ---------------------------
+    if spec["cfgs"]:
+        cfg_old = "".join(f"    {k}=10,\n" for k in spec["cfgs"])
+        cfg_new = "".join(f"    {k}={v},\n" for k, v in spec["cfgs"].items())
+        hits = [
+            i
+            for i, c in enumerate(nb["cells"])
+            if c.get("cell_type") == "code" and cfg_old in "".join(c.get("source", []))
+        ]
+        if len(hits) != 1:
+            raise SystemExit(f"expected exactly 1 cell carrying {cfg_old!r}, got {hits}")
+        kn = hits[0]
+        body = "".join(nb["cells"][kn]["source"]).replace(cfg_old, cfg_new)
+        nb["cells"][kn]["source"] = body.splitlines(keepends=True)
+        if cfg_new not in body or cfg_old in body:
+            raise SystemExit("serving knob did not land")
+        # The knob is useless if it does not reach the scored rerun's branch, and the
+        # bounds check in the launcher would refuse to boot a config where the CUDA-graph
+        # batch does not cover MAXREQ.
+        if f'max-running-requests", str(CFG["MAXREQ"])' not in body:
+            raise SystemExit("serving knob landed in a cell that never builds the SGLang args")
+        assert all(v >= 10 for v in spec["cfgs"].values())
 
     # --- the rerun branch must be untouched ----------------------------------------
     patched = "".join(nb["cells"][idx]["source"])
@@ -193,6 +241,7 @@ def build() -> dict:
 
     record = {
         "arm": "duck-sota",
+        "variant": variant,
         "what": "verbatim lift of the top-voted public ARC-AGI-3 solution",
         "source_kernel": SOURCE_KERNEL,
         "source_notebook_sha256": src_sha,
@@ -200,20 +249,31 @@ def build() -> dict:
         "kernel_version_pending": True,
         "cells": len(nb["cells"]),
         "patched_cell_index": idx,
+        "knobs": spec["cfgs"],
         "diffs": [
             "commit-mode branch (TRUE_SUBMISSION False) bounded to n_passes=1, "
             "concurrency=25, 240 s/game, and the 32400 s budget assertion downgraded "
             "to a warning -- commit-mode smoke only; the scored rerun branch is "
             "untouched and byte-identical to upstream"
-        ],
+        ]
+        + ([spec["note"]] if spec["cfgs"] else []),
         "machine_shape": "NvidiaRtxPro6000",
         "runtime_cap_min": 540,
         "read_back_key_suggestion": (
-            "20261004 duck-sota (open-source lift): top-voted public ARC-AGI-3 "
-            "solution (Tufa Labs duck harness + Qwen3.8-Flash-Next), verbatim except a "
-            "bounded commit-mode smoke; community reads this family at ~27.8 LB"
+            "duck-sota (open-source ARC-AGI-3 lift): Tufa Labs duck harness + "
+            "Qwen3.8-Flash-Next; community reads this family at ~27.8 LB"
         ),
     }
+    if spec["cfgs"]:
+        record["smoke_prediction"] = {
+            "baseline": {"aggregate_tok_s": 556.3, "actions": 146, "tokens": 133521,
+                         "games_served": "12 of 25"},
+            "batch32": ("aggregate tok/s and games-served both up (expect most of the 25 "
+                        "to hold a slot, and tok/s to track batch up to the memory band)"),
+            "falsifier": ("aggregate tok/s within ~20% of 556 and games-served unchanged: "
+                          "the server was not the bottleneck and the knob is closed"),
+        }
+
     (OUT / "experiment.json").write_text(
         json.dumps(record, indent=2) + "\n", encoding="utf-8"
     )
@@ -225,4 +285,4 @@ if __name__ == "__main__":
     if "--pull-only" in sys.argv:
         print(pull())
         sys.exit(0)
-    build()
+    build(sys.argv[sys.argv.index("--variant") + 1] if "--variant" in sys.argv else "v1")
