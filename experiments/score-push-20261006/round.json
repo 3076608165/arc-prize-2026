@@ -31,6 +31,11 @@
       "what": "v11 identical resubmit #12 (a draw of the pinned build)",
       "public_score": 28.47,
       "reading": "inside the 12-draw band, below the pair's second member (30.56): the predeclared '<= 30.56 no change' branch fired. 2 of 12 draws have now landed at or above 30.56."
+    },
+    "agi3_lean_smoke": {
+      "what": "the commit smoke of kernel v3 (the lean arm), read automatically by scripts/read_smoke.py",
+      "source": "agi3/out/duck-sota-v3/runout/token-attribution.json",
+      "verdict": "predeclared falsifier fired; see next_arm.smoke_reading_2026_10_06T06_58Z"
     }
   },
   "measurement_this_round": {
@@ -132,7 +137,36 @@
       "tokens do not fall": "the knob does not reach the request payload; fix the plumbing before reading any score"
     },
     "honest_caveat": "upstream ships thinking on by default and this is a why-parameterisation, not an improvement claim: the honest prior is that the smoke's mean score sags. Its value is that it prices the reasoning in tokens, which is the only lever the fixed wall clock leaves.",
-    "gated_on": "its own commit smoke, exactly as batch32 was: it is queued BEHIND the redraw, and the 2026-10-07 round reads the smoke before any session moves it to the head."
+    "gated_on": "its own commit smoke, exactly as batch32 was: it is queued BEHIND the redraw, and the 2026-10-07 round reads the smoke before any session moves it to the head.",
+    "smoke_reading_2026_10_06T06_58Z": {
+      "kernel_version": 3,
+      "status": "COMPLETE",
+      "measured": {
+        "requests": 442,
+        "completion_tokens": 80765,
+        "completion_per_request_mean": 182.7,
+        "p50": 147,
+        "p90": 357,
+        "max": 810,
+        "prompt_tokens": 14016136,
+        "actions": 693,
+        "games_served": "10 of 25",
+        "mean_public_score": 0.0041,
+        "levels_cleared": "tu93 1/9 only"
+      },
+      "baseline_v1": {
+        "requests": 115,
+        "completion_tokens": 142732,
+        "completion_per_request_mean": 1241.1,
+        "actions": 146,
+        "games_served": "10 of 25",
+        "mean_public_score": 0.4589
+      },
+      "prediction_verdict": "half right, and the half that matters is the wrong half: tokens per request fell 85% (1,132 -> 183, past the >50% predeclared) and actions rose 4.4x (158 -> 693) exactly as the arithmetic said, while the public-25 mean score collapsed to 0.0041 -- 0.9% of v1's 0.4589. The predeclared '< 0.15 means reasoning is load-bearing and the axis closes' branch fired.",
+      "what_it_establishes": "the fixed wall clock is NOT what limits this board. 4.4x the actions bought with 57% of the tokens returned 0.9% of the score, so on ARC-AGI-3 the scarce quantity is reasoning depth per action, not model time. The prompt bill also inverted (14.0M prompt tokens against 2.1M, 6.7x, over 442 requests): without reasoning the agent burns context re-reading instead of deciding.",
+      "not_measured": "whether a bounded thinking budget would sit between the two points. The two measured points bracket the effect but a mid-budget needs a template-level thinking budget that this harness does not expose as a knob, and a raw max_tokens cap truncates the action call itself. Named here so a future session adopts it deliberately rather than by drift."
+    },
+    "outcome": "CLOSED by its own smoke. The arm is removed from the queue: the predeclared branch fired, so firing it would spend a slot on an arm whose own measurement says it cannot work."
   },
   "staged_for_2026_10_07": {
     "inv1": {
@@ -160,15 +194,24 @@
     }
   },
   "planning": {
-    "where_the_score_can_still_move": "exactly two quantities: aggregate tok/s (a serving/hardware change on the same harness) and completion tokens per action (an agent change). Both multiply the same budget -- aggregate tok/s x 540 min / 110 games -- and the lean arm is the first instrument that prices the second one.",
+    "where_the_score_can_still_move": "nothing cheap is left on ARC-AGI-3: the config axis is inert by its own arithmetic and the per-action token axis is closed by measurement, with reasoning depth named as the scarce quantity. The AGI-3 slot is a redraw until the competition closes; the two live workstreams are the AGI-2 checkpoint swap and the writeup, whose central claim the two smokes now support directly.",
     "agi2_next": "the checkpoint swap work is unchanged and still unstarted: locate the effective model path in the built notebook, add pranshubahadur/xcalibur-aa2-sft-500 to model_sources, compare vocab size and the 12 ARC_VOCAB token ids, then push one version. Until that lands, AGI-2 spends its slots on draws by construction.",
     "publish_backstop": "2026-10-26T23:59Z. Both the notebook AND the solution repo must be public before it; git remote -v is still empty. Decide the date explicitly."
   },
   "open_work": [
-    "read the two PENDING results (AGI-3 batch32 56872786, AGI-2 draw 56872798) -- no session needed, the board is authoritative",
-    "read the v3 commit smoke when it leaves the queue (it was QUEUED at 06:55Z; v2's commit run took hours to start, so do not expect it before 2026-10-07): completion tokens per request against the 1,132 baseline, and the public-25 mean score against 0.46/0.42",
-    "if that smoke is green, move duck-sota-lean to the head of the queue for the 2026-10-08 AGI-3 slot; if it is red, the per-action token axis is closed and the AGI-3 board is done",
-    "start the AGI-2 checkpoint-swap verification (see planning.agi2_next)",
-    "record the publish date for the repo and the notebooks before 2026-10-26T23:59Z"
-  ]
+    "read the two PENDING results (AGI-3 batch32 56872786, AGI-2 draw 56872798) -- the board is authoritative",
+    "the v3 lean smoke is read and the axis is closed (see next_arm.smoke_reading): the arm is out of the queue, nothing to fire",
+    "start the AGI-2 checkpoint-swap verification (see planning.agi2_next) -- it is the only capability arm this campaign has left",
+    "record the publish date for the repo and the notebooks before 2026-10-26T23:59Z",
+    "write up the three-measurement result: the config axis is arithmetic-inert, the class draws ~2 points on identical bytes, and reasoning depth (not model time) sets the score"
+  ],
+  "staged_for_2026_10_08": {
+    "inv1": {
+      "id": "duck-sota-redraw3",
+      "board": "arc-prize-2026-arc-agi-3",
+      "kernel": "uts3125025522741/arc-agi-3-duck-sota-open-source-lift",
+      "version": 1,
+      "why": "both knob axes have now read null with mechanisms, so the AGI-3 slot's only un-fired arm is another draw of the class: ~50% upside on the pair's second member, and n=4 for the spread"
+    }
+  }
 }

@@ -68,7 +68,11 @@ VARIANTS = {
         "out": "duck-sota-v3",
         "cfgs": {},
         "envs": {"LOCAL_ANALYZER_ENABLE_THINKING": "false"},
-        "note": ("why-parameterisation of the agent's token spend: "
+        # MEASURED 2026-10-06 (commit smoke, kernel v3): 183 completion tokens/request (from 1,132),
+    # 693 actions (from 158, 4.4x), public-25 mean score 0.0041 (from 0.4589). The actions rose
+    # exactly as the arithmetic said and the score collapsed to 0.9% of v1, so reasoning is the
+    # product, not the overhead: this variant is a why-parameterisation, never a submission.
+    "note": ("why-parameterisation of the agent's token spend: "
                  "LOCAL_ANALYZER_ENABLE_THINKING true -> false. The smoke attributes "
                  "141,548 completion tokens over 125 requests (mean 1,132; p90 2,315; "
                  "max 5,023) and the completion is reasoning plus a one-token action, "

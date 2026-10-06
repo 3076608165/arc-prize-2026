@@ -24,16 +24,16 @@
   "note": "the AGI-2 fallback, unchanged in role from draws #5..#13"
  },
  {
-  "id": "duck-sota-lean",
-  "arm": "per-action token bill on the open-source lift (reasoning generation off)",
+  "id": "duck-sota-redraw3",
+  "arm": "fourth draw of the open-source lift (the standing arm now that every knob axis has read null)",
   "competition": "arc-prize-2026-arc-agi-3",
   "kernel": "uts3125025522741/arc-agi-3-duck-sota-open-source-lift",
-  "version": 3,
+  "version": 1,
   "file": "submission.parquet",
-  "build": "agi3/out/duck-sota-v3 (lift_duck_sota.py --variant lean; exactly one cell and one line differ from v1)",
-  "message": "20261008 duck-sota lean: the open-source lift with reasoning generation off (kernel v3 -- LOCAL_ANALYZER_ENABLE_THINKING true -> false, one cell differs from v1). The batch32 smoke closed the config axis with a mechanism: MAXREQ 32 was capped to 12 by the mamba state cache and the harness priority gate admits 10 streams, so with aggregate throughput flat at ~510-556 tok/s the tokens available per game are aggregate x wall / n_games whatever the concurrency. What is left is the per-action token bill (141,548 completion tokens over 125 requests, mean 1,132). Predeclared from its own commit smoke: tokens per request down >50% with the public-25 mean score >= 0.30 earns the slot, mean < 0.15 means reasoning is load-bearing and this axis closes too",
-  "predicts": "completion tokens per request fall by more than half while the smoke's mean score sags from 0.42-0.46; the arm's value is the measurement of what reasoning buys, not the score",
-  "note": "gated on its commit smoke, exactly as batch32 was: it fires only once the v3 smoke has been read, and the redraw above holds the slot until then"
+  "build": "agi3/out/duck-sota (kernel version 1, the bytes that read 28.12 and 26.03)",
+  "message": "20261008 duck-sota redraw 3: fourth independent draw of the open-source lift (kernel v1), standing arm after both knob axes read null (batch32's config was inert by its own smoke, and reasoning-off bought 4.4x the actions for 0.9% of the score). The pair keeps the best two, so anything above 26.03 improves it and n=4 tightens the class spread; predeclared >= 28.12 the first member improves, 26.04-28.11 the second improves, <= 26.03 no change",
+  "predicts": "inside the measured 26.03-28.12 band; this board is a redraw until the competition closes",
+  "note": "the AGI-3 slot has no capability arm left that is not already refuted"
  },
  {
   "id": "duck-sota-batch32",
