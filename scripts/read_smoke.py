@@ -31,12 +31,18 @@ def api():
     return a
 
 
+def state(a) -> str:
+    """Status as a bare token: the SDK returns an enum, not a dict."""
+    s = getattr(a.kernels_status(KERNEL), "status", None)
+    return str(s).rsplit(".", 1)[-1] if s is not None else "UNKNOWN"
+
+
 def main() -> int:
     out = Path(sys.argv[1] if len(sys.argv) > 1 else "agi3/out/duck-sota-v3")
     once = "--once" in sys.argv
     a = api()
     while True:
-        status = a.kernels_status(KERNEL).get("status")
+        status = state(a)
         print(f"{time.strftime('%H:%M:%SZ', time.gmtime())} {KERNEL} -> {status}", flush=True)
         if status == "COMPLETE":
             break
