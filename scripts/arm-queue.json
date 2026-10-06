@@ -36,6 +36,18 @@
   "note": "the AGI-3 slot has no capability arm left that is not already refuted"
  },
  {
+  "id": "v11-redraw-15",
+  "arm": "draw n=15 of the pinned ARC-AGI-2 build (keeps the AGI-2 slot from going unfired)",
+  "competition": "arc-prize-2026-arc-agi-2",
+  "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+  "version": 11,
+  "file": "submission.json",
+  "build": "agi2/out/audited16/submission.ipynb (kernel version 11, unchanged since 2026-09-14)",
+  "message": "20261008 v11 identical resubmit #15: draw n=15 of the pinned build (best two of 30.97 + 30.56 stand; every structural axis is closed against its own band). The checkpoint swap is still unverified, so the slot buys a best-of-draws sample rather than nothing: predeclared >= 30.97 the pair's first member improves, 30.57-30.96 the second improves, <= 30.56 no change",
+  "predicts": "inside the 12-draw band (mean 29.60, max 30.97); 2 of 15 draws have landed at or above the pair's second member",
+  "note": "queued only so the AGI-2 slot on 2026-10-08 is not wasted while the checkpoint swap is being verified; replace it with the swap arm the moment that verification lands"
+ },
+ {
   "id": "duck-sota-batch32",
   "arm": "serving batch 10 -> 32 on the open-source lift (the only lever the scored rerun's config leaves unspent)",
   "competition": "arc-prize-2026-arc-agi-3",
