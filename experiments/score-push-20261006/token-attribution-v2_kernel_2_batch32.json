@@ -1,0 +1,57 @@
+{
+  "requests": 125,
+  "games_with_requests": 10,
+  "completion_tokens": 141548,
+  "prompt_tokens": 2251685,
+  "completion_per_request": {
+    "mean": 1132.4,
+    "p50": 863,
+    "p90": 2315,
+    "max": 5023
+  },
+  "requests_per_turn": {
+    "ri=1": 74,
+    "ri=2": 32,
+    "ri=3": 12,
+    "ri=4": 6,
+    "ri=5": 1
+  },
+  "finish_reasons": {
+    "tool_calls": 125
+  },
+  "tokens_per_game": {
+    "lp85-305b61c3": 17275,
+    "vc33-5430563c": 15000,
+    "bp35-0a0ad940": 14938,
+    "wa30-ee6fef47": 14781,
+    "dc22-fdcac232": 14689,
+    "tn36-ef4dde99": 14582,
+    "sk48-d8078629": 13245,
+    "m0r0-492f87ba": 12999,
+    "tu93-0768757b": 12232,
+    "cn04-2fe56bfb": 11807
+  },
+  "games_with_any_action": 10,
+  "games_total": 25,
+  "actions": 158,
+  "generated_tokens_bench": 0,
+  "mean_public_score": 0.4249,
+  "levels_cleared": {
+    "cn04-2fe56bfb": [
+      1,
+      6
+    ],
+    "tu93-0768757b": [
+      1,
+      9
+    ],
+    "lp85-305b61c3": [
+      1,
+      8
+    ],
+    "vc33-5430563c": [
+      1,
+      7
+    ]
+  }
+}

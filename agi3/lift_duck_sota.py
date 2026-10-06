@@ -46,15 +46,35 @@ SRC_DIR = OUT / "refs" / "upstream"
 # batch is the lever the config is leaving unspent -- and it is measurable for free in
 # the same 4-minute smoke, before the arm is ever scored.
 VARIANTS = {
-    "v1": {"out": "duck-sota", "cfgs": {},
+    "v1": {"out": "duck-sota", "cfgs": {}, "envs": {},
            "note": "verbatim lift; the only diff is the bounded commit-mode smoke"},
     "batch32": {
         "out": "duck-sota-v2",
         "cfgs": {"MAXREQ": 32, "CUDAGRAPH_MAXBS": 32},
+        "envs": {},
         "note": ("serving batch 10 -> 32 via MAXREQ + CUDAGRAPH_MAXBS together (the "
                  "launcher asserts CUDAGRAPH_MAXBS >= MAXREQ, so they move as one "
                  "knob). MAMBA_CACHE stays 60 > 32, so every decode slot still has a "
                  "resident Mamba/SSM state slot: the change adds KV pressure only."),
+    },
+    # 2026-10-06: batch32's own smoke refuted its premise -- MAXREQ 32 was capped to 12
+    # by the mamba state cache (5 slots/request x 60 slots; SGLang said so in serve.log)
+    # and the harness's priority gate admits 10 streams regardless. With aggregate
+    # throughput flat at ~510-556 tok/s and a fixed wall clock, tokens-per-game is
+    # aggregate x wall / n_games, i.e. independent of concurrency. The only lever left
+    # is tokens spent per action: completion is reasoning + a ~50-token tool call, so
+    # this variant turns the reasoning off and reads what it was worth.
+    "lean": {
+        "out": "duck-sota-v3",
+        "cfgs": {},
+        "envs": {"LOCAL_ANALYZER_ENABLE_THINKING": "false"},
+        "note": ("why-parameterisation of the agent's token spend: "
+                 "LOCAL_ANALYZER_ENABLE_THINKING true -> false. The smoke attributes "
+                 "141,548 completion tokens over 125 requests (mean 1,132; p90 2,315; "
+                 "max 5,023) and the completion is reasoning plus a one-token action, "
+                 "so this knob is the whole per-action token cost. Both branches see "
+                 "the same env dict, so the commit smoke measures the same setting the "
+                 "scored rerun would use."),
     },
 }
 
@@ -182,6 +202,36 @@ def build(variant: str = "v1") -> dict:
             raise SystemExit("serving knob landed in a cell that never builds the SGLang args")
         assert all(v >= 10 for v in spec["cfgs"].values())
 
+    # --- variant knobs: the harness env dict (cell 4) -------------------------------
+    if spec.get("envs"):
+        hits = []
+        for i, c in enumerate(nb["cells"]):
+            if c.get("cell_type") != "code":
+                continue
+            body = "".join(c.get("source", []))
+            if all(f"'{k}':" in body for k in spec["envs"]):
+                hits.append(i)
+        if len(hits) != 1:
+            raise SystemExit(f"expected exactly 1 cell carrying the env anchor, got {hits}")
+        en = hits[0]
+        body = "".join(nb["cells"][en]["source"])
+        for k, v in spec["envs"].items():
+            # The anchor is the current 'true' value of the knob; replace exactly once.
+            old = f"'{k}': 'true',"
+            new = f"'{k}': '{v}',"
+            if body.count(old) != 1:
+                raise SystemExit(f"expected exactly 1 {old!r}, got {body.count(old)}")
+            body = body.replace(old, new)
+        nb["cells"][en]["source"] = body.splitlines(keepends=True)
+        # The knob is worthless if it does not reach os.environ, and it is unsafe if the
+        # cell it landed in also carries the scored-rerun branch.
+        if "os.environ.update(" not in body or "setup_env" not in body:
+            raise SystemExit("env knob landed in a cell that never exports setup_env")
+        # The dict is set before the TRUE_SUBMISSION branch, so both the smoke and the
+        # scored rerun read the knob; assert that branch is still in the cell untouched.
+        if "TRUE_SUBMISSION = os.environ.get(" not in body:
+            raise SystemExit("env knob landed in a cell without the rerun switch")
+
     # --- the rerun branch must be untouched ----------------------------------------
     patched = "".join(nb["cells"][idx]["source"])
     for required in (
@@ -256,7 +306,7 @@ def build(variant: str = "v1") -> dict:
             "to a warning -- commit-mode smoke only; the scored rerun branch is "
             "untouched and byte-identical to upstream"
         ]
-        + ([spec["note"]] if spec["cfgs"] else []),
+        + ([spec["note"]] if (spec["cfgs"] or spec.get("envs")) else []),
         "machine_shape": "NvidiaRtxPro6000",
         "runtime_cap_min": 540,
         "read_back_key_suggestion": (
@@ -264,14 +314,21 @@ def build(variant: str = "v1") -> dict:
             "Qwen3.8-Flash-Next; community reads this family at ~27.8 LB"
         ),
     }
-    if spec["cfgs"]:
+    if spec.get("envs"):
         record["smoke_prediction"] = {
-            "baseline": {"aggregate_tok_s": 556.3, "actions": 146, "tokens": 133521,
-                         "games_served": "12 of 25"},
-            "batch32": ("aggregate tok/s and games-served both up (expect most of the 25 "
-                        "to hold a slot, and tok/s to track batch up to the memory band)"),
-            "falsifier": ("aggregate tok/s within ~20% of 556 and games-served unchanged: "
-                          "the server was not the bottleneck and the knob is closed"),
+            "baseline": {
+                "requests": 125, "completion_tokens": 141548,
+                "completion_per_request_mean": 1132, "p50": 863, "p90": 2315, "max": 5023,
+                "actions": 158, "games_served": "10 of 25",
+                "smoke_mean_score": {"v1": 0.46, "batch32": 0.42},
+            },
+            "lean": ("completion tokens per request fall by more than half (mean below "
+                     "~560) while the smoke's mean score holds at or above ~0.30: the "
+                     "token bill was reasoning, the action budget roughly doubles, and "
+                     "the variant earns the next scored slot"),
+            "falsifier": ("mean score below ~0.15 as the tokens fall: reasoning is "
+                          "load-bearing, the per-action token axis is closed, and what "
+                          "is left for this board is the writeup, not the leaderboard"),
         }
 
     (OUT / "experiment.json").write_text(

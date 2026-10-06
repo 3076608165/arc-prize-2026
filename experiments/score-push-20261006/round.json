@@ -1,0 +1,174 @@
+{
+  "date": "2026-10-06",
+  "policy": "Standing campaign policy: one slot per board per UTC day, the best two submissions across the competition count, an unused slot cannot be banked. Both slots were spent by the two scheduled routes in the catch-up burst at 06:35:51Z / 06:36:27Z (the machine was asleep at the nominal 10:05 / 10:25 local). This round therefore READS what the fire path left behind -- the batch32 commit smoke and the redraw that landed overnight -- and stages the next arm. It fires nothing.",
+  "state_at_read": {
+    "read_utc": "2026-10-06T06:45Z",
+    "gates": {
+      "arc_agi_2": "maxDailySubmissions 1 | numScoredSubmissions 2 | maxGpuRuntimeMinutes 720 | deadline 2026-11-02T23:59Z | kernelsPublishingDisabledDeadline 2026-10-26T23:59Z | syncReruns true | requiresIdentityVerification true | truncation 2dp | requiredSubmissionFilename submission.json",
+      "arc_agi_3": "maxDailySubmissions 1 | numScoredSubmissions 2 | maxGpuRuntimeMinutes 540 | deadline 2026-11-02T23:59Z | kernelsPublishingDisabledDeadline 2026-10-26T23:59Z | syncReruns true | requiresIdentityVerification true | truncation 2dp | requiredSubmissionFilename submission.parquet",
+      "paper_track": "deadline 2026-11-09T23:59Z",
+      "read_this_round": "kernelsPublishingDisabledDeadline is 2026-10-26T23:59Z, 20 days out, and the repo still has no remote. That backstop is the binding one, not the 11-02 deadline."
+    },
+    "leaderboard": {
+      "observed_utc": "2026-10-06T06:43Z",
+      "source": "competition_leaderboard_download for both boards",
+      "agi3": "UTS_25522741 rank 408/3851, best 28.12, 27 submissions (2026-10-05: 318/3728). The score did not change while the rank fell 90 places: the field moved, we did not.",
+      "agi2": "UTS_25522741 rank 528/2498, best 30.97, 26 submissions (2026-10-05: 517/2445).",
+      "top_agi3": "Tufa Labs 55.89, Yi-Chia Chen 48.59, the last dance 39.30",
+      "top_agi2": "Tufa Labs 83.61, rabbithole 80.56, Yi-Chia Chen 77.22"
+    },
+    "agi3_pair": "28.12 + 26.03 (second member up from 0.67 -- the redraw landed above it)",
+    "agi2_pair": "30.97 + 30.56 (unchanged; both draws since read below the second member)"
+  },
+  "results_landed": {
+    "agi3_56843045": {
+      "what": "duck-sota redraw 1 -- the second independent draw of the same kernel v1 bytes",
+      "public_score": 26.03,
+      "reading": "the same bytes that read 28.12 read 26.03. This is the first time this campaign has two scores for one artifact, and it is the number that governs every config arm from here: a single scored rerun cannot distinguish a config effect from this spread unless it clears ~2.1 points.",
+      "pair_change": "28.12 + 0.67 -> 28.12 + 26.03"
+    },
+    "agi2_56843050": {
+      "what": "v11 identical resubmit #12 (a draw of the pinned build)",
+      "public_score": 28.47,
+      "reading": "inside the 12-draw band, below the pair's second member (30.56): the predeclared '<= 30.56 no change' branch fired. 2 of 12 draws have now landed at or above 30.56."
+    }
+  },
+  "measurement_this_round": {
+    "what": "the commit smoke of kernel v2 (the batch32 arm), read from a local pull of kernels output -- taken BEFORE pushing version 3, because the API only ever returns the newest commit run",
+    "source": "agi3/out/duck-sota-v2/runout (benchmark.json, serve.log, *_p0_requests.jsonl) ; reproduced by `python scripts/smoke_token_attribution.py <runout>` (both smokes' outputs copied to this round directory)",
+    "conditions": "identical to the v1 baseline: 25 public demo games, concurrency 25, n_passes 1, 240 s per game, 4 min 16 s of GPU wall clock, SGLang Pennyroyal serving the W4A16 checkpoint",
+    "side_by_side": {
+      "v1_kernel_1": {
+        "actions": 146,
+        "generated_tokens": 133521,
+        "aggregate_tok_s": 556.3,
+        "games_with_any_action": "10 of 25",
+        "games_clearing_a_level": 2,
+        "public_mean_score": 0.46
+      },
+      "v2_kernel_2_batch32": {
+        "actions": 158,
+        "generated_tokens": 130048,
+        "aggregate_tok_s": 507.4,
+        "games_with_any_action": "10 of 25",
+        "games_clearing_a_level": "cn04 1/6, lp85 1/8, tu93 1/9, vc33 1/7",
+        "public_mean_score": 0.42
+      }
+    },
+    "falsifier_fired": "predeclared: 'aggregate tok/s within ~20% of 556 and games-served unchanged -- the server was not the bottleneck and the knob is closed'. Measured: 507.4 tok/s (-8.8%) and 10 of 25 games served, exactly as in v1. The knob is closed, and the run itself says why.",
+    "why_the_knob_was_inert": {
+      "cap_1_server": "--max-running-requests 32 was requested and SGLang capped it to 12: 'max_running_requests is capped to 12 by the mamba state cache (max_mamba_cache_size=60, 5 state slots per request)'. The effective line reads max_running_requests=12. So the edit moved the ceiling from 10 to 12, not to 32.",
+      "cap_2_harness": "the harness's own priority gate admits 10 streams -- the env dict sets 'ARC3_MAX_ACTIVE_STREAMS': 10 under USE_PRIORITY_SCHEDULING and the run logs 'priority gate active: 10 concurrent streams'. Two independent caps sat at ~10-12.",
+      "the_arithmetic": "tokens available per game = aggregate tok/s x wall clock / number of games. The wall clock (540 min) and the number of private games are both fixed, so concurrency cannot change how much model time each game gets: it can only change WHICH games are served. That is why the batch knob could not move the score, and it is why the arm's own smoke could falsify it in four minutes for free."
+    },
+    "token_attribution": {
+      "source": "125 response records across the 10 served games' _p0_requests.jsonl",
+      "requests": 125,
+      "completion_tokens": 141548,
+      "prompt_tokens": 2251685,
+      "completion_per_request": {
+        "mean": 1132,
+        "p50": 863,
+        "p90": 2315,
+        "max": 5023
+      },
+      "requests_per_turn": {
+        "1": 74,
+        "2": 32,
+        "3": 12,
+        "4": 6,
+        "5": 1
+      },
+      "finish_reasons": "125/125 tool_calls (no request ever stopped on its own)",
+      "reading": "the completion is reasoning plus a one-token action, so this bill is the reasoning bill. It is the one quantity that scales the number of actions a game can take inside a fixed wall clock, and nothing else in the configuration touches it.",
+      "baseline_v1_request_logs": {
+        "requests": 115,
+        "completion_tokens": 142732,
+        "completion_per_request": {
+          "mean": 1241.1,
+          "p50": 951,
+          "p90": 2587,
+          "max": 5703
+        },
+        "reading": "the two smokes' per-request bills are within 9% of each other, so the batch knob changed nothing about the agent's token behaviour either"
+      }
+    }
+  },
+  "fired_this_round": {
+    "note": "not fired by this session. Both routes caught up at 06:35:51Z and 06:36:27Z; the lock plus the per-board guard allocated one slot per board, so both boards' 2026-10-06 slots are spent.",
+    "agi3_56872786": {
+      "kernel": "uts3125025522741/arc-agi-3-duck-sota-open-source-lift",
+      "version": 2,
+      "what": "duck-sota batch32",
+      "status": "PENDING",
+      "reading": "its own commit smoke says the intervention did not land (12 of 32 requests, gate at 10), so this rerun is a third sample of the lift class rather than a test of the batch knob. Anything above 26.03 improves the pair."
+    },
+    "agi2_56872798": {
+      "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+      "version": 11,
+      "what": "v11 identical resubmit #13",
+      "status": "PENDING",
+      "reading": "2 of 13 draws have landed at or above the pair's second member."
+    }
+  },
+  "next_arm": {
+    "id": "duck-sota-lean",
+    "board": "arc-prize-2026-arc-agi-3",
+    "kernel": "uts3125025522741/arc-agi-3-duck-sota-open-source-lift",
+    "version": 3,
+    "push_state": "pushed QUEUED at 2026-10-06T06:55Z as version 3",
+    "build": "agi3/out/duck-sota-v3, produced by `python agi3/lift_duck_sota.py --variant lean`",
+    "the_one_knob": "LOCAL_ANALYZER_ENABLE_THINKING true -> false, in the harness setup_env dict (cell 4) that both the commit smoke and the scored rerun read.",
+    "verified_before_push": [
+      "exactly one cell differs from the v1 build (cell 4); inside it exactly one line (the knob)",
+      "the anchor is unique in the cell and the cell is the one that exports setup_env",
+      "the TRUE_SUBMISSION switch is still present in that cell, so the dict is set before the branch and the scored rerun sees the same setting the smoke measured",
+      "the TRUE_SUBMISSION branch itself is byte-identical to upstream (concurrency 120, 532*60 s, n_passes 1)",
+      "the rerun branch, the commit-mode smoke patch and every code cell's ast-parse all still pass the build gate"
+    ],
+    "predeclared": {
+      "tokens_per_request <= ~560 (from 1,132) and public-25 mean score >= 0.30": "the token bill was reasoning: the per-action action budget roughly doubles, and the variant earns a scored slot",
+      "tokens fall and mean score < 0.15": "reasoning is load-bearing; the per-action token axis is closed too, and what is left for this board is the writeup, not the leaderboard",
+      "tokens do not fall": "the knob does not reach the request payload; fix the plumbing before reading any score"
+    },
+    "honest_caveat": "upstream ships thinking on by default and this is a why-parameterisation, not an improvement claim: the honest prior is that the smoke's mean score sags. Its value is that it prices the reasoning in tokens, which is the only lever the fixed wall clock leaves.",
+    "gated_on": "its own commit smoke, exactly as batch32 was: it is queued BEHIND the redraw, and the 2026-10-07 round reads the smoke before any session moves it to the head."
+  },
+  "staged_for_2026_10_07": {
+    "inv1": {
+      "id": "duck-sota-redraw2",
+      "board": "arc-prize-2026-arc-agi-3",
+      "kernel": "uts3125025522741/arc-agi-3-duck-sota-open-source-lift",
+      "version": 1,
+      "what": "third draw of the same bytes (28.12, 26.03)",
+      "why": "the pair keeps the best two, so a draw above 26.03 improves it for free, and n=3 is the class spread the writeup needs. No un-fired capability arm is readable yet."
+    },
+    "inv2": {
+      "id": "v11-redraw-14",
+      "board": "arc-prize-2026-arc-agi-2",
+      "kernel": "uts3125025522741/arc-agi-2-nvarc-repro",
+      "version": 11,
+      "why": "AGI-2 has no un-fired variant with a signed prior; the checkpoint swap is still unverified."
+    },
+    "verified": "scripts/check_staged_arms.py 2026-10-07 -> inv1 duck-sota-redraw2 (AGI-3), inv2 v11-redraw-14 (AGI-2)"
+  },
+  "field_recon": {
+    "agi3_public_pool_read_2026_10_06": {
+      "by_votes": "inversion sample agents 721/692, dfranzen/arc-agi-3-milestone-2-solution 568 (the notebook this campaign lifted; 488 votes on 2026-10-05), jeroencottaar duck harness 360, foysalemonshanto 'LB-9 ... 27B' 295, wuliao0 duck qwen3-8 anim base 279, keithtyser NVFP4 MTP 196, scottlegrand taaf-flashnext-sheetu12b 196",
+      "by_date_top25": "2026-10-05/06 is almost entirely forks of the dfranzen notebook (lwq255 'arc3-dfranzen-m2-guarded', amatlas 'dfranzen fork + D-prime', changxuuuu 'arc3-duck-public') plus small v0-vote experiments",
+      "reading": "no public ARC-AGI-3 artifact claims more than the 28.12 the lift already reproduces; the candidates for a model-class change are the 27B FP8 and NVFP4/MTP noteboooks, whose own titles read in the single digits and which use a different harness bundle. There is no opportunistic lift on this board today. The dfranzen notebook is also being forked verbatim by the field, which is the measured form of the campaign's 'the lift is the pool' observation."
+    }
+  },
+  "planning": {
+    "where_the_score_can_still_move": "exactly two quantities: aggregate tok/s (a serving/hardware change on the same harness) and completion tokens per action (an agent change). Both multiply the same budget -- aggregate tok/s x 540 min / 110 games -- and the lean arm is the first instrument that prices the second one.",
+    "agi2_next": "the checkpoint swap work is unchanged and still unstarted: locate the effective model path in the built notebook, add pranshubahadur/xcalibur-aa2-sft-500 to model_sources, compare vocab size and the 12 ARC_VOCAB token ids, then push one version. Until that lands, AGI-2 spends its slots on draws by construction.",
+    "publish_backstop": "2026-10-26T23:59Z. Both the notebook AND the solution repo must be public before it; git remote -v is still empty. Decide the date explicitly."
+  },
+  "open_work": [
+    "read the two PENDING results (AGI-3 batch32 56872786, AGI-2 draw 56872798) -- no session needed, the board is authoritative",
+    "read the v3 commit smoke when it leaves the queue (it was QUEUED at 06:55Z; v2's commit run took hours to start, so do not expect it before 2026-10-07): completion tokens per request against the 1,132 baseline, and the public-25 mean score against 0.46/0.42",
+    "if that smoke is green, move duck-sota-lean to the head of the queue for the 2026-10-08 AGI-3 slot; if it is red, the per-action token axis is closed and the AGI-3 board is done",
+    "start the AGI-2 checkpoint-swap verification (see planning.agi2_next)",
+    "record the publish date for the repo and the notebooks before 2026-10-26T23:59Z"
+  ]
+}
