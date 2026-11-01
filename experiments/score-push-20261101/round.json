@@ -1,0 +1,61 @@
+{
+  "date": "2026-11-01",
+  "read_at_utc": "2026-11-01T10:49:00Z",
+  "days_to_deadline": 1,
+  "why_this_round": "The campaign last fired 2026-10-09. Scoring now takes 24h+ and the hosts refused to extend the selection window (forum 753723, host reply 2026-10-30), so the last usable scoring window is ~2026-11-01. Both boards had an unspent slot today (numToday 0, numAllowedNow 1).",
+  "recon": {
+    "doc": "docs/public-solutions-2026-11.md",
+    "agi2_pool": "still one 4B checkpoint (sorokin/qwen3_4b_grids15_sft139) in every public notebook checked; new public work is throughput/coverage (woguoat triple-pass) and a symbolic leg (yuvrajlamba01, seasthaalores)",
+    "agi3_pool": "all candidates = dfranzen M2 + the same 498,757-byte harness patch (sha 07fd859e7ce7); the differences are customization cells. ondrewsha/arc-agi-3-stack-s16 is the only candidate with a real harness-fix stack (HF/RESET-off/KA/TP/MA-text/K3/H1/SCH/MA.4c/HY/GW) and its own S8/S9 31.6 vs S6/S7 25.6 evidence; lalalia (101 votes) claims 31.46 with one memory cell; AGI Boys and Duck Lab T06 are dfranzen v1 with an unchanged patch"
+  },
+  "boards": {
+    "arc-prize-2026-arc-agi-3": {
+      "standing_pair": [
+        28.12,
+        27.96
+      ],
+      "arm": "lift of ondrewsha/arc-agi-3-stack-s16, verbatim (bounded commit branch: 25-48 min/game, n_passes 1, concurrency 10, 15 games excluded)",
+      "kernel": "uts3125025522741/arc-agi-3-stack-s16",
+      "version": 1,
+      "file": "submission.parquet",
+      "decision_dependency": "whether a dfranzen-family lift with the measured harness-fix stack converts the public S8/S9 evidence (31.6) into board points at our scale, and whether KA/GW remove the startup-zero failure mode behind our 20.98 and 26.03 draws",
+      "predeclared": {
+        ">= 31.6": "the harness-fix stack is the missing ~3.5 points; the stack is the arm to carry into any further round and the writeup reports harness behaviour, not model class, as the lever",
+        "28.2-31.5": "stack is live but only partly converts at our scale; pair improves, and the gap to the claim is the platform spread already documented for this board",
+        "26.1-28.1": "second member improves only; the stack's public evidence does not transfer",
+        "<= 26.0": "the stack does not transfer OR the run never reached the games -- read the commit smoke's games-served count before writing it up as a class failure"
+      },
+      "ref": 57870306,
+      "submitted_utc": "2026-11-01T11:35:35Z",
+      "status": "PENDING",
+      "smoke": "COMPLETE, benchmark.json on the 10 allowlisted public games: 10/10 games served actions (our dfranzen-v1 smoke served 13 of 25 games ZERO actions), 897k generated tokens, 31 levels cleared (sk48 0, bp35 1, vc33 3, lf52 2, r11l 2, sc25 3, sb26 8, re86 5, su15 2, tr87 5), 32-275 actions on the played games"
+    },
+    "arc-prize-2026-arc-agi-2": {
+      "standing_pair": [
+        30.97,
+        30.56
+      ],
+      "arm": "lift of woguoat/arc2-nvarc-full-cost-sota-triple-pass, verbatim (commit branch already bounded: 32 min, 4 eval tasks)",
+      "kernel": "uts3125025522741/arc-agi-2-triple-pass",
+      "version": 1,
+      "file": "submission.json",
+      "decision_dependency": "whether ~2x decode speed (length-grouped DFS batches of up to 8 views) plus guaranteed full coverage and a pooled second run on the least-certain tasks beats the pinned build's draw band; a redraw cannot",
+      "predeclared": {
+        ">= 32.0": "coverage was the binding constraint after all and this public variant is a real lever; the writeup's 'every structural axis is closed' line gets corrected",
+        "30.6-31.9": "inside the rerun band -- a second member at best; the pinned build stands",
+        "<= 30.5": "the throughput/coverage axis is confirmed closed by an independent implementation; the pair stands unchanged"
+      },
+      "ref": 57870092,
+      "submitted_utc": "2026-11-01T11:27:06Z",
+      "status": "PENDING",
+      "smoke": "COMPLETE, 0 tracebacks, submission.json 120 tasks, pass A + pass B telemetry on 4 allowlisted tasks, Reload 2.5 (2.5/4 correct, same as score_kgmon)"
+    }
+  },
+  "slot_economics": "best two submissions per board count; today's AGI-3 arm can only improve the pair above 26.03, AGI-2 above 30.56",
+  "watcher": "experiments/score-push-20261101/kernel-watch.jsonl (scripts/watch_kernels.py, detached)",
+  "next_actions": [
+    "submit both kernels the moment each reaches COMPLETE and its output file exists (a rejected submit spends no slot)",
+    "read the AGI-3 commit smoke's games-served count + benchmark summary from kernels output BEFORE pushing any further version (the newest version is the only CLI-readable one)",
+    "no further lift is possible after ~2026-11-01 23:00Z: 24h+ scoring means a submission after that cannot be selected"
+  ]
+}
