@@ -17,3 +17,5 @@ experiments/**/*.zip
 experiments/arm-*-targets.json
 # the fire lock (per-machine, holds no state)
 scripts/.fire-next-arm.lock
+experiments/*/agi2-out/unsloth_compiled_cache/
+experiments/*/agi3-out*/
