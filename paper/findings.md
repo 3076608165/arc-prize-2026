@@ -1253,3 +1253,80 @@ text was wrong in exactly the way a text assertion cannot see.
   source-text assertions over generated code. The check that replaced it executes
   the emitted function, and the class of bugs the old tests were blind to (type
   errors in generated cells) now has a place to be caught.
+
+## The last month: what draws bought, and the agent-class jump (2026-09-28 → 2026-11-02)
+
+Three things happened after the sections above, and they change the writeup's
+two headline numbers without changing any of its conclusions.
+
+**1. The ARC-AGI-2 pair locked, and it is a floor not a capability.** Five more
+identical-code resubmits of the pinned build in October returned 28.06
+(`56816321`), 28.47 (`56843050`), 28.89 (`56872798`), 29.31 (`56923665`), 28.47
+(`56992069`) — every one below the two September draws the pair keeps. Pooled
+over all fourteen draws of that build the distribution is 28.06-30.97, mean
+29.48, sd 0.88, range 2.91. So the standing pair (**30.97** `56204329`,
+**30.56** `56512472`) is the top of a 2.9-point-wide distribution produced by
+one unchanged program, and the five October slots that cost ~55 GPU-hours
+moved the pair by exactly zero. The bootstrap in the section above (expected
+best saturates at 30.75 / 30.95 / 30.97 after 10 / 30 / 60 further draws) is
+now measured rather than modelled: five draws, no change.
+
+**2. ARC-AGI-3 moved 104x, and none of it was ours.** Our September score was
+0.27 on the starter-derived agent. On 2026-10-04 we submitted the top-voted
+public agent-class solution instead — dfranzen's Milestone-2 build (Tufa Labs
+duck harness + Qwen3.8-Flash-Next, offline, same 12 h envelope) — byte-identical,
+and it read **28.12** (`56820929`) first try. That is the largest single
+movement in the project and it came entirely from the public pool. The writeup
+should say so plainly: on this board, model *class* (a 4B grid-SFT model playing
+a click-only game through an agent loop) dominates every harness knob we ever
+turned, by two orders of magnitude.
+
+**3. Which makes the instrument question sharper, not softer.** Four draws of
+that byte-identical build returned **28.12, 27.96, 26.03, 20.98** (refs
+`56820929`, `56992057`, `56843045`, `56923651`) — mean 25.77, sd 3.33, range
+7.14, i.e. 28% of the mean. There is no seeding bug to blame this time: the
+September 14x spread was retracted because our agent seeded from `hash()`, but
+this build seeds deterministically and still spreads 7.1 points. A fifth draw
+with a decode-batch knob that the commit smoke showed was inert returned 26.26
+(`56872786`) — inside the same band, from a config the engine never read. On
+ARC-AGI-3 at agent-class scale, single-slot comparisons are noise unless the
+effect exceeds ~7 points. Every published before/after on that board, including
+the one below, is inside that.
+
+**4. A twelve-mechanism harness-fix stack transferred negative.** The one public
+candidate that claimed a mechanism rather than a knob was ondrewsha's
+arc-agi-3-stack-s16: the same dfranzen base plus twelve measured harness fixes
+(HF animated != no-op, RESET hidden, KA keep-alive against the 15-minute
+scorecard close, TP frame-history serialisation, MA model-visible text, K3
+resume images, H1 cache-safe solved-level memory, SCH priority flags, MA.4c
+edge-band no-op, HY sandbox hygiene, GW start-RESET retry), with public
+evidence of 31.6 on two game sets against 25.6 on two others. We lifted it
+verbatim and it read **24.80** (`57870306`) — below the 26.03 floor of the pair,
+i.e. no improvement. The interesting part is the disambiguation the run made
+possible: its predeclared low branch said "the stack does not transfer OR the
+run never reached the games", and the full-run log settles it — 10 of 10
+allowlisted games served, 32-275 actions each, 31 levels cleared, sb26 8/8. The
+run hit the games and scored less anyway. Harness behaviour is not where these
+points are.
+
+**5. The last slot bought nothing measurable.** An ARC-AGI-2 submission on
+2026-11-01 (`57870092`, the triple-pass variant: length-grouped DFS decode at
+~2x throughput, guaranteed coverage, pooled rerun on the six least-certain
+tasks) was still `PENDING` 20.5 hours later, against a 2026-11-02 23:59 UTC
+close, so it never entered selection. Recorded here as a fact about the
+scheduling envelope rather than about the method: with 24h+ queue latency, the
+last usable scoring window closes ~24 hours before the published deadline, and
+nothing in the rules says so.
+
+**Final standings, read 2026-11-02** from the public leaderboard CSVs
+(`kaggle competitions leaderboard -c <comp> --download`):
+
+| board | our pair | rank | field median | field max |
+|---|---|---|---|---|
+| ARC-AGI-2 | 30.97 / 30.56 | 934 / 3577 | 29.31 | 88.06 |
+| ARC-AGI-3 | 28.12 / 27.96 | 1521 / 5043 | 2.50 | 75.56 |
+
+ARC-AGI-3's field median is 2.50 because the distribution is bimodal: most
+teams sit at the starter agent's floor, and the 28+ cluster is the agent-class
+builds. Our 28.12 is rank 1521 of 5043 — top 30% — and it is a forked public
+notebook, which is exactly what the writeup says it is.
