@@ -19,3 +19,6 @@ experiments/arm-*-targets.json
 scripts/.fire-next-arm.lock
 experiments/*/agi2-out/unsloth_compiled_cache/
 experiments/*/agi3-out*/
+
+# gh token lacks workflow scope: keep CI out of the public mirror
+.github/
