@@ -141,3 +141,12 @@ rules are checked at prize time — so the remote must exist, public, before the
 Until it does, nothing in this repo is prize-eligible, and no score gained in
 the meantime changes that.
 
+
+**Outcome, 2026-11-02: the Oct-26 backstop was missed by seven days.** The repo
+was still remote-less on 2026-11-02; it was published that day to
+`github.com/3076608165/arc-prize-2026` (public, MIT-0, `LICENSE` + `NOTICE.md`
+in tree). That is late against our own backstop but still inside the rule that
+matters -- "participants must open source their solutions before receiving
+official private evaluation scores" -- since private scoring follows the
+2026-11-02 23:59 UTC close. The `.github/workflows` directory stays untracked in
+the public mirror: the gh token has no `workflow` scope.
