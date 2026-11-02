@@ -4,27 +4,36 @@ Working repo for all three 2026 ARC competitions. One local harness for
 ARC-AGI-2, the official starter wired up for ARC-AGI-3, and a writeup skeleton
 for the Paper Track that both feed.
 
-## Where we actually stand (2026-09-27)
+## Where we actually stand (2026-11-02, deadline day)
 
 | competition | our score | rank | field median | field max |
 |---|---|---|---|---|
-| ARC-AGI-2 | **30.97** | 469 / 2211 | 28.19 | 83.06 |
-| ARC-AGI-3 | 0.27 | 1852 / 3365 | 0.31 | 27.29 |
+| ARC-AGI-2 | **30.97** | 934 / 3577 | 29.31 | 88.06 |
+| ARC-AGI-3 | **28.12** | 1521 / 5043 | 2.50 | 75.56 |
 
-Both scores are the best single submission so far (finals take the best two),
-read back from the leaderboard files with `kaggle competitions leaderboard -c
-<comp> -d`; the rank is the board's own, which is the last position of a tie
-group. Both fields grew faster than we scored, so both ranks slipped even though
-nothing changed on our side (462 / 2201 and 1823 / 3335 on 9/26). ARC-AGI-3's
-field maximum nearly doubled in two days, 19.40 -> 27.29 = the agent-class
-harnesses this board's leaders run, and our slot on 9/27 is the first non-seed
-arm we have ever fired on it.
-ARC-AGI-3's 0.27 is a lucky draw from a
-deterministic step function, not a capability estimate — see
-[paper/findings.md](paper/findings.md).
+Finals take the best two submissions per board, so the standing pairs are
+ARC-AGI-2 30.97 / 30.56 and ARC-AGI-3 28.12 / 27.96. Both scores are read back
+from the leaderboard CSV with `kaggle competitions leaderboard -c <comp> -d`.
+
+The last round (2026-11-01) spent both slots on the only public levers left:
+
+- **ARC-AGI-2 triple-pass** (length-grouped DFS decode, guaranteed coverage,
+  pooled rerun) — submitted 11:27Z, still unscored at the deadline; if it never
+  scores, the pair above is what ships.
+- **ARC-AGI-3 stack-s16** (dfranzen M2 + the 12-layer harness-fix stack every
+  high-scoring public fork shares) — **24.80, below the 26.03 it had to beat**.
+  The run did reach the games (full-run log: 10/10 allowlisted games served,
+  32-275 actions each, 31 levels cleared, sb26 8/8), so the failure is the
+  measured one: the stack's public S8/S9 evidence does not transfer to the
+  judged games at our scale. Harness behaviour is not the missing points here.
+
+See [paper/findings.md](paper/findings.md) for the two-draw spread that makes
+ARC-AGI-3 unmeasurable at one submission per day, and
+[paper/state-of-the-art.md](paper/state-of-the-art.md) for why we abandoned our
+own ARC-AGI-2 pipeline.
+
 
 ARC-AGI-2 went 0.00 -> 30.97 by abandoning our own approach and running the
-public NVARC-lineage notebook. See [paper/state-of-the-art.md](paper/state-of-the-art.md).
 
 ARC-AGI-3 is stuck, and [paper/findings.md](paper/findings.md) explains why it
 is hard to unstick: our local metric said the newer policy was 59% better and

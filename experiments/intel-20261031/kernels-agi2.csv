@@ -1,0 +1,62 @@
+Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)
+ref,title,author,lastRunTime,totalVotes
+vigneshalugunulla/arc-prize-2026-symbolic-synthesizer-v2,ARC Prize 2026 Symbolic Synthesizer v2,Vignesh_,2026-10-26 13:50:36.943000,0
+piyush295/arc-agi2-advanced-30-strategies,ARC AGI2 Advanced 30 Strategies,Piyush kumar,2026-10-26 11:34:29.507000,3
+piyush295/arc-agi-2-advanced-solver-v2,ARC AGI 2 Advanced Solver v2,Piyush kumar,2026-10-26 11:31:12.280000,1
+piyush295/arc-agi-2-baseline-pass2-heuristics,ARC AGI 2 Baseline Pass2 Heuristics,Piyush kumar,2026-10-26 10:52:28.330000,1
+rahim3/monty-arc-nvarc-hybrid,Monty-ARC NVARC Hybrid,Abdur Rahim,2026-10-26 11:25:54.250000,1
+rahim3/monty-arc-thousand-brains-arc-agi-2,Monty-ARC: Thousand Brains ARC-AGI-2,Abdur Rahim,2026-10-26 13:19:13.387000,1
+priyalmantri/arc-agi-2-neuro-symbolic-solver-with-qwen,ARC-AGI-2: Neuro-Symbolic Solver with Qwen,Priyal Mantri,2026-10-26 05:40:06.870000,0
+tomdupuis24/arc-agi-2-frozen-learner,ARC-AGI-2 frozen learner,Tom Dupuis,2026-10-25 20:30:10.317000,0
+woguoat/arc2-nvarc-trm-evidence,ARC2 NVARC TRM Evidence,woguoat,2026-10-25 15:31:35.323000,0
+harunaalasan/arc-prize-2026-arc-agi-2,(arc-prize-2026-arc-agi-2,Haruna Alasan,2026-10-25 15:08:10.517000,0
+kiyoshiohno/arc-agi-2-template,ARC AGI 2 Template,kiyoc,2026-10-27 15:44:00.647000,0
+cosmorin/1-1-arc-agi-2-japanese,なぜ1位は1位なのか ― ARC-AGI-2 点差分析（Japanese）,cosmorin,2026-10-25 14:15:04.193000,0
+cosmorin/why-1-is-1-arc-agi-2-gap-analysis,Why #1 Is #1 — ARC-AGI-2 Gap Analysis,cosmorin,2026-10-25 14:02:07.277000,0
+cosmorin/why-1-is-1-gap-analysis-across-6-competitions,Why #1 Is #1: Gap Analysis Across 6 Competitions,cosmorin,2026-10-25 14:02:13.750000,1
+wuchenghao2026/arc2-mount-audit-tuantuan-20261025,ARC2 mount audit tuantuan 20261025,wuchenghao_2026,2026-10-25 13:37:24.283000,0
+saiprakashnayak/arc2-nvarc-reproduction-lb33-89,ARC2 NVARC reproduction LB33.89,Saiprakash Nayak,2026-10-25 12:54:07.043000,4
+guoxiangwangs/arc-agi2-lb33-89-perfpatch-v3-envrepair,arc-agi2-lb33-89-perfpatch-v3-envrepair,guoxiang wangs,2026-10-25 13:49:30.150000,0
+hariom28/arc-agi-2-measured-expressiveness-solver,ARC-AGI-2: Measured Expressiveness Solver,Hariom Prajapati,2026-10-25 10:05:50.543000,1
+unclebumblebeer/arc-prize-2026-arc-agi-2-plumbing-baseline,ARC Prize 2026 ARC-AGI-2 plumbing baseline,UncleBumblebeer,2026-10-25 07:54:11.757000,0
+ninadrai/arc2-ttt-repro,ARC2 TTT Repro,NapolianAdmin,2026-10-25 03:54:09.047000,1
+weitaoguo/arc2-mount-probe-comp,arc2 mount probe comp,Weitao Guo,2026-10-25 01:26:26.680000,0
+ruicodex/rc-arc2-cpu-verified-search,rc-arc2-cpu-verified-search,Rui Codex,2026-10-25 08:49:27.917000,0
+seasthaalores/cprs-arc-agi-2-apex-sota-engine-v7,CPRS ARC-AGI-2 Apex SOTA Engine v7,Santiago D. J. V. G.,2026-10-24 21:35:38.613000,3
+bakuyilang/arc-agi-2-solver-stdlib-cpu-offline-20261025,ARC-AGI-2 Solver stdlib CPU offline 20261025,BakuYilang,2026-10-26 05:13:25.363000,0
+guoxiangwangs/arc-agi2-lb33-89-perfpatch-fork,ARC AGI2 LB33.89 Perfpatch Fork,guoxiang wangs,2026-10-24 12:44:10.513000,1
+candiceevawilliams/arc2-dc-indep-checker,ARC2 DC indep checker,Candice Eva Williams,2026-10-24 20:19:16.557000,0
+smitalib/anchor,anchor,SmitaliB,2026-10-24 11:21:48.447000,1
+mirzamilanfarabi/bypass-dataset-mounting-issues,Bypass Dataset Mounting Issues,Mirza Milan Farabi,2026-10-24 13:41:51.503000,0
+victorzhong0110/arc-agi2-eval-ep2,ARC AGI2 Eval EP2,Victor Zhong,2026-10-24 06:46:58.870000,0
+weitaoguo/arc2-dale-ckpt-v6s-smoke-fork,ARC2 dale ckpt v6s smoke fork,Weitao Guo,2026-10-24 04:28:12.577000,0
+victorzhong0110/arc-agi2-eval-dfs300,ARC AGI2 Eval DFS300,Victor Zhong,2026-10-24 06:17:46.800000,0
+fahdmtidam/arc-agi-2-dsl-brute-force-baseline,ARC-AGI-2 DSL brute-force baseline,Fahd Mtidam,2026-10-24 11:15:55.803000,0
+victorzhong0110/arc-agi2-eval-det,ARC AGI2 Eval DET,Victor Zhong,2026-10-24 04:10:21.140000,0
+yuvrajlamba01/arc-agi2-apex-triple-pass-sota,ARC AGI2 Apex Triple Pass SOTA,YuvrajLamba01,2026-10-23 22:35:07.457000,0
+rsaxena3011/arc-agi-2-baseline,arc-agi-2-baseline,Ratnesh Saxena,2026-10-23 21:33:05.507000,0
+masumhuq/arc2-v9-dsl-solver,arc2-v9-dsl-solver,Masum Huq,2026-10-23 17:14:28.103000,2
+woguoat/arc2-nvarc-full-cost-sota-triple-pass,ARC2 NVARC Full-Cost SOTA Triple Pass,woguoat,2026-10-23 10:37:42.360000,60
+hansleestahl/arc-agi-2-learned-solver,ARC-AGI-2 Learned Solver,Hans Simmons,2026-10-23 09:21:50.627000,0
+hansleestahl/arc-agi-2-learned-smoke,ARC-AGI-2 Learned Smoke,Hans Simmons,2026-10-23 11:57:10.860000,1
+luciferr1/arc-agi2-sota-33-89-plus-cognitive-solver,ARC AGI2 SOTA 33 89 Plus Cognitive Solver,Shah Shazid Askary,2026-10-22 21:36:22.253000,0
+yuvrajlamba01/arc-agi2-sota-33-89-plus-cognitive-solver,ARC AGI2 SOTA 33 89 Plus Cognitive Solver,YuvrajLamba01,2026-10-24 21:54:35.697000,23
+argszeroreg/arc-agi2-ruler-dev120,ARC AGI2 ruler dev120,argszeroreg,2026-10-22 19:07:19.670000,0
+ghjhit/arc2-oracle-solution-public,ARC2 Oracle Solution (public),ghj_hit,2026-10-22 11:54:37.113000,0
+annpurnaverma/notebookbb7dd53d59,notebookbb7dd53d59,Annpurna verma,2026-10-24 12:53:07.457000,0
+victorzhong0110/arc-agi2-eval-base,ARC AGI2 Eval BASE,Victor Zhong,2026-10-22 11:48:41.283000,0
+victorzhong0110/arc-agi2-eval-cov700,ARC AGI2 Eval COV700,Victor Zhong,2026-10-24 00:09:51.490000,0
+victorzhong0110/arc-agi-2-qwen3-ttt-baseline,ARC AGI 2 Qwen3 TTT Baseline,Victor Zhong,2026-10-22 08:03:33.023000,2
+candiceevawilliams/arc2-dc-near-miss,ARC2 DC near miss,Candice Eva Williams,2026-10-24 09:40:06.467000,0
+liuzewen123/arc-prize-2026-route-selection-case-study,ARC Prize 2026 route selection case study,liuzewen123,2026-10-22 03:58:39.747000,0
+sonic240612/arc26-nvarc-full-half-q20-4xl4,ARC26 NVARC Full Half Q20 4xL4,sonic240612,2026-10-22 02:34:39.057000,2
+robinamirbahar/eda-gemini-4-argon-arc-agi-2-solver-suite,EDA Gemini 4 Argon ARC-AGI-2 Solver Suite,Robina Mirbahar,2026-10-26 17:38:07.100000,3
+cdeotte/eda-12-gemini-4-argon,EDA 12 - Gemini 4 Argon,Chris Deotte,2026-10-21 18:19:49.890000,2
+cdeotte/eda-11-gemini-4-argon,EDA 11 - Gemini 4 Argon,Chris Deotte,2026-10-21 16:20:31.357000,5
+yuvrajlamba01/arc-agi2-sota-triple-pass-neuro-symbolic,ARC AGI2 SOTA Triple Pass Neuro Symbolic,YuvrajLamba01,2026-10-21 12:45:08.023000,1
+zareer883/fluidarc-arc2-valid-baseline,FluidARC ARC2 Valid Baseline,Zareer883,2026-10-21 11:00:22.147000,0
+astrogilda/arc-receipt-baseline,ARC receipt baseline,Sankalp Gilda,2026-10-21 23:50:18.487000,0
+sonic240612/arc26-nvarc-q20-cost-order-4xl4,ARC26 NVARC Q20 Cost Order 4xL4,sonic240612,2026-10-21 01:23:32.727000,0
+sonic240612/arc26-nvarc-q20-rescue-4xl4,ARC26 NVARC Q20 Rescue 4xL4,sonic240612,2026-10-21 00:45:02.867000,0
+houchiunyo/arc-agi-2-dsl-depth2,arc-agi-2-dsl-depth2,Kanemochi,2026-10-20 16:40:41.850000,0
+chaitanyagullapalli/cot-arc-overlay-plus-general-solver,Cot Arc Overlay Plus General Solver,Chaitanya Gullapalli,2026-10-20 13:39:14.070000,0

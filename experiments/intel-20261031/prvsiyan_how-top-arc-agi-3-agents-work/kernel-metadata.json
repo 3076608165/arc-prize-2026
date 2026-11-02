@@ -1,0 +1,21 @@
+{
+  "id": "prvsiyan/how-top-arc-agi-3-agents-work",
+  "id_no": 141028432,
+  "title": "How Top ARC-AGI-3 Agents Work",
+  "code_file": "how-top-arc-agi-3-agents-work.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": [
+    "arc-prize-2026-arc-agi-3"
+  ],
+  "model_sources": [],
+  "docker_image": "gcr.io/kaggle-images/python@sha256:17b2fc7f27c25c6c2fd4230ec8e66097ab2b89fc88e1e4d6f338b72e1ee0bc3e",
+  "machine_shape": "None"
+}

@@ -1,0 +1,62 @@
+Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)
+ref,title,author,lastRunTime,totalVotes
+juliancamilovilla/arc-agi3-franzen-s1,arc agi3 franzen s1,Julian Camilo Villa,2026-10-26 23:35:27.360000,1
+madcat/arc-agi-3-fm2-public-fork-control,ARC-AGI-3 FM2 public fork (control),Madcat,2026-10-26 19:22:58.443000,0
+sinethembanani/dqn-agent-myagent-44517c,dqn_agent_myagent 44517c,Sinethemba Nani,2026-10-26 18:45:15.447000,0
+juliancamilovilla/arc-agi3-franzen-m2,arc agi3 franzen m2,Julian Camilo Villa,2026-10-26 23:35:04.300000,0
+prvsiyan/how-top-arc-agi-3-agents-work,How Top ARC-AGI-3 Agents Work,prvsiyan,2026-10-26 17:59:26.553000,0
+joshuaweppelman/arc-agi-ppo-wits-submission,Arc-Agi-PPO-Wits-Submission,Joshua Weppelman,2026-10-27 21:48:58.270000,0
+joshuaweppelman/arc-agi-dqn-wits-submission,Arc-Agi-DQN-Wits-Submission,Joshua Weppelman,2026-10-27 06:24:47.607000,0
+ondrewsha/arc-agi-3-stack-s16,ARC-AGI-3 Stack S16,Андрей Рябов,2026-10-26 12:25:21.210000,7
+ondrewsha/arc-agi-3-stack-s15,ARC-AGI-3 Stack S15,Андрей Рябов,2026-10-26 10:54:11.020000,3
+vucongaaa/qa-dar-graph-smoke-copy-20261026,QA DAR Graph Smoke Copy 20261026,Vu COng,2026-10-27 12:50:42.807000,1
+khesng/r24-manet-adaptive-s2026-resume,r24-manet-adaptive-s2026-resume,Khỏe Sống,2026-10-26 09:41:03.333000,0
+khesng/r23-manet-cefd-s2026-resume,r23-manet-cefd-s2026-resume,Khỏe Sống,2026-10-26 09:40:49.010000,1
+honghiendeptrai/r21-manet-cefd-s42-resume,r21-manet-cefd-s42-resume,Hiên Hồng,2026-10-26 09:40:45.913000,0
+honghiendeptrai/r20-unetpp-adaptive-s2026-resume,r20-unetpp-adaptive-s2026-resume,Hiên Hồng,2026-10-26 09:40:45.717000,0
+hstraw/r18-unetpp-ced-s2026-resume,r18-unetpp-ced-s2026-resume,HStraw,2026-10-26 09:39:56.550000,0
+leehien12/r22-manet-adaptive-s42-resume,r22-manet-adaptive-s42-resume,Hien Le,2026-10-26 09:17:47.667000,0
+cosmorin/arc-agi-3-oracle-calibration-completion-vs-waste,ARC-AGI-3 Oracle Calibration: Completion vs Waste,cosmorin,2026-10-26 08:07:16.993000,0
+cosmorin/arc-agi-3-phase2-validated-config-bench,ARC AGI 3 Phase2 Validated Config Bench,cosmorin,2026-10-26 07:56:57.617000,2
+leehien12/r24-manet-adaptive-s2026-ipynb,R24_manet_adaptive_s2026.ipynb,Hien Le,2026-10-25 20:16:56.647000,0
+xuti1224/r24-manet-adaptive-s2026-ipynb,R24_manet_adaptive_s2026.ipynb,Xỉu Tài,2026-10-25 20:15:12.670000,1
+xuti1224/r23-manet-cefd-s2026-ipynb,R23_manet_cefd_s2026.ipynb,Xỉu Tài,2026-10-25 20:05:24.027000,0
+leehien12/r22-manet-adaptive-s42-ipynb,R22_manet_adaptive_s42.ipynb,Hien Le,2026-10-25 19:19:54.947000,0
+honghiendeptrai/r21-manet-cefd-s42-ipynb,R21_manet_cefd_s42.ipynb,Hiên Hồng,2026-10-25 19:02:15.407000,0
+khesng/r20-unetpp-adaptive-s2026-ipynb,R20_unetpp_adaptive_s2026.ipynb,Khỏe Sống,2026-10-25 18:56:45.177000,0
+vuhuycong/qa-generation-ec-template-smoke-compact-20261026,QA Generation EC Template Smoke Compact 20261026,Vũ Huy Công,2026-10-26 09:52:49.343000,0
+parkwave1/clab-csl-noncsl-methodofficial-lateon, [CLAB]CSL+nonCSL- methodOFFICIAL (lateon),PARKWAVE_1,2026-10-28 12:34:32.637000,1
+tantan0327/arc3-paper-cpu-reproduction,ARC3 paper: CPU reproduction,red-down,2026-10-26 15:29:41.777000,0
+masumhuq/arc3-v10-fresh,ARC3 v10 Fresh,Masum Huq,2026-10-25 14:58:36.860000,0
+cosmorin/1-1-arc-agi-3-japanese,なぜ1位は1位なのか ― ARC-AGI-3 点差分析（Japanese）,cosmorin,2026-10-25 14:15:13.650000,0
+cosmorin/why-1-is-1-arc-agi-3-gap-analysis,Why #1 Is #1 — ARC-AGI-3 Gap Analysis,cosmorin,2026-10-25 14:02:10.147000,0
+cosmorin/why-1-is-1-gap-analysis-across-6-competitions,Why #1 Is #1: Gap Analysis Across 6 Competitions,cosmorin,2026-10-25 14:02:13.750000,1
+adi4r86/arc-agi-3-gemma-31b-agent,ARC AGI 3 Gemma 31B Agent,Adi4R86,2026-10-25 14:31:53.263000,0
+adi4r86/arc-agi-3-exploration-baseline,ARC AGI 3 Exploration Baseline,Adi4R86,2026-10-25 13:19:18.797000,0
+hieuld216/reproduction-of-table-2,Reproduction of Table 2,Hiếu Lê Đình,2026-10-25 18:21:39.673000,0
+nguynngcnhntrng/ver-4,ver_4,Nguyễn ngọc Nhân trọng,2026-10-26 09:12:21.447000,0
+samuraiiii/priced-curiosity-ec,Priced Curiosity EC,Satyam,2026-10-25 13:15:28.430000,2
+kevinmoritz/arc-agi-3-graph3-cnn,arc-agi-3-graph3-cnn,Kevin Moritz,2026-10-25 11:11:28.720000,1
+sinethembanani/dqn-agent,DQN Agent,Sinethemba Nani,2026-10-25 11:01:33.237000,1
+hylin16/arc3-auditable-cpu-batching,ARC3 Auditable CPU Batching,hylin16,2026-10-25 08:51:52.640000,0
+xuti1224/r18-unetpp-ced-s2026-ipynb,R18_unetpp_ced_s2026.ipynb,Xỉu Tài,2026-10-25 08:57:10.733000,0
+khesng/r17-unetpp-ce-s2026-ipynb,R17_unetpp_ce_s2026.ipynb,Khỏe Sống,2026-10-25 08:49:20.683000,0
+sinethembanani/random-agent,Random Agent,Sinethemba Nani,2026-10-25 08:42:44.740000,0
+ninadrai/arc3-m2-repro,ARC3 M2 Repro,NapolianAdmin,2026-10-25 05:05:31.800000,0
+youdocare/the-agi-boys-fork,The AGI Boys Fork,流动凯youdocare,2026-10-25 04:50:48.803000,0
+vickyfym/arc-agi-3-lalalia-dprime-m85tuned,arc-agi-3-lalalia-dprime-m85tuned,Yiming Fang,2026-10-25 02:53:56.960000,0
+youdocare/the-agi-boys-fork-romantamrazov-35-35,The AGI Boys Fork (romantamrazov 35.35),流动凯youdocare,2026-10-25 04:52:31.173000,1
+seasthaalores/arc-agi-3-unified-sota-speculative-decoding-engine,ARC-AGI-3 Unified SOTA Speculative Decoding Engine,Santiago D. J. V. G.,2026-10-24 21:34:45.523000,0
+cpmpml/notebook582dba8536,notebook582dba8536,CPMP,2026-10-24 20:45:41.207000,1
+zhangyues0000/arc3-27b-anim-p1,arc3 27b anim p1,zhangyues0000,2026-10-24 18:56:05.657000,0
+ipfilidzhade/ppo-improvement-2,PPO Improvement 2,Ipfi Lidzhade,2026-10-24 17:48:05.417000,0
+bigbag1983/arc3-franzen-graft-v8,arc3-franzen-graft-v8,PavelLiashkov,2026-10-24 17:20:53.097000,0
+xvmhieu/llmembed-reproduction-baselines-table2,llmembed-reproduction-BASELINES-TABLE2,zxc_vmh666,2026-10-27 15:14:12.553000,2
+danyalabbas1/arc-agi-3-m2-solution,ARC-AGI-3 M2 Solution,Danyal Abbas,2026-10-24 15:17:56.313000,0
+vickyfym/arc-agi-3-lalalia-dprime,arc-agi-3-lalalia-dprime,Yiming Fang,2026-10-24 10:25:35.253000,0
+mirzamilanfarabi/bypass-dataset-mounting-issues,Bypass Dataset Mounting Issues,Mirza Milan Farabi,2026-10-24 13:41:51.503000,0
+kriztianrubin/fork-of-mosaixvii-5,Fork of MosaixVii.5,Kriztian Rubin,2026-10-24 06:09:25.457000,0
+weitaoguo/arc3-slm-plus-55min-startup-fix,ARC3 SLM plus 55min startup fix,Weitao Guo,2026-10-26 16:35:50.237000,0
+guoxiangwangs/arc-agi-3-dfranzen-m2-fork,ARC AGI 3 Dfranzen M2 Fork,guoxiang wangs,2026-10-25 11:35:19.613000,0
+vickyfym/arc-agi-3-lalalia-final,arc-agi-3-lalalia-final,Yiming Fang,2026-10-24 01:43:25.647000,101
+vickyfym/arc-agi-3-base-final,arc-agi-3-base-final,Yiming Fang,2026-10-24 01:40:07.923000,2

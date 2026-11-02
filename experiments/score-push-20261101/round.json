@@ -57,5 +57,20 @@
     "submit both kernels the moment each reaches COMPLETE and its output file exists (a rejected submit spends no slot)",
     "read the AGI-3 commit smoke's games-served count + benchmark summary from kernels output BEFORE pushing any further version (the newest version is the only CLI-readable one)",
     "no further lift is possible after ~2026-11-01 23:00Z: 24h+ scoring means a submission after that cannot be selected"
-  ]
+  ],
+  "results": {
+    "read_at": "2026-11-02T06:55Z",
+    "arc-agi-3": {
+      "ref": 57870306,
+      "status": "COMPLETE",
+      "public": 24.8,
+      "verdict": "PREDECLARED BAND <=26.0. The run DID reach the games (full-run log: all 10 allowlisted games served, 32-275 actions, 2/3/5/8/3/0/2/5/3/2 levels, sb26 100%), so the 'never reached the games' alternative is excluded: the harness-fix stack does not transfer to the judged games. Pair stands 28.12/27.96."
+    },
+    "arc-agi-2": {
+      "ref": 57870092,
+      "status": "PENDING",
+      "age_h": 19.5,
+      "note": "submitted 2026-11-01T11:27Z, unscored at 19.5h; deadline 2026-11-02T23:59Z. If it never scores, the pair stands at 30.97/30.56."
+    }
+  }
 }
